@@ -3,63 +3,222 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collection;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CollectionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of collections
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Collection::with(['supplier', 'product', 'user', 'rate']);
+        
+        // Filter by supplier
+        if ($request->has('supplier_id')) {
+            $query->where('supplier_id', $request->supplier_id);
+        }
+        
+        // Filter by product
+        if ($request->has('product_id')) {
+            $query->where('product_id', $request->product_id);
+        }
+        
+        // Filter by user
+        if ($request->has('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+        
+        // Filter by date range
+        if ($request->has('start_date')) {
+            $query->where('collection_date', '>=', $request->start_date);
+        }
+        
+        if ($request->has('end_date')) {
+            $query->where('collection_date', '<=', $request->end_date);
+        }
+        
+        // Pagination
+        $perPage = $request->get('per_page', 15);
+        $collections = $query->latest('collection_date')->paginate($perPage);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $collections
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created collection
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'supplier_id' => 'required|exists:suppliers,id',
+            'product_id' => 'required|exists:products,id',
+            'collection_date' => 'required|date',
+            'quantity' => 'required|numeric|min:0',
+            'unit' => 'required|string|max:50',
+            'notes' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $collection = DB::transaction(function () use ($request) {
+                // Get authenticated user
+                $userId = auth()->id();
+                if (!$userId) {
+                    throw new \Exception('User authentication required');
+                }
+
+                // Get the product and current rate
+                $product = Product::findOrFail($request->product_id);
+                $rate = $product->getCurrentRate($request->collection_date, $request->unit);
+
+                if (!$rate) {
+                    throw new \Exception('No valid rate found for the specified date and unit');
+                }
+
+                // Calculate total amount
+                $quantity = $request->quantity;
+                $rateApplied = $rate->rate;
+                $totalAmount = $quantity * $rateApplied;
+
+                // Create collection
+                return Collection::create([
+                    'supplier_id' => $request->supplier_id,
+                    'product_id' => $request->product_id,
+                    'user_id' => $userId,
+                    'rate_id' => $rate->id,
+                    'collection_date' => $request->collection_date,
+                    'quantity' => $quantity,
+                    'unit' => $request->unit,
+                    'rate_applied' => $rateApplied,
+                    'total_amount' => $totalAmount,
+                    'notes' => $request->notes,
+                    'version' => 1,
+                ]);
+            });
+
+            $collection->load(['supplier', 'product', 'user', 'rate']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Collection created successfully',
+                'data' => $collection
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified collection
      */
-    public function show(string $id)
+    public function show(Collection $collection)
     {
-        //
+        $collection->load(['supplier', 'product', 'user', 'rate']);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $collection
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified collection
      */
-    public function edit(string $id)
+    public function update(Request $request, Collection $collection)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'supplier_id' => 'sometimes|required|exists:suppliers,id',
+            'product_id' => 'sometimes|required|exists:products,id',
+            'collection_date' => 'sometimes|required|date',
+            'quantity' => 'sometimes|required|numeric|min:0',
+            'unit' => 'sometimes|required|string|max:50',
+            'notes' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::transaction(function () use ($request, $collection) {
+                // If product, date, or unit changed, recalculate rate
+                if ($request->hasAny(['product_id', 'collection_date', 'unit'])) {
+                    $productId = $request->get('product_id', $collection->product_id);
+                    $date = $request->get('collection_date', $collection->collection_date);
+                    $unit = $request->get('unit', $collection->unit);
+                    
+                    $product = Product::findOrFail($productId);
+                    $rate = $product->getCurrentRate($date, $unit);
+
+                    if (!$rate) {
+                        throw new \Exception('No valid rate found for the specified date and unit');
+                    }
+
+                    $collection->rate_id = $rate->id;
+                    $collection->rate_applied = $rate->rate;
+                }
+
+                // Update quantity if provided
+                if ($request->has('quantity')) {
+                    $collection->quantity = $request->quantity;
+                }
+
+                // Recalculate total amount
+                $collection->total_amount = $collection->quantity * $collection->rate_applied;
+
+                // Update other fields
+                $collection->fill($request->only(['supplier_id', 'product_id', 'collection_date', 'unit', 'notes']));
+                
+                // Increment version for concurrency control
+                $collection->version++;
+                $collection->save();
+            });
+
+            $collection->load(['supplier', 'product', 'user', 'rate']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Collection updated successfully',
+                'data' => $collection
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified collection
      */
-    public function update(Request $request, string $id)
+    public function destroy(Collection $collection)
     {
-        //
-    }
+        $collection->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Collection deleted successfully'
+        ]);
     }
 }
