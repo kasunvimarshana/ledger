@@ -99,8 +99,13 @@ class SyncService {
     try {
       const response = await apiClient.get(API_ENDPOINTS.SUPPLIERS);
       if (response.success && response.data) {
-        const suppliers = Array.isArray(response.data) ? response.data : response.data.data || [];
-        await LocalStorageService.cacheSuppliers(suppliers);
+        const suppliers = Array.isArray(response.data) 
+          ? response.data 
+          : (response.data.data && Array.isArray(response.data.data) ? response.data.data : []);
+        
+        if (suppliers.length > 0) {
+          await LocalStorageService.cacheSuppliers(suppliers);
+        }
       }
     } catch (error) {
       console.error('Error fetching suppliers:', error);
@@ -115,8 +120,13 @@ class SyncService {
     try {
       const response = await apiClient.get(API_ENDPOINTS.PRODUCTS);
       if (response.success && response.data) {
-        const products = Array.isArray(response.data) ? response.data : response.data.data || [];
-        await LocalStorageService.cacheProducts(products);
+        const products = Array.isArray(response.data) 
+          ? response.data 
+          : (response.data.data && Array.isArray(response.data.data) ? response.data.data : []);
+        
+        if (products.length > 0) {
+          await LocalStorageService.cacheProducts(products);
+        }
       }
     } catch (error) {
       console.error('Error fetching products:', error);

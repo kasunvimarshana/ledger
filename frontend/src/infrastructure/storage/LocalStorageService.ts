@@ -195,10 +195,11 @@ class LocalStorageService {
     return result.map(row => {
       try {
         return typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
-      } catch {
-        return row.data;
+      } catch (error) {
+        console.error('Error parsing supplier data:', error);
+        return null;
       }
-    });
+    }).filter(item => item !== null);
   }
 
   /**
@@ -238,10 +239,11 @@ class LocalStorageService {
     return result.map(row => {
       try {
         return typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
-      } catch {
-        return row.data;
+      } catch (error) {
+        console.error('Error parsing product data:', error);
+        return null;
       }
-    });
+    }).filter(item => item !== null);
   }
 
   /**
