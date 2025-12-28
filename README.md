@@ -1,70 +1,150 @@
-# Data Collection and Payment Management Application
+# Data Collection and Payment Management System
 
-### Detailed System Specification – Data Collection and Payment Management Application
+A production-ready, end-to-end data collection and payment management application built with React Native (Expo) frontend and Laravel backend. The system ensures data integrity, multi-user/multi-device support, and auditable financial operations.
 
-**Overview:**
-Design and implement a fully functional, production-ready, end-to-end data collection and payment management application using a React Native (Expo) frontend and a Laravel backend. The system must prioritize **data integrity, multi-device support, multi-user access, prevention of data duplication or corruption, and multi-unit management**, providing reliable, accurate, and auditable operations across all modules.
+## 🎯 Overview
 
-**Backend Requirements:**
+This system provides centralized management of users, suppliers, products, collections, and payments with:
+- **Multi-unit quantity tracking** (kg, g, liters, etc.)
+- **Versioned rate management** with historical preservation
+- **Automated payment calculations** with audit trails
+- **Multi-user/multi-device concurrency** with conflict resolution
+- **RBAC/ABAC security** with end-to-end encryption
 
-- Act as the **single source of truth**, responsible for authoritative validation, persistence, and conflict resolution.
-- Maintain a **centralized, secure database** for all entities including users, suppliers, products, collections, and payments.
-- Ensure **transactional integrity** and enforce consistent rules for CRUD operations across multiple users and devices.
-- Support **versioning, timestamps, and server-side validation** to preserve data integrity and prevent data corruption or duplication.
-- Implement **role-based (RBAC) and attribute-based access control (ABAC)** to manage authentication and authorization consistently.
+## 🏗️ Architecture
 
-**Frontend Requirements:**
+### Backend (`/backend`)
+- **Framework**: Laravel 11
+- **Database**: SQLite (development), MySQL/PostgreSQL (production)
+- **Architecture**: Clean Architecture, SOLID principles
+- **Security**: JWT authentication, RBAC/ABAC, encrypted storage
 
-- Provide a responsive, user-friendly interface that supports **multi-device usage** and simultaneous access by multiple users.
-- Enable full CRUD functionality for users, suppliers, products, collections, and payments.
-- Allow **multi-unit quantity tracking**, time-based and versioned product rates, advance and partial payments, and automated payment calculations based on historical collections and prior transactions.
-- Ensure **accurate, auditable financial oversight**, maintaining historical records immutable while applying the latest valid rates for new entries.
+### Frontend (`/frontend`)
+- **Framework**: React Native with Expo
+- **Language**: TypeScript
+- **Architecture**: Clean Architecture with clear separation of concerns
+- **State Management**: Context API / Redux (to be implemented)
+- **Offline Support**: Local SQLite storage with sync
 
-**Data Integrity and Multi-User Support:**
+## 📋 Features
 
-- Handle **multi-user, multi-device concurrency** with deterministic conflict detection and resolution.
-- Guarantee **no data loss, no duplication, and no corruption** across all operations.
-- Provide a robust mechanism for **real-time collaboration**, ensuring multiple users can update data simultaneously without overwriting or losing information.
-- Ensure that **multi-unit transactions** (e.g., kilograms, grams, liters) are consistently recorded, calculated, and reported accurately.
+### Core Functionality
+- ✅ User Management (CRUD, roles, permissions)
+- ✅ Supplier Management (profiles, multi-unit tracking)
+- ✅ Product Management (CRUD, versioned rates)
+- ✅ Collection Management (daily tracking, multi-unit support)
+- ✅ Payment Management (advance/partial/full payments)
 
-**Security Requirements:**
+### Advanced Features
+- 🔒 End-to-end encryption
+- 👥 Multi-user concurrent access
+- 📱 Multi-device synchronization
+- 📊 Automated financial calculations
+- 📝 Complete audit trails
+- 🔄 Offline-first with sync
 
-- Encrypt sensitive data **in transit and at rest**.
-- Apply **secure data storage and transmission practices** throughout both backend and frontend.
-- Use **tamper-resistant payloads** and enforce secure authentication and authorization consistently.
+## 🚀 Quick Start
 
-**Architecture and Design Principles:**
+### Prerequisites
+- PHP 8.3+
+- Composer 2.x
+- Node.js 20.x+
+- npm 10.x+
 
-- Follow **Clean Architecture**, **SOLID principles**, **DRY**, and **KISS** practices.
-- Maintain **clear separation of concerns** across domain logic, application services, infrastructure, state management, UI components, and event orchestration.
-- Minimize external dependencies, favoring **native platform capabilities** and relying only on essential, open-source, free, and LTS-supported libraries.
-- Ensure **long-term maintainability, scalability, high performance, deterministic behavior, and minimal technical debt**.
+### Backend Setup
 
-**Key Features:**
+```bash
+cd backend
 
-- Centralized management of **suppliers, products, collections, and payments**.
-- **Historical and dynamic rate management**, preserving applied rates for historical entries and automatically using the latest rates for new data.
-- Automated, auditable calculations for **advance and partial payments**, ensuring accuracy in total amounts owed.
-- **Multi-device and multi-user support** for real-time collaboration and concurrent data entry.
-- **Robust financial tracking** suitable for complex workflows, including agricultural collection scenarios (e.g., tea leaves, produce collection).
+# Install dependencies
+composer install
 
-**Example Use Case – Tea Leaves Collection:**
+# Configure environment
+cp .env.example .env
+php artisan key:generate
 
-- Users visit multiple suppliers daily and record quantities collected in **multiple units** (kg, g, etc.).
-- Payments may be made intermittently (advance or partial payments).
-- At the end of the month, rates per unit are finalized, and total payments are automatically calculated.
-- The system ensures **accurate tracking, no duplication or corruption**, and provides **transparent and auditable financial oversight**.
+# Run migrations
+php artisan migrate
 
-**Technical and Operational Goals:**
+# Start development server
+php artisan serve
+```
 
-- Enable reliable **multi-user collaboration** across multiple devices.
-- Guarantee **data integrity** under all operational conditions.
-- Support **precise tracking, reporting, and reconciliation** for multi-unit and multi-rate collections.
-- Ensure **secure, scalable, and maintainable architecture**, optimized for real-world business workflows.
+### Frontend Setup
 
-**Deliverables:**
+```bash
+cd frontend
 
-- Production-ready React Native (Expo) frontend with intuitive UI and UX.
-- Laravel backend with robust data management, security, and conflict resolution mechanisms.
-- Fully documented architecture, including **domain models, database schema, business logic, and security protocols**.
-- End-to-end test coverage for CRUD operations, concurrency handling, and financial calculations.
+# Install dependencies
+npm install
+
+# Start Expo development server
+npm start
+
+# Run on specific platform
+npm run android  # Android
+npm run ios      # iOS (requires macOS)
+npm run web      # Web browser
+```
+
+## 📚 Documentation
+
+For detailed specifications, see:
+- [Software Requirements Specification (SRS)](./SRS.md)
+- [Product Requirements Document (PRD)](./PRD.md)
+- [Executive Summary (ES)](./ES.md)
+
+## 🔧 Technology Stack
+
+### Backend
+- Laravel 11
+- PHP 8.3
+- JWT for authentication
+- SQLite/MySQL/PostgreSQL
+
+### Frontend
+- React Native
+- Expo SDK
+- TypeScript
+- AsyncStorage / SQLite for offline storage
+
+## 🧪 Testing
+
+```bash
+# Backend tests
+cd backend
+php artisan test
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+## 📝 Example Use Case: Tea Leaves Collection
+
+1. Users visit multiple suppliers daily
+2. Record quantities in multiple units (kg, g)
+3. Track advance/partial payments
+4. Apply finalized rates at month-end
+5. Automatically calculate total payments
+6. Maintain full audit trail
+
+## 🤝 Contributing
+
+This project follows Clean Architecture, SOLID, DRY, and KISS principles. All contributions must maintain:
+- Clear separation of concerns
+- Comprehensive tests
+- Proper documentation
+- Security best practices
+
+## 📄 License
+
+[Specify your license here]
+
+## 👤 Author
+
+Kasun Vimarshana
+
+## 📞 Support
+
+[Add support contact information]
