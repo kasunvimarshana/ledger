@@ -16,7 +16,7 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { apiClient } from '../../infrastructure/api/apiClient';
+import apiClient from '../../infrastructure/api/apiClient';
 import { Payment } from '../../domain/entities/Payment';
 
 export const PaymentListScreen: React.FC = () => {

@@ -16,7 +16,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { apiClient } from '../../infrastructure/api/apiClient';
+import apiClient from '../../infrastructure/api/apiClient';
 
 interface ProductFormData {
   name: string;

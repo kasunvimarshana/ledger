@@ -16,7 +16,7 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { apiClient } from '../../infrastructure/api/apiClient';
+import apiClient from '../../infrastructure/api/apiClient';
 import { Collection } from '../../domain/entities/Collection';
 
 export const CollectionListScreen: React.FC = () => {

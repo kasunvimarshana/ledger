@@ -16,7 +16,7 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { apiClient } from '../../infrastructure/api/apiClient';
+import apiClient from '../../infrastructure/api/apiClient';
 import { Supplier } from '../../domain/entities/Supplier';
 import { Product, Rate } from '../../domain/entities/Product';
 
