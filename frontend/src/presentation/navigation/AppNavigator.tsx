@@ -16,8 +16,10 @@ import { ProductFormScreen } from '../screens/ProductFormScreen';
 import { ProductDetailScreen } from '../screens/ProductDetailScreen';
 import { CollectionListScreen } from '../screens/CollectionListScreen';
 import { CollectionFormScreen } from '../screens/CollectionFormScreen';
+import { CollectionDetailScreen } from '../screens/CollectionDetailScreen';
 import { PaymentListScreen } from '../screens/PaymentListScreen';
 import { PaymentFormScreen } from '../screens/PaymentFormScreen';
+import { PaymentDetailScreen } from '../screens/PaymentDetailScreen';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -57,10 +59,12 @@ export const AppNavigator: React.FC = () => {
             {/* Collection Screens */}
             <Stack.Screen name="CollectionList" component={CollectionListScreen} />
             <Stack.Screen name="CollectionForm" component={CollectionFormScreen} />
+            <Stack.Screen name="CollectionDetail" component={CollectionDetailScreen} />
             
             {/* Payment Screens */}
             <Stack.Screen name="PaymentList" component={PaymentListScreen} />
             <Stack.Screen name="PaymentForm" component={PaymentFormScreen} />
+            <Stack.Screen name="PaymentDetail" component={PaymentDetailScreen} />
           </>
         ) : (
           <>

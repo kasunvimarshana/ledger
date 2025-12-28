@@ -87,7 +87,9 @@ export const ProductDetailScreen: React.FC = () => {
   };
 
   const handleViewRateHistory = () => {
-    navigation.navigate('RateHistory' as never, { productId } as never);
+    // TODO: Implement rate history screen
+    Alert.alert('Coming Soon', 'Rate history feature will be available soon');
+    // navigation.navigate('RateHistory' as never, { productId } as never);
   };
 
   if (loading) {
