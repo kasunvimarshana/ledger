@@ -75,6 +75,12 @@ class CollectionController extends Controller
 
         try {
             $collection = DB::transaction(function () use ($request) {
+                // Get authenticated user
+                $userId = auth()->id();
+                if (!$userId) {
+                    throw new \Exception('User authentication required');
+                }
+
                 // Get the product and current rate
                 $product = Product::findOrFail($request->product_id);
                 $rate = $product->getCurrentRate($request->collection_date, $request->unit);
@@ -92,7 +98,7 @@ class CollectionController extends Controller
                 return Collection::create([
                     'supplier_id' => $request->supplier_id,
                     'product_id' => $request->product_id,
-                    'user_id' => auth()->id(),
+                    'user_id' => $userId,
                     'rate_id' => $rate->id,
                     'collection_date' => $request->collection_date,
                     'quantity' => $quantity,
@@ -156,7 +162,7 @@ class CollectionController extends Controller
         try {
             DB::transaction(function () use ($request, $collection) {
                 // If product, date, or unit changed, recalculate rate
-                if ($request->has(['product_id', 'collection_date', 'unit'])) {
+                if ($request->hasAny(['product_id', 'collection_date', 'unit'])) {
                     $productId = $request->get('product_id', $collection->product_id);
                     $date = $request->get('collection_date', $collection->collection_date);
                     $unit = $request->get('unit', $collection->unit);

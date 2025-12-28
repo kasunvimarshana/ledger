@@ -75,9 +75,15 @@ class PaymentController extends Controller
 
         try {
             $payment = DB::transaction(function () use ($request) {
+                // Get authenticated user
+                $userId = auth()->id();
+                if (!$userId) {
+                    throw new \Exception('User authentication required');
+                }
+
                 return Payment::create([
                     'supplier_id' => $request->supplier_id,
-                    'user_id' => auth()->id(),
+                    'user_id' => $userId,
                     'payment_date' => $request->payment_date,
                     'amount' => $request->amount,
                     'type' => $request->type,
