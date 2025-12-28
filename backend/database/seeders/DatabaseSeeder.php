@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +14,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Seed roles first
+        $this->call(RoleSeeder::class);
+        
+        // Create admin user
+        $adminRole = Role::where('name', 'admin')->first();
+        
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@ledger.com',
+            'password' => Hash::make('password'),
+            'role_id' => $adminRole->id,
+            'is_active' => true,
+        ]);
+        
+        // Create a collector user
+        $collectorRole = Role::where('name', 'collector')->first();
+        
+        User::create([
+            'name' => 'Collector User',
+            'email' => 'collector@ledger.com',
+            'password' => Hash::make('password'),
+            'role_id' => $collectorRole->id,
+            'is_active' => true,
         ]);
     }
 }
