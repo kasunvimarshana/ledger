@@ -79,7 +79,7 @@ class RateManagementService
      * @param string|null $unit
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getRateHistory(int $productId, ?string $unit = null)
+    public function getRateHistory(int $productId, ?string $unit = null): \Illuminate\Database\Eloquent\Collection
     {
         $query = Rate::where('product_id', $productId)
             ->orderBy('effective_from', 'desc');

@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentCalculationService
 {
+    protected RateManagementService $rateService;
+
+    public function __construct(RateManagementService $rateService)
+    {
+        $this->rateService = $rateService;
+    }
     /**
      * Calculate total amount owed to a supplier.
      * 
@@ -74,19 +80,11 @@ class PaymentCalculationService
     {
         $date = $collectionDate ?? now()->toDateString();
 
-        // Find the applicable rate for this product, unit, and date
-        $rate = \App\Models\Rate::where('product_id', $productId)
-            ->where('unit', $unit)
-            ->where('effective_from', '<=', $date)
-            ->where(function($query) use ($date) {
-                $query->whereNull('effective_to')
-                      ->orWhere('effective_to', '>=', $date);
-            })
-            ->orderBy('effective_from', 'desc')
-            ->first();
+        // Use rate service to get the applicable rate
+        $rate = $this->rateService->getCurrentRate($productId, $unit, $date);
 
         if (!$rate) {
-            throw new \Exception("No valid rate found for product, unit, and date");
+            throw new \InvalidArgumentException("No valid rate found for product ID {$productId}, unit {$unit}, and date {$date}");
         }
 
         $totalAmount = $quantity * $rate->rate_per_unit;
@@ -113,7 +111,7 @@ class PaymentCalculationService
             $balance = $this->calculateSupplierBalance($supplierId);
 
             if ($balance['balance'] <= 0) {
-                throw new \Exception("No outstanding balance for this supplier");
+                throw new \InvalidArgumentException("No outstanding balance for supplier ID {$supplierId}");
             }
 
             return Payment::create(array_merge($paymentData, [
