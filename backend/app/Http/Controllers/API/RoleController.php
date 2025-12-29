@@ -149,10 +149,10 @@ class RoleController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="manager"),
-     *             @OA\Property(property="display_name", type="string", example="Manager"),
-     *             @OA\Property(property="description", type="string", example="Role for managers"),
-     *             @OA\Property(property="permissions", type="array", @OA\Items(type="string"), example={"view_reports","manage_collections"})
+     *             @OA\Property(property="name", type="string", example="supervisor"),
+     *             @OA\Property(property="display_name", type="string", example="Supervisor"),
+     *             @OA\Property(property="description", type="string", example="Role for supervisors"),
+     *             @OA\Property(property="permissions", type="array", @OA\Items(type="string"), example={"view_reports","approve_collections"})
      *         )
      *     ),
      *     @OA\Response(response=200, description="Role updated"),

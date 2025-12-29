@@ -929,15 +929,15 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "manager"
+                                        "example": "supervisor"
                                     },
                                     "display_name": {
                                         "type": "string",
-                                        "example": "Manager"
+                                        "example": "Supervisor"
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "Role for managers"
+                                        "example": "Role for supervisors"
                                     },
                                     "permissions": {
                                         "type": "array",
@@ -946,7 +946,7 @@
                                         },
                                         "example": [
                                             "view_reports",
-                                            "manage_collections"
+                                            "approve_collections"
                                         ]
                                     }
                                 },
@@ -1306,11 +1306,11 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "John Doe"
+                                        "example": "Jane Smith"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "user@example.com"
+                                        "example": "jane.smith@example.com"
                                     },
                                     "password": {
                                         "type": "string",
