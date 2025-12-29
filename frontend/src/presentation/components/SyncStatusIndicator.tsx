@@ -46,7 +46,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
           <ActivityIndicator size="small" color={COLORS.primary} />
         ) : (
           <Ionicons
-            name={getStatusIcon() as any}
+            name={getStatusIcon()}
             size={20}
             color={getStatusColor()}
           />
@@ -130,5 +130,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-
-export default SyncStatusIndicator;

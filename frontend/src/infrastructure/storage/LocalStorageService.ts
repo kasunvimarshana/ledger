@@ -293,10 +293,15 @@ class LocalStorageService {
   async getCachedRates(productId?: number): Promise<any[]> {
     if (!this.db) throw new Error('Database not initialized');
 
+    // Validate productId if provided
+    if (productId !== undefined && (!Number.isInteger(productId) || productId < 0)) {
+      throw new Error('Invalid productId: must be a positive integer');
+    }
+
     let query = 'SELECT data FROM rates WHERE is_active = 1';
     const params: any[] = [];
 
-    if (productId) {
+    if (productId !== undefined) {
       query += ' AND product_id = ?';
       params.push(productId);
     }
