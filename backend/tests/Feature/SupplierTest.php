@@ -50,14 +50,17 @@ class SupplierTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'id',
-                'name',
-                'code',
-                'contact_person',
-                'phone',
-                'email',
-                'address',
-                'balance',
+                'success',
+                'message',
+                'data' => [
+                    'id',
+                    'name',
+                    'code',
+                    'contact_person',
+                    'phone',
+                    'email',
+                    'address',
+                ],
             ]);
 
         $this->assertDatabaseHas('suppliers', [
@@ -75,11 +78,13 @@ class SupplierTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
+                'success',
                 'data' => [
-                    '*' => ['id', 'name', 'code', 'balance'],
+                    'data' => [
+                        '*' => ['id', 'name', 'code'],
+                    ],
                 ],
-            ])
-            ->assertJsonCount(3, 'data');
+            ]);
     }
 
     public function test_can_show_supplier(): void
@@ -94,9 +99,12 @@ class SupplierTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'id' => $supplier->id,
-                'name' => 'Test Supplier',
-                'code' => 'SUP001',
+                'success' => true,
+                'data' => [
+                    'id' => $supplier->id,
+                    'name' => 'Test Supplier',
+                    'code' => 'SUP001',
+                ],
             ]);
     }
 
@@ -118,7 +126,11 @@ class SupplierTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'name' => 'Updated Name',
+                'success' => true,
+                'message' => 'Supplier updated successfully',
+                'data' => [
+                    'name' => 'Updated Name',
+                ],
             ]);
 
         $this->assertDatabaseHas('suppliers', [
@@ -134,7 +146,11 @@ class SupplierTest extends TestCase
         $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->deleteJson('/api/suppliers/' . $supplier->id);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Supplier deleted successfully'
+            ]);
 
         $this->assertSoftDeleted('suppliers', [
             'id' => $supplier->id,
@@ -150,9 +166,14 @@ class SupplierTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'total_collections',
-                'total_payments',
-                'balance',
+                'success',
+                'data' => [
+                    'supplier',
+                    'total_collected',
+                    'total_paid',
+                    'balance',
+                    'period',
+                ],
             ]);
     }
 

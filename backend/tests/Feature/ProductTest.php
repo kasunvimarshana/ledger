@@ -146,7 +146,7 @@ class ProductTest extends TestCase
             'rate' => 250.00,
             'unit' => 'kg',
             'effective_from' => now()->subDays(1),
-            'effective_until' => null,
+            'effective_to' => null,
         ]);
 
         $response = $this->withHeaders($this->authenticatedHeaders($this->user))
@@ -171,7 +171,7 @@ class ProductTest extends TestCase
             'rate' => 200.00,
             'unit' => 'kg',
             'effective_from' => now()->subDays(10),
-            'effective_until' => now()->subDays(5),
+            'effective_to' => now()->subDays(5),
             'version' => 1,
         ]);
 
@@ -180,7 +180,7 @@ class ProductTest extends TestCase
             'rate' => 250.00,
             'unit' => 'kg',
             'effective_from' => now()->subDays(5),
-            'effective_until' => null,
+            'effective_to' => null,
             'version' => 2,
         ]);
 
