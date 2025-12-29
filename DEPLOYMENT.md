@@ -39,8 +39,8 @@ This guide provides step-by-step instructions for deploying the system to produc
 
 ```bash
 # Clone repository
-git clone https://github.com/kasunvimarshana/ledger.git
-cd ledger/backend
+git clone https://github.com/your-org/your-repo.git
+cd your-repo/backend
 
 # Install PHP dependencies
 composer install --no-dev --optimize-autoloader
@@ -359,9 +359,13 @@ opcache.memory_consumption=128
 opcache.interned_strings_buffer=8
 opcache.max_accelerated_files=10000
 
-# Redis configuration
+# Redis configuration (NOTE: CLI changes are temporary; add to redis.conf for persistence)
 redis-cli config set maxmemory 256mb
 redis-cli config set maxmemory-policy allkeys-lru
+
+# For persistent Redis configuration, edit /etc/redis/redis.conf:
+# maxmemory 256mb
+# maxmemory-policy allkeys-lru
 ```
 
 ### 5. Testing Production
