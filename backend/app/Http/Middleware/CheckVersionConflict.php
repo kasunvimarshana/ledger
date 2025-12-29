@@ -82,6 +82,6 @@ class CheckVersionConflict
      */
     protected function hasVersionField($model): bool
     {
-        return $model && property_exists($model, 'version');
+        return $model && isset($model->version);
     }
 }
