@@ -36,7 +36,7 @@ class PaymentTest extends TestCase
 
         // Create authenticated user
         $this->user = User::factory()->create();
-        $this->token = auth()->login($this->user);
+        $this->token = auth('api')->login($this->user);
 
         // Create test data
         $this->supplier = Supplier::factory()->create();

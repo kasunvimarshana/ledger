@@ -28,7 +28,7 @@ class SupplierTest extends TestCase
 
         // Create authenticated user
         $this->user = User::factory()->create();
-        $this->token = auth()->login($this->user);
+        $this->token = auth('api')->login($this->user);
     }
 
     protected function authenticatedHeaders(): array
