@@ -247,6 +247,10 @@ class ApiClient {
         const match = endpoint.match(/product_id=(\d+)/);
         const productId = match ? parseInt(match[1]) : undefined;
         return await LocalStorageService.getCachedRates(productId);
+      } else if (endpoint.includes('/collections')) {
+        return await LocalStorageService.getCachedCollections();
+      } else if (endpoint.includes('/payments')) {
+        return await LocalStorageService.getCachedPayments();
       }
       return null;
     } catch (error) {
