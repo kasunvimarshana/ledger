@@ -69,9 +69,12 @@ export const PaymentFormScreen: React.FC = () => {
   const loadSuppliers = async () => {
     try {
       const response = await apiClient.get<any>('/suppliers');
-      if (response.success && response.data as any) {
-        const data = response.data as any || response.data as any;
-        setSuppliers(data.filter((s: Supplier) => s.is_active));
+      if (response.success && response.data) {
+        // Handle paginated response
+        const suppliers = Array.isArray(response.data) 
+          ? response.data 
+          : ((response.data as any).data || response.data);
+        setSuppliers(suppliers.filter((s: Supplier) => s.is_active));
       }
     } catch (error) {
       console.error('Error loading suppliers:', error);

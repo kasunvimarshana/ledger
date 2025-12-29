@@ -40,9 +40,12 @@ export const SupplierListScreen: React.FC = () => {
       setLoading(true);
       const response = await apiClient.get<any>('/suppliers');
       if (response.success && response.data) {
-        const data = response.data || response.data;
-        setSuppliers(data);
-        setFilteredSuppliers(data);
+        // Handle paginated response
+        const suppliers = Array.isArray(response.data) 
+          ? response.data 
+          : ((response.data as any).data || response.data);
+        setSuppliers(suppliers);
+        setFilteredSuppliers(suppliers);
       }
     } catch (error) {
       console.error('Error loading suppliers:', error);

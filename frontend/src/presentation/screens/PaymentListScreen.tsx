@@ -39,10 +39,13 @@ export const PaymentListScreen: React.FC = () => {
     try {
       setLoading(true);
       const response = await apiClient.get<any>('/payments');
-      if (response.success && response.data as any) {
-        const data = response.data as any || response.data as any;
-        setPayments(data);
-        setFilteredPayments(data);
+      if (response.success && response.data) {
+        // Handle paginated response
+        const payments = Array.isArray(response.data) 
+          ? response.data 
+          : ((response.data as any).data || response.data);
+        setPayments(payments);
+        setFilteredPayments(payments);
       }
     } catch (error) {
       console.error('Error loading payments:', error);

@@ -34,8 +34,8 @@ export const ProductDetailScreen: React.FC = () => {
   const loadProduct = async () => {
     try {
       const response = await apiClient.get<any>(`/products/${productId}`);
-      if (response.success && response.data as any) {
-        setProduct(response.data as any);
+      if (response.success && response.data) {
+        setProduct(response.data);
       }
     } catch (error) {
       console.error('Error loading product:', error);
@@ -48,8 +48,8 @@ export const ProductDetailScreen: React.FC = () => {
   const loadCurrentRate = async () => {
     try {
       const response = await apiClient.get<any>(`/products/${productId}/current-rate`);
-      if (response.success && response.data as any) {
-        setCurrentRate(response.data as any);
+      if (response.success && response.data) {
+        setCurrentRate(response.data);
       }
     } catch (error) {
       console.error('Error loading current rate:', error);

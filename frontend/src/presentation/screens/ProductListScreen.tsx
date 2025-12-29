@@ -39,10 +39,13 @@ export const ProductListScreen: React.FC = () => {
     try {
       setLoading(true);
       const response = await apiClient.get<any>('/products');
-      if (response.success && response.data as any) {
-        const data = response.data || response.data;
-        setProducts(data);
-        setFilteredProducts(data);
+      if (response.success && response.data) {
+        // Handle paginated response
+        const products = Array.isArray(response.data) 
+          ? response.data 
+          : ((response.data as any).data || response.data);
+        setProducts(products);
+        setFilteredProducts(products);
       }
     } catch (error) {
       console.error('Error loading products:', error);
