@@ -286,7 +286,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#888',
     marginBottom: 6,
-    fontFamily: 'monospace',
   },
   roleDescription: {
     fontSize: 14,

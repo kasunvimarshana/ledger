@@ -252,7 +252,7 @@ export const RoleFormScreen: React.FC = () => {
                   </View>
                 </TouchableOpacity>
 
-                <View style={styles.permissionsContainer}>
+                <View>
                   {permissions.map((permission) => (
                     <TouchableOpacity
                       key={permission}
@@ -381,9 +381,6 @@ const styles = StyleSheet.create({
   },
   groupCheckboxSelected: {
     backgroundColor: '#007bff',
-  },
-  permissionsContainer: {
-    // No gap needed, marginBottom on permissionItem handles spacing
   },
   permissionItem: {
     flexDirection: 'row',
