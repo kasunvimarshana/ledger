@@ -68,15 +68,22 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'id',
-                'supplier_id',
-                'amount',
-                'type',
-                'payment_date',
+                'success',
+                'message',
+                'data' => [
+                    'id',
+                    'supplier_id',
+                    'amount',
+                    'type',
+                    'payment_date',
+                ],
             ])
             ->assertJson([
-                'amount' => 5000.00,
-                'type' => 'advance',
+                'success' => true,
+                'data' => [
+                    'amount' => 5000.00,
+                    'type' => 'advance',
+                ],
             ]);
 
         $this->assertDatabaseHas('payments', [
@@ -101,8 +108,11 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJson([
-                'type' => 'partial',
-                'amount' => 7000.00,
+                'success' => true,
+                'data' => [
+                    'type' => 'partial',
+                    'amount' => 7000.00,
+                ],
             ]);
     }
 
@@ -121,8 +131,11 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJson([
-                'type' => 'full',
-                'amount' => 12625.00,
+                'success' => true,
+                'data' => [
+                    'type' => 'full',
+                    'amount' => 12625.00,
+                ],
             ]);
     }
 
@@ -137,11 +150,14 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
+                'success',
                 'data' => [
-                    '*' => ['id', 'amount', 'type', 'payment_date'],
+                    'data' => [
+                        '*' => ['id', 'amount', 'type', 'payment_date'],
+                    ],
                 ],
             ])
-            ->assertJsonCount(3, 'data');
+            ->assertJsonCount(3, 'data.data');
     }
 
     public function test_can_show_payment(): void
@@ -156,8 +172,11 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'id' => $payment->id,
-                'amount' => 5000.00,
+                'success' => true,
+                'data' => [
+                    'id' => $payment->id,
+                    'amount' => 5000.00,
+                ],
             ]);
     }
 
@@ -181,7 +200,10 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'amount' => 6000.00,
+                'success' => true,
+                'data' => [
+                    'amount' => 6000.00,
+                ],
             ]);
 
         $this->assertDatabaseHas('payments', [
@@ -199,7 +221,11 @@ class PaymentTest extends TestCase
         $response = $this->withHeaders($this->authenticatedHeaders())
             ->deleteJson('/api/payments/' . $payment->id);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Payment deleted successfully'
+            ]);
 
         $this->assertSoftDeleted('payments', [
             'id' => $payment->id,
@@ -223,9 +249,12 @@ class PaymentTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'total_collections' => 12625.00,
-                'total_payments' => 5000.00,
-                'balance' => 7625.00, // 12,625 - 5,000
+                'success' => true,
+                'data' => [
+                    'total_collected' => 12625.00,
+                    'total_paid' => 5000.00,
+                    'balance' => 7625.00, // 12,625 - 5,000
+                ],
             ]);
     }
 

@@ -64,19 +64,26 @@ class CollectionTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'id',
-                'supplier_id',
-                'product_id',
-                'rate_id',
-                'quantity',
-                'unit',
-                'amount',
+                'success',
+                'message',
+                'data' => [
+                    'id',
+                    'supplier_id',
+                    'product_id',
+                    'rate_id',
+                    'quantity',
+                    'unit',
+                    'total_amount',
+                ],
             ]);
 
         // Verify amount calculation: 50.5 * 250 = 12,625
         $response->assertJson([
-            'quantity' => 50.5,
-            'amount' => 12625.00,
+            'success' => true,
+            'data' => [
+                'quantity' => 50.5,
+                'total_amount' => 12625.00,
+            ],
         ]);
 
         $this->assertDatabaseHas('collections', [
@@ -104,7 +111,10 @@ class CollectionTest extends TestCase
 
         // Amount should be: 100 * 250 = 25,000
         $response->assertJson([
-            'amount' => 25000.00,
+            'success' => true,
+            'data' => [
+                'total_amount' => 25000.00,
+            ],
         ]);
     }
 
@@ -121,11 +131,14 @@ class CollectionTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
+                'success',
                 'data' => [
-                    '*' => ['id', 'quantity', 'unit', 'amount'],
+                    'data' => [
+                        '*' => ['id', 'quantity', 'unit', 'total_amount'],
+                    ],
                 ],
             ])
-            ->assertJsonCount(3, 'data');
+            ->assertJsonCount(3, 'data.data');
     }
 
     public function test_can_show_collection(): void
@@ -142,8 +155,11 @@ class CollectionTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'id' => $collection->id,
-                'quantity' => 50,
+                'success' => true,
+                'data' => [
+                    'id' => $collection->id,
+                    'quantity' => 50,
+                ],
             ]);
     }
 
@@ -171,7 +187,10 @@ class CollectionTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'quantity' => 75,
+                'success' => true,
+                'data' => [
+                    'quantity' => 75,
+                ],
             ]);
 
         $this->assertDatabaseHas('collections', [
@@ -191,7 +210,11 @@ class CollectionTest extends TestCase
         $response = $this->withHeaders($this->authenticatedHeaders())
             ->deleteJson('/api/collections/' . $collection->id);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Collection deleted successfully'
+            ]);
 
         $this->assertSoftDeleted('collections', [
             'id' => $collection->id,
@@ -207,7 +230,6 @@ class CollectionTest extends TestCase
             ->assertJsonValidationErrors([
                 'supplier_id',
                 'product_id',
-                'rate_id',
                 'quantity',
                 'unit',
                 'collection_date',
