@@ -121,7 +121,12 @@ curl -X POST http://localhost:8000/api/login \
   -d '{"email":"admin@ledger.com","password":"password"}'
 ```
 
-2. **Mobile App:**
+2. **Swagger API Documentation:**
+   - Access interactive API documentation at: `http://localhost:8000/api/documentation`
+   - Test all API endpoints directly from the browser
+   - View request/response schemas and examples
+
+3. **Mobile App:**
    - Scan QR code with Expo Go app
    - Login with test credentials
    - Navigate through features
@@ -129,6 +134,7 @@ curl -X POST http://localhost:8000/api/login \
 ## 📚 Documentation
 
 For detailed information, see:
+- **[Swagger API Documentation](http://localhost:8000/api/documentation)** - Interactive API explorer
 - [Deployment Guide](./DEPLOYMENT.md) - Production deployment instructions
 - [Testing Guide](./TESTING.md) - Comprehensive testing strategies
 - [API Reference](./API_REFERENCE.md) - Complete API documentation
