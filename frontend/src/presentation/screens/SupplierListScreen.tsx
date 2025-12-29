@@ -20,8 +20,6 @@ import apiClient from '../../infrastructure/api/apiClient';
 import { Supplier } from '../../domain/entities/Supplier';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { usePagination } from '../../core/hooks/usePagination';
-import { useSort } from '../../core/hooks/useSort';
 import { Pagination } from '../components/Pagination';
 import { SortButton } from '../components/SortButton';
 
@@ -32,42 +30,57 @@ export const SupplierListScreen: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
+  const [searchTerm, setSearchTerm] = useState(''); // Debounced search term
+  
+  // Server-side pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  
+  // Server-side sorting state
+  const [sortBy, setSortBy] = useState<string>('created_at');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  // Sorting hook
-  const { sortedData, requestSort, getSortDirection } = useSort<Supplier>(filteredSuppliers);
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchQuery);
+      setCurrentPage(1); // Reset to first page on search
+    }, 500); // 500ms debounce
 
-  // Pagination hook
-  const {
-    currentData,
-    currentPage,
-    totalPages,
-    totalItems,
-    perPage,
-    goToPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = usePagination(sortedData, { initialPerPage: 10 });
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     loadSuppliers();
-  }, []);
-
-  useEffect(() => {
-    filterSuppliers();
-  }, [searchQuery, suppliers]);
+  }, [currentPage, sortBy, sortOrder, searchTerm]);
 
   const loadSuppliers = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get<any>('/suppliers');
+      
+      // Build query parameters for server-side operations
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        per_page: perPage.toString(),
+        sort_by: sortBy,
+        sort_order: sortOrder,
+      });
+      
+      if (searchTerm.trim()) {
+        params.append('search', searchTerm.trim());
+      }
+      
+      const response = await apiClient.get<any>(`/suppliers?${params.toString()}`);
       if (response.success && response.data) {
-        // Handle paginated response
-        const suppliers = Array.isArray(response.data) 
-          ? response.data 
-          : ((response.data as any).data || response.data);
-        setSuppliers(suppliers);
-        setFilteredSuppliers(suppliers);
+        // Handle Laravel pagination response
+        const paginatedData = response.data;
+        setSuppliers(paginatedData.data || []);
+        setTotalPages(paginatedData.last_page || 1);
+        setTotalItems(paginatedData.total || 0);
+        setCurrentPage(paginatedData.current_page || 1);
+        setPerPage(paginatedData.per_page || 10);
       }
     } catch (error) {
       console.error('Error loading suppliers:', error);
@@ -83,20 +96,24 @@ export const SupplierListScreen: React.FC = () => {
     setRefreshing(false);
   };
 
-  const filterSuppliers = () => {
-    if (!searchQuery.trim()) {
-      setFilteredSuppliers(suppliers);
-      return;
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      // Toggle sort order
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // New field, default to ascending
+      setSortBy(field);
+      setSortOrder('asc');
     }
+    setCurrentPage(1); // Reset to first page when sorting changes
+  };
 
-    const query = searchQuery.toLowerCase();
-    const filtered = suppliers.filter(
-      (supplier) =>
-        supplier.name.toLowerCase().includes(query) ||
-        supplier.code?.toLowerCase().includes(query) ||
-        supplier.region?.toLowerCase().includes(query)
-    );
-    setFilteredSuppliers(filtered);
+  const getSortDirection = (field: string): 'asc' | 'desc' | null => {
+    return sortBy === field ? sortOrder : null;
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleSupplierPress = (supplier: Supplier) => {
@@ -173,22 +190,22 @@ export const SupplierListScreen: React.FC = () => {
         <SortButton 
           label="Name" 
           direction={getSortDirection('name')}
-          onPress={() => requestSort('name')} 
+          onPress={() => handleSort('name')} 
         />
         <SortButton 
           label="Code" 
           direction={getSortDirection('code')}
-          onPress={() => requestSort('code')} 
+          onPress={() => handleSort('code')} 
         />
         <SortButton 
           label="Region" 
           direction={getSortDirection('region')}
-          onPress={() => requestSort('region')} 
+          onPress={() => handleSort('region')} 
         />
       </View>
 
       <FlatList
-        data={currentData}
+        data={suppliers}
         renderItem={renderSupplierItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
@@ -210,9 +227,9 @@ export const SupplierListScreen: React.FC = () => {
         totalPages={totalPages}
         totalItems={totalItems}
         perPage={perPage}
-        onPageChange={goToPage}
-        hasNextPage={hasNextPage}
-        hasPreviousPage={hasPreviousPage}
+        onPageChange={handlePageChange}
+        hasNextPage={currentPage < totalPages}
+        hasPreviousPage={currentPage > 1}
       />
     </View>
   );
