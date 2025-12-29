@@ -283,9 +283,31 @@ Import this into:
 
 ## Production Deployment
 
-### 1. Update Base URL
+### 1. Update Contact Information
 
-Edit `backend/config/l5-swagger.php`:
+Edit `backend/app/Http/Controllers/Controller.php` to update the contact email:
+```php
+/**
+ * @OA\Contact(
+ *     email="your-support@your-domain.com",
+ *     name="API Support"
+ * )
+ */
+```
+
+### 2. Update Server URLs
+
+Edit `backend/app/Http/Controllers/Controller.php` to update production URL:
+```php
+/**
+ * @OA\Server(
+ *     url="https://your-production-domain.com/api",
+ *     description="Production Server"
+ * )
+ */
+```
+
+Or configure dynamically in `backend/config/l5-swagger.php`:
 ```php
 'servers' => [
     [
@@ -295,20 +317,20 @@ Edit `backend/config/l5-swagger.php`:
 ]
 ```
 
-### 2. Set Environment Variable
+### 3. Set Environment Variable
 
 In `.env`:
 ```
 APP_URL=https://your-production-domain.com
 ```
 
-### 3. Regenerate Documentation
+### 4. Regenerate Documentation
 
 ```bash
 php artisan l5-swagger:generate
 ```
 
-### 4. Secure Access (Optional)
+### 5. Secure Access (Optional)
 
 Add middleware to protect Swagger UI in production:
 
