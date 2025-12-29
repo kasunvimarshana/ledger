@@ -31,10 +31,8 @@ class SupplierTest extends TestCase
         $this->token = auth('api')->login($this->user);
     }
 
-    protected function authenticatedHeaders(): array
-    {
-        return ['Authorization' => 'Bearer ' . $this->token];
-    }
+    // Use parent class authenticatedHeaders method
+
 
     public function test_can_create_supplier(): void
     {
@@ -47,7 +45,7 @@ class SupplierTest extends TestCase
             'address' => '123 Test Street',
         ];
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->postJson('/api/suppliers', $data);
 
         $response->assertStatus(201)
@@ -72,7 +70,7 @@ class SupplierTest extends TestCase
     {
         Supplier::factory()->count(3)->create();
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->getJson('/api/suppliers');
 
         $response->assertStatus(200)
@@ -91,7 +89,7 @@ class SupplierTest extends TestCase
             'code' => 'SUP001',
         ]);
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->getJson('/api/suppliers/' . $supplier->id);
 
         $response->assertStatus(200)
@@ -115,7 +113,7 @@ class SupplierTest extends TestCase
             'version' => $supplier->version,
         ];
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->putJson('/api/suppliers/' . $supplier->id, $data);
 
         $response->assertStatus(200)
@@ -133,7 +131,7 @@ class SupplierTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->deleteJson('/api/suppliers/' . $supplier->id);
 
         $response->assertStatus(204);
@@ -147,7 +145,7 @@ class SupplierTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->getJson('/api/suppliers/' . $supplier->id . '/balance');
 
         $response->assertStatus(200)
@@ -162,7 +160,7 @@ class SupplierTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->getJson('/api/suppliers/' . $supplier->id . '/collections');
 
         $response->assertStatus(200)
@@ -173,7 +171,7 @@ class SupplierTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->getJson('/api/suppliers/' . $supplier->id . '/payments');
 
         $response->assertStatus(200)
@@ -189,7 +187,7 @@ class SupplierTest extends TestCase
             'code' => 'SUP001',
         ];
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->postJson('/api/suppliers', $data);
 
         $response->assertStatus(422)
@@ -212,7 +210,7 @@ class SupplierTest extends TestCase
             'version' => 1, // Old version
         ];
 
-        $response = $this->withHeaders($this->authenticatedHeaders())
+        $response = $this->withHeaders($this->authenticatedHeaders($this->user))
             ->putJson('/api/suppliers/' . $supplier->id, $data);
 
         $response->assertStatus(409); // Conflict
