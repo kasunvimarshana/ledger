@@ -51,7 +51,8 @@ class PaymentTest extends TestCase
             'product_id' => $this->product->id,
             'rate_id' => $this->rate->id,
             'quantity' => 50.5,
-            'amount' => 12625.00, // 50.5 * 250
+            'rate_applied' => 250.00,
+            'total_amount' => 12625.00, // 50.5 * 250
         ]);
     }
 
