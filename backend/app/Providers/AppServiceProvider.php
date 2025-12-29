@@ -26,12 +26,12 @@ class AppServiceProvider extends ServiceProvider
         // This prevents "Route [login] not defined" errors for JWT-based API authentication
         \Illuminate\Auth\Middleware\Authenticate::redirectUsing(function ($request) {
             // For API requests, return null to trigger JSON response via exception handler
-            // For web requests, would redirect to login (but not implemented in this API-only app)
             if ($request->expectsJson() || $request->is('api/*')) {
                 return null;
             }
-            // Fallback for any potential web routes (though this is an API-only application)
-            return url('/api/login');
+            // This is an API-only application - web routes are not supported
+            // Return null for any non-API requests to trigger 401 JSON response
+            return null;
         });
     }
 }
