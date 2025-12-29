@@ -74,11 +74,16 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
+                'success',
                 'data' => [
-                    '*' => ['id', 'name', 'code', 'units', 'base_unit'],
+                    'data' => [
+                        '*' => ['id', 'name', 'code', 'base_unit'],
+                    ],
+                    'current_page',
+                    'per_page',
+                    'total',
                 ],
-            ])
-            ->assertJsonCount(3, 'data');
+            ]);
     }
 
     public function test_can_show_product(): void
@@ -157,10 +162,11 @@ class ProductTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'data' => [
-                    'id',
+                    'product',
                     'rate',
+                    'date',
                     'unit',
-                    'effective_from',
+                ],
             ]);
     }
 
@@ -194,12 +200,14 @@ class ProductTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'data' => [
-                    'data' => [
+                    'product',
+                    'unit',
+                    'rates' => [
                         '*' => ['id', 'rate', 'unit', 'version', 'effective_from'],
                     ],
                 ],
             ])
-            ->assertJsonCount(2, 'data');
+            ->assertJsonCount(2, 'data.rates');
     }
 
     public function test_cannot_create_product_with_duplicate_code(): void
