@@ -44,8 +44,7 @@ export const SupplierListScreen: React.FC = () => {
     totalPages,
     totalItems,
     perPage,
-    nextPage,
-    previousPage,
+    goToPage,
     hasNextPage,
     hasPreviousPage,
   } = usePagination(sortedData, { initialPerPage: 10 });
@@ -211,7 +210,7 @@ export const SupplierListScreen: React.FC = () => {
         totalPages={totalPages}
         totalItems={totalItems}
         perPage={perPage}
-        onPageChange={(page) => page > currentPage ? nextPage() : previousPage()}
+        onPageChange={goToPage}
         hasNextPage={hasNextPage}
         hasPreviousPage={hasPreviousPage}
       />

@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
-import { PERMISSIONS, canView } from '../../core/utils/permissions';
+import { canView } from '../../core/utils/permissions';
 
 export const HomeScreen: React.FC = () => {
   const navigation = useNavigation();

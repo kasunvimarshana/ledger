@@ -44,8 +44,7 @@ export const CollectionListScreen: React.FC = () => {
     totalPages,
     totalItems,
     perPage,
-    nextPage,
-    previousPage,
+    goToPage,
     hasNextPage,
     hasPreviousPage,
   } = usePagination(sortedData, { initialPerPage: 10 });
@@ -212,7 +211,7 @@ export const CollectionListScreen: React.FC = () => {
         totalPages={totalPages}
         totalItems={totalItems}
         perPage={perPage}
-        onPageChange={(page) => page > currentPage ? nextPage() : previousPage()}
+        onPageChange={goToPage}
         hasNextPage={hasNextPage}
         hasPreviousPage={hasPreviousPage}
       />
