@@ -18,6 +18,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import apiClient from '../../infrastructure/api/apiClient';
 import { PERMISSIONS } from '../../core/utils/permissions';
 
+// Utility function to format permission text for display
+const formatPermissionText = (permission: string): string => {
+  return permission.replace(/_/g, ' ').toLowerCase();
+};
+
 // Available permissions grouped by resource
 const PERMISSION_GROUPS = {
   Users: [
@@ -197,7 +202,7 @@ export const RoleFormScreen: React.FC = () => {
             value={name}
             onChangeText={setName}
             autoCapitalize="none"
-            editable={!isEditMode} // System name cannot be changed in edit mode
+            editable={!isEditMode}
           />
           {isEditMode && (
             <Text style={styles.helpText}>System name cannot be changed to maintain referential integrity</Text>
@@ -268,7 +273,7 @@ export const RoleFormScreen: React.FC = () => {
                         )}
                       </View>
                       <Text style={styles.permissionLabel}>
-                        {permission.replace(/_/g, ' ').toLowerCase()}
+                        {formatPermissionText(permission)}
                       </Text>
                     </TouchableOpacity>
                   ))}
