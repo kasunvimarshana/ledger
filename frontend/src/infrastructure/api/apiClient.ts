@@ -1,10 +1,13 @@
 /**
  * API Client for making HTTP requests using Axios
+ * Includes offline support with automatic queueing
  */
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 import { API_BASE_URL, API_TIMEOUT, TOKEN_STORAGE_KEY } from '../../core/constants/api';
+import LocalStorageService from '../storage/LocalStorageService';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -66,37 +69,66 @@ class ApiClient {
   }
 
   /**
-   * GET request
+   * GET request with offline fallback
    */
   async get<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
     try {
       const response = await this.axiosInstance.get<ApiResponse<T>>(endpoint, config);
       return response.data;
     } catch (error: any) {
+      // If network error, try to get cached data
+      if (this.isNetworkError(error)) {
+        const cachedData = await this.getCachedData(endpoint);
+        if (cachedData) {
+          return {
+            success: true,
+            data: cachedData as T,
+            message: 'Data loaded from cache (offline)',
+          };
+        }
+      }
       return this.handleError(error);
     }
   }
 
   /**
-   * POST request
+   * POST request with offline support
    */
   async post<T>(endpoint: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
     try {
       const response = await this.axiosInstance.post<ApiResponse<T>>(endpoint, data, config);
       return response.data;
     } catch (error: any) {
+      // Check if this is a network error and should be queued
+      if (this.isNetworkError(error) && this.shouldQueueOperation(endpoint)) {
+        await this.queueOperation('create', endpoint, data);
+        return {
+          success: true,
+          message: 'Operation queued for sync when online',
+          data: data as T,
+        };
+      }
       return this.handleError(error);
     }
   }
 
   /**
-   * PUT request
+   * PUT request with offline support
    */
   async put<T>(endpoint: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
     try {
       const response = await this.axiosInstance.put<ApiResponse<T>>(endpoint, data, config);
       return response.data;
     } catch (error: any) {
+      // Check if this is a network error and should be queued
+      if (this.isNetworkError(error) && this.shouldQueueOperation(endpoint)) {
+        await this.queueOperation('update', endpoint, data);
+        return {
+          success: true,
+          message: 'Operation queued for sync when online',
+          data: data as T,
+        };
+      }
       return this.handleError(error);
     }
   }
@@ -114,14 +146,93 @@ class ApiClient {
   }
 
   /**
-   * DELETE request
+   * DELETE request with offline support
    */
   async delete<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
     try {
       const response = await this.axiosInstance.delete<ApiResponse<T>>(endpoint, config);
       return response.data;
     } catch (error: any) {
+      // Check if this is a network error and should be queued
+      if (this.isNetworkError(error) && this.shouldQueueOperation(endpoint)) {
+        // Extract ID from endpoint for delete operations
+        const match = endpoint.match(/\/(\d+)$/);
+        const id = match ? parseInt(match[1]) : null;
+        if (id) {
+          await this.queueOperation('delete', endpoint, { id });
+          return {
+            success: true,
+            message: 'Operation queued for sync when online',
+          };
+        }
+      }
       return this.handleError(error);
+    }
+  }
+
+  /**
+   * Check if error is a network error
+   */
+  private isNetworkError(error: any): boolean {
+    return !error.response && error.request;
+  }
+
+  /**
+   * Check if operation should be queued for offline support
+   */
+  private shouldQueueOperation(endpoint: string): boolean {
+    // Queue operations for these entities
+    const queueableEntities = [
+      '/suppliers',
+      '/products',
+      '/collections',
+      '/payments',
+      '/rates',
+    ];
+    return queueableEntities.some(entity => endpoint.includes(entity));
+  }
+
+  /**
+   * Queue operation for later sync
+   */
+  private async queueOperation(action: 'create' | 'update' | 'delete', endpoint: string, data: any): Promise<void> {
+    try {
+      // Determine entity type from endpoint
+      let entity = '';
+      if (endpoint.includes('/suppliers')) entity = 'supplier';
+      else if (endpoint.includes('/products')) entity = 'product';
+      else if (endpoint.includes('/collections')) entity = 'collection';
+      else if (endpoint.includes('/payments')) entity = 'payment';
+      else if (endpoint.includes('/rates')) entity = 'rate';
+
+      if (entity) {
+        await LocalStorageService.addToSyncQueue(entity, action, data);
+        console.log(`Queued ${action} operation for ${entity}`);
+      }
+    } catch (error) {
+      console.error('Failed to queue operation:', error);
+    }
+  }
+
+  /**
+   * Get cached data for offline mode
+   */
+  private async getCachedData(endpoint: string): Promise<any> {
+    try {
+      if (endpoint.includes('/suppliers')) {
+        return await LocalStorageService.getCachedSuppliers();
+      } else if (endpoint.includes('/products')) {
+        return await LocalStorageService.getCachedProducts();
+      } else if (endpoint.includes('/rates')) {
+        // Extract product ID if present
+        const match = endpoint.match(/product_id=(\d+)/);
+        const productId = match ? parseInt(match[1]) : undefined;
+        return await LocalStorageService.getCachedRates(productId);
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting cached data:', error);
+      return null;
     }
   }
 
