@@ -19,9 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.version' => \App\Http\Middleware\CheckVersionConflict::class,
             'check.permission' => \App\Http\Middleware\CheckPermission::class,
         ]);
-        
-        // Stateful API endpoints (if needed)
-        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Handle authentication exceptions for API
