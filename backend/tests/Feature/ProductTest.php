@@ -32,7 +32,7 @@ class ProductTest extends TestCase
         $this->token = auth('api')->login($this->user);
     }
 
-    // Use parent class authenticatedHeaders method
+    // Using parent TestCase::authenticatedHeaders() method with $this->user parameter
 
     public function test_can_create_product_with_multiple_units(): void
     {

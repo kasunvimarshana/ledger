@@ -55,7 +55,7 @@ class PaymentTest extends TestCase
         ]);
     }
 
-    // Use parent class authenticatedHeaders method
+    // Using parent TestCase::authenticatedHeaders() method with $this->user parameter
 
     public function test_can_create_advance_payment(): void
     {
