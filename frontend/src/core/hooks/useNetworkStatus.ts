@@ -169,7 +169,7 @@ export const useNetworkStatus = () => {
   /**
    * Get status icon name
    */
-  const getStatusIcon = (): keyof typeof Ionicons.glyphMap => {
+  const getStatusIcon = (): string => {
     if (syncStatus.isSyncing) return 'sync';
     if (syncStatus.syncError) return 'alert-circle';
     if (syncStatus.hasPendingChanges) return 'cloud-upload';
