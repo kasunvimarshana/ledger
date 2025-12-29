@@ -189,11 +189,11 @@ class SyncService {
    */
   async fetchAndCacheSuppliers(): Promise<void> {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.SUPPLIERS);
+      const response = await apiClient.get<any>(API_ENDPOINTS.SUPPLIERS);
       if (response.success && response.data) {
         const suppliers = Array.isArray(response.data) 
           ? response.data 
-          : (response.data.data && Array.isArray(response.data.data) ? response.data.data : []);
+          : ((response.data as any).data && Array.isArray((response.data as any).data) ? (response.data as any).data : []);
         
         if (suppliers.length > 0) {
           await LocalStorageService.cacheSuppliers(suppliers);
@@ -210,11 +210,11 @@ class SyncService {
    */
   async fetchAndCacheProducts(): Promise<void> {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.PRODUCTS);
+      const response = await apiClient.get<any>(API_ENDPOINTS.PRODUCTS);
       if (response.success && response.data) {
         const products = Array.isArray(response.data) 
           ? response.data 
-          : (response.data.data && Array.isArray(response.data.data) ? response.data.data : []);
+          : ((response.data as any).data && Array.isArray((response.data as any).data) ? (response.data as any).data : []);
         
         if (products.length > 0) {
           await LocalStorageService.cacheProducts(products);

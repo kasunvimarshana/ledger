@@ -38,9 +38,9 @@ export const ProductListScreen: React.FC = () => {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get('/products');
-      if (response.data.success) {
-        const data = response.data.data.data || response.data.data;
+      const response = await apiClient.get<any>('/products');
+      if (response.success && response.data as any) {
+        const data = response.data || response.data;
         setProducts(data);
         setFilteredProducts(data);
       }
@@ -75,11 +75,11 @@ export const ProductListScreen: React.FC = () => {
   };
 
   const handleProductPress = (product: Product) => {
-    navigation.navigate('ProductDetail' as never, { productId: product.id } as never);
+    (navigation.navigate as any)('ProductDetail', { productId: product.id });
   };
 
   const handleAddProduct = () => {
-    navigation.navigate('ProductForm' as never);
+    (navigation.navigate as any)('ProductForm');
   };
 
   const renderProductItem = ({ item }: { item: Product }) => (
