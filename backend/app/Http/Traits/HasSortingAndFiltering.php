@@ -179,8 +179,25 @@ trait HasSortingAndFiltering
         string $field,
         string $param
     ): Builder {
-        if ($request->has($param)) {
-            $query->where($field, $request->get($param));
+        if (!$request->has($param)) {
+            return $query;
+        }
+        
+        $value = $request->get($param);
+        
+        // Validate boolean value
+        // Accept: true, false, 1, 0, "1", "0", "true", "false"
+        if (is_bool($value)) {
+            $query->where($field, $value);
+        } elseif ($value === 1 || $value === 0) {
+            $query->where($field, (bool)$value);
+        } elseif (is_string($value)) {
+            $lowerValue = strtolower($value);
+            if (in_array($lowerValue, ['true', '1'])) {
+                $query->where($field, true);
+            } elseif (in_array($lowerValue, ['false', '0'])) {
+                $query->where($field, false);
+            }
         }
         
         return $query;
