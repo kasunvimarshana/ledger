@@ -63,7 +63,7 @@ export const RateHistoryScreen: React.FC = () => {
         <View style={styles.cardBody}>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Version:</Text>
-            <Text style={styles.detailValue}>{item.version || 1}</Text>
+            <Text style={styles.detailValue}>{item.version}</Text>
           </View>
           
           <View style={styles.detailRow}>
@@ -79,13 +79,6 @@ export const RateHistoryScreen: React.FC = () => {
               <Text style={styles.detailValue}>
                 {new Date(item.effective_to).toLocaleDateString()}
               </Text>
-            </View>
-          )}
-          
-          {item.notes && (
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Notes:</Text>
-              <Text style={styles.detailValue}>{item.notes}</Text>
             </View>
           )}
           
@@ -126,7 +119,7 @@ export const RateHistoryScreen: React.FC = () => {
       ) : (
         <FlatList
           data={rates}
-          keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+          keyExtractor={(item, index) => item.id?.toString() || `rate-${index}`}
           renderItem={renderRateItem}
           contentContainerStyle={styles.listContent}
         />
@@ -203,11 +196,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   cardBody: {
-    gap: 8,
+    marginTop: 4,
   },
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 8,
   },
   detailLabel: {
     fontSize: 14,

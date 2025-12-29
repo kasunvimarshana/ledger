@@ -81,8 +81,8 @@ export const UserFormScreen: React.FC = () => {
         is_active: isActive,
       };
 
-      if (roleId) {
-        data.role_id = parseInt(roleId);
+      if (roleId && roleId.trim()) {
+        data.role_id = parseInt(roleId, 10);
       }
 
       if (password) {

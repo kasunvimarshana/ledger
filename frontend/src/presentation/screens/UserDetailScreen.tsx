@@ -209,7 +209,6 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: 'row',
     padding: 16,
-    gap: 12,
   },
   editButton: {
     flex: 1,
@@ -217,6 +216,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
+    marginRight: 12,
   },
   editButtonText: {
     color: '#fff',
