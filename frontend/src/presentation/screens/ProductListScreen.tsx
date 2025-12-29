@@ -1,6 +1,6 @@
 /**
- * Supplier List Screen
- * Displays all suppliers with search and filter capabilities
+ * Product List Screen
+ * Displays all products with search and filter capabilities
  */
 
 import React, { useState, useEffect } from 'react';
@@ -17,36 +17,36 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../infrastructure/api/apiClient';
-import { Supplier } from '../../domain/entities/Supplier';
+import { Product } from '../../domain/entities/Product';
 
-export const SupplierListScreen: React.FC = () => {
+export const ProductListScreen: React.FC = () => {
   const navigation = useNavigation();
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    loadSuppliers();
+    loadProducts();
   }, []);
 
   useEffect(() => {
-    filterSuppliers();
-  }, [searchQuery, suppliers]);
+    filterProducts();
+  }, [searchQuery, products]);
 
-  const loadSuppliers = async () => {
+  const loadProducts = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get('/suppliers');
+      const response = await apiClient.get('/products');
       if (response.data.success) {
         const data = response.data.data.data || response.data.data;
-        setSuppliers(data);
-        setFilteredSuppliers(data);
+        setProducts(data);
+        setFilteredProducts(data);
       }
     } catch (error) {
-      console.error('Error loading suppliers:', error);
-      Alert.alert('Error', 'Failed to load suppliers');
+      console.error('Error loading products:', error);
+      Alert.alert('Error', 'Failed to load products');
     } finally {
       setLoading(false);
     }
@@ -54,41 +54,41 @@ export const SupplierListScreen: React.FC = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await loadSuppliers();
+    await loadProducts();
     setRefreshing(false);
   };
 
-  const filterSuppliers = () => {
+  const filterProducts = () => {
     if (!searchQuery.trim()) {
-      setFilteredSuppliers(suppliers);
+      setFilteredProducts(products);
       return;
     }
 
     const query = searchQuery.toLowerCase();
-    const filtered = suppliers.filter(
-      (supplier) =>
-        supplier.name.toLowerCase().includes(query) ||
-        supplier.code?.toLowerCase().includes(query) ||
-        supplier.region?.toLowerCase().includes(query)
+    const filtered = products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(query) ||
+        product.code?.toLowerCase().includes(query) ||
+        product.base_unit?.toLowerCase().includes(query)
     );
-    setFilteredSuppliers(filtered);
+    setFilteredProducts(filtered);
   };
 
-  const handleSupplierPress = (supplier: Supplier) => {
-    navigation.navigate('SupplierDetail' as never, { supplierId: supplier.id } as never);
+  const handleProductPress = (product: Product) => {
+    navigation.navigate('ProductDetail' as never, { productId: product.id } as never);
   };
 
-  const handleAddSupplier = () => {
-    navigation.navigate('SupplierForm' as never);
+  const handleAddProduct = () => {
+    navigation.navigate('ProductForm' as never);
   };
 
-  const renderSupplierItem = ({ item }: { item: Supplier }) => (
+  const renderProductItem = ({ item }: { item: Product }) => (
     <TouchableOpacity
-      style={styles.supplierCard}
-      onPress={() => handleSupplierPress(item)}
+      style={styles.productCard}
+      onPress={() => handleProductPress(item)}
     >
-      <View style={styles.supplierHeader}>
-        <Text style={styles.supplierName}>{item.name}</Text>
+      <View style={styles.productHeader}>
+        <Text style={styles.productName}>{item.name}</Text>
         <View style={[
           styles.statusBadge,
           { backgroundColor: item.is_active ? '#4CAF50' : '#F44336' }
@@ -99,23 +99,34 @@ export const SupplierListScreen: React.FC = () => {
         </View>
       </View>
       
-      <View style={styles.supplierDetails}>
-        <Text style={styles.detailText}>Code: {item.code}</Text>
-        {item.region && (
-          <Text style={styles.detailText}>Region: {item.region}</Text>
-        )}
-        {item.phone && (
-          <Text style={styles.detailText}>Phone: {item.phone}</Text>
-        )}
+      <View style={styles.productDetails}>
+        <Text style={styles.detailLabel}>Code:</Text>
+        <Text style={styles.detailValue}>{item.code}</Text>
       </View>
+
+      <View style={styles.productDetails}>
+        <Text style={styles.detailLabel}>Base Unit:</Text>
+        <Text style={styles.detailValue}>{item.base_unit}</Text>
+      </View>
+
+      {item.supported_units && item.supported_units.length > 0 && (
+        <View style={styles.productDetails}>
+          <Text style={styles.detailLabel}>Supported Units:</Text>
+          <Text style={styles.detailValue}>
+            {Array.isArray(item.supported_units) 
+              ? item.supported_units.join(', ')
+              : item.supported_units}
+          </Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#2196F3" />
-        <Text style={styles.loadingText}>Loading suppliers...</Text>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007bff" />
+        <Text style={styles.loadingText}>Loading products...</Text>
       </View>
     );
   }
@@ -123,38 +134,35 @@ export const SupplierListScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Suppliers</Text>
+        <Text style={styles.title}>Products</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={handleAddSupplier}
+          onPress={handleAddProduct}
         >
-          <Text style={styles.addButtonText}>+ Add Supplier</Text>
+          <Text style={styles.addButtonText}>+ Add Product</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search by name, code, or region..."
+          placeholder="Search products..."
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
       </View>
 
       <FlatList
-        data={filteredSuppliers}
-        renderItem={renderSupplierItem}
+        data={filteredProducts}
+        renderItem={renderProductItem}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No suppliers found</Text>
-            <Text style={styles.emptySubtext}>
-              {searchQuery ? 'Try a different search term' : 'Add your first supplier to get started'}
-            </Text>
+            <Text style={styles.emptyText}>No products found</Text>
           </View>
         }
       />
@@ -166,15 +174,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 10,
-    color: '#666',
   },
   header: {
     flexDirection: 'row',
@@ -191,13 +190,14 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   addButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#007bff',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
   },
   addButtonText: {
     color: '#fff',
+    fontSize: 14,
     fontWeight: '600',
   },
   searchContainer: {
@@ -206,33 +206,33 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     backgroundColor: '#f5f5f5',
-    borderRadius: 8,
     padding: 12,
+    borderRadius: 8,
     fontSize: 16,
   },
-  listContainer: {
+  listContent: {
     padding: 16,
   },
-  supplierCard: {
+  productCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
     padding: 16,
+    borderRadius: 8,
     marginBottom: 12,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
   },
-  supplierHeader: {
+  productHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
   },
-  supplierName: {
+  productName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: '#333',
     flex: 1,
   },
@@ -246,29 +246,37 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  supplierDetails: {
-    gap: 4,
+  productDetails: {
+    flexDirection: 'row',
+    marginBottom: 8,
   },
-  detailText: {
+  detailLabel: {
     fontSize: 14,
     color: '#666',
+    width: 120,
   },
-  emptyContainer: {
+  detailValue: {
+    fontSize: 14,
+    color: '#333',
+    flex: 1,
+  },
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#666',
+  },
+  emptyContainer: {
     padding: 32,
-    marginTop: 64,
+    alignItems: 'center',
   },
   emptyText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#666',
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#999',
-    textAlign: 'center',
   },
 });

@@ -11,13 +11,19 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 
 export const HomeScreen: React.FC = () => {
+  const navigation = useNavigation();
   const { user, logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  const navigateTo = (screen: string) => {
+    navigation.navigate(screen as never);
   };
 
   return (
@@ -30,22 +36,34 @@ export const HomeScreen: React.FC = () => {
 
       <ScrollView style={styles.content}>
         <View style={styles.menuGrid}>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigateTo('SupplierList')}
+          >
             <Text style={styles.menuIcon}>👥</Text>
             <Text style={styles.menuText}>Suppliers</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigateTo('ProductList')}
+          >
             <Text style={styles.menuIcon}>📦</Text>
             <Text style={styles.menuText}>Products</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigateTo('CollectionList')}
+          >
             <Text style={styles.menuIcon}>📊</Text>
             <Text style={styles.menuText}>Collections</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigateTo('PaymentList')}
+          >
             <Text style={styles.menuIcon}>💰</Text>
             <Text style={styles.menuText}>Payments</Text>
           </TouchableOpacity>
