@@ -781,6 +781,7 @@
                     {
                         "name": "search",
                         "in": "query",
+                        "description": "Search by name or display_name",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -789,6 +790,7 @@
                     {
                         "name": "per_page",
                         "in": "query",
+                        "description": "Results per page",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -1133,6 +1135,7 @@
                     {
                         "name": "is_active",
                         "in": "query",
+                        "description": "Filter by active status",
                         "required": false,
                         "schema": {
                             "type": "boolean"
@@ -1141,6 +1144,7 @@
                     {
                         "name": "role_id",
                         "in": "query",
+                        "description": "Filter by role ID",
                         "required": false,
                         "schema": {
                             "type": "integer"
@@ -1149,6 +1153,7 @@
                     {
                         "name": "search",
                         "in": "query",
+                        "description": "Search by name or email",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -1157,6 +1162,7 @@
                     {
                         "name": "per_page",
                         "in": "query",
+                        "description": "Results per page",
                         "required": false,
                         "schema": {
                             "type": "integer",
