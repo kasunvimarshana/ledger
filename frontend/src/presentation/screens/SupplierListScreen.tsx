@@ -86,7 +86,7 @@ export const SupplierListScreen: React.FC = () => {
         setPerPage(paginatedData.per_page || 10);
         
         // Cache suppliers for offline use
-        if (loadedSuppliers.length > 0 && !response.message?.includes('cache')) {
+        if (loadedSuppliers.length > 0 && !response.fromCache) {
           try {
             await LocalStorageService.cacheSuppliers(loadedSuppliers);
           } catch (cacheError) {

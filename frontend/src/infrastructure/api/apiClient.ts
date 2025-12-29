@@ -9,6 +9,9 @@ import NetInfo from '@react-native-community/netinfo';
 import { API_BASE_URL, API_TIMEOUT, TOKEN_STORAGE_KEY } from '../../core/constants/api';
 import LocalStorageService from '../storage/LocalStorageService';
 
+// Cache indicator constant
+const CACHE_MESSAGE = 'Data loaded from cache (offline)';
+
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -16,6 +19,7 @@ export interface ApiResponse<T = any> {
   errors?: Record<string, string[]>;
   conflict?: boolean;
   serverData?: any;
+  fromCache?: boolean; // Flag to indicate cached data
 }
 
 class ApiClient {
@@ -156,9 +160,8 @@ class ApiClient {
       // Check if this is a network error and should be queued
       if (this.isNetworkError(error) && this.shouldQueueOperation(endpoint)) {
         // Extract ID from endpoint for delete operations
-        const match = endpoint.match(/\/(\d+)$/);
-        const id = match ? parseInt(match[1]) : null;
-        if (id) {
+        const id = this.extractIdFromEndpoint(endpoint);
+        if (id !== null) {
           await this.queueOperation('delete', endpoint, { id });
           return {
             success: true,
@@ -171,10 +174,49 @@ class ApiClient {
   }
 
   /**
+   * Extract ID from endpoint URL
+   */
+  private extractIdFromEndpoint(endpoint: string): number | null {
+    // Match various patterns: /entity/{id}, /entity/{id}/action, etc.
+    const patterns = [
+      /\/(\d+)$/,           // /entity/123
+      /\/(\d+)\//,          // /entity/123/
+      /\/(\d+)\/[^/]+$/,    // /entity/123/action
+    ];
+    
+    for (const pattern of patterns) {
+      const match = endpoint.match(pattern);
+      if (match) {
+        const id = parseInt(match[1]);
+        if (!isNaN(id) && id > 0) {
+          return id;
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  /**
    * Check if error is a network error
    */
   private isNetworkError(error: any): boolean {
-    return !error.response && error.request;
+    // Check if there's no response from server but request was made
+    if (!error.response && error.request) {
+      return true;
+    }
+    
+    // Check for specific network error codes
+    const networkErrorCodes = [
+      'NETWORK_ERROR',
+      'TIMEOUT',
+      'ENOTFOUND',
+      'ECONNREFUSED',
+      'ECONNRESET',
+      'ETIMEDOUT',
+    ];
+    
+    return networkErrorCodes.includes(error.code);
   }
 
   /**
@@ -233,6 +275,30 @@ class ApiClient {
     } catch (error) {
       console.error('Error getting cached data:', error);
       return null;
+    }
+  }
+
+  /**
+   * GET request with offline fallback
+   */
+  async get<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.axiosInstance.get<ApiResponse<T>>(endpoint, config);
+      return response.data;
+    } catch (error: any) {
+      // If network error, try to get cached data
+      if (this.isNetworkError(error)) {
+        const cachedData = await this.getCachedData(endpoint);
+        if (cachedData) {
+          return {
+            success: true,
+            data: cachedData as T,
+            message: CACHE_MESSAGE,
+            fromCache: true,
+          };
+        }
+      }
+      return this.handleError(error);
     }
   }
 

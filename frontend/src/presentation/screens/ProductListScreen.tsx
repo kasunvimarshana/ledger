@@ -80,7 +80,7 @@ export const ProductListScreen: React.FC = () => {
         setPerPage(paginatedData.per_page || 10);
         
         // Cache products for offline use
-        if (loadedProducts.length > 0 && !response.message?.includes('cache')) {
+        if (loadedProducts.length > 0 && !response.fromCache) {
           try {
             await LocalStorageService.cacheProducts(loadedProducts);
           } catch (cacheError) {
