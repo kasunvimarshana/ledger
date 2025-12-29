@@ -49,19 +49,29 @@ trait HasSortingAndFiltering
      * @param Request $request The HTTP request
      * @param array $searchableFields List of fields to search in
      * @param string $searchParam The request parameter name for search (default: 'search')
+     * @param int $maxLength Maximum allowed length for search term (default: 100)
      * @return Builder
      */
     protected function applySearch(
         Builder $query,
         Request $request,
         array $searchableFields,
-        string $searchParam = 'search'
+        string $searchParam = 'search',
+        int $maxLength = 100
     ): Builder {
         if (!$request->has($searchParam) || empty($searchableFields)) {
             return $query;
         }
         
         $search = $request->get($searchParam);
+        
+        // Validate and sanitize search input
+        if (empty($search) || !is_string($search)) {
+            return $query;
+        }
+        
+        // Limit search term length to prevent performance issues
+        $search = substr($search, 0, $maxLength);
         
         return $query->where(function($q) use ($search, $searchableFields) {
             foreach ($searchableFields as $index => $field) {
@@ -91,8 +101,13 @@ trait HasSortingAndFiltering
     ) {
         $perPage = $request->get('per_page', $defaultPerPage);
         
-        // Ensure per_page doesn't exceed maximum
-        $perPage = min($perPage, $maxPerPage);
+        // Validate that per_page is a positive integer
+        if (!is_numeric($perPage) || $perPage < 1) {
+            $perPage = $defaultPerPage;
+        }
+        
+        // Ensure per_page doesn't exceed maximum and is an integer
+        $perPage = min((int)$perPage, $maxPerPage);
         
         return $query->paginate($perPage);
     }
@@ -115,14 +130,38 @@ trait HasSortingAndFiltering
         string $endDateParam = 'end_date'
     ): Builder {
         if ($request->has($startDateParam)) {
-            $query->where($dateField, '>=', $request->get($startDateParam));
+            $startDate = $request->get($startDateParam);
+            // Validate date format (YYYY-MM-DD)
+            if ($this->isValidDate($startDate)) {
+                $query->where($dateField, '>=', $startDate);
+            }
         }
         
         if ($request->has($endDateParam)) {
-            $query->where($dateField, '<=', $request->get($endDateParam));
+            $endDate = $request->get($endDateParam);
+            // Validate date format (YYYY-MM-DD)
+            if ($this->isValidDate($endDate)) {
+                $query->where($dateField, '<=', $endDate);
+            }
         }
         
         return $query;
+    }
+    
+    /**
+     * Validate if a string is a valid date in Y-m-d format
+     * 
+     * @param mixed $date The date string to validate
+     * @return bool
+     */
+    private function isValidDate($date): bool
+    {
+        if (!is_string($date)) {
+            return false;
+        }
+        
+        $d = \DateTime::createFromFormat('Y-m-d', $date);
+        return $d && $d->format('Y-m-d') === $date;
     }
     
     /**
