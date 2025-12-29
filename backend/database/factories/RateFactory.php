@@ -17,7 +17,8 @@ class RateFactory extends Factory
             'rate' => fake()->randomFloat(2, 100, 500),
             'unit' => 'kg',
             'effective_from' => now()->subDays(rand(1, 30)),
-            'effective_until' => null,
+            'effective_to' => null,
+            'is_active' => true,
             'version' => 1,
         ];
     }

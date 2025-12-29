@@ -63,9 +63,14 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'token',
-                'user' => ['id', 'name', 'email'],
-            ]);
+                'success',
+                'message',
+                'data' => [
+                    'token',
+                    'user' => ['id', 'name', 'email'],
+                ],
+            ])
+            ->assertJson(['success' => true]);
     }
 
     public function test_user_cannot_login_with_invalid_credentials(): void
@@ -80,7 +85,8 @@ class AuthenticationTest extends TestCase
             'password' => 'wrongpassword',
         ]);
 
-        $response->assertStatus(401);
+        $response->assertStatus(401)
+            ->assertJson(['success' => false]);
     }
 
     public function test_authenticated_user_can_get_profile(): void
@@ -93,10 +99,8 @@ class AuthenticationTest extends TestCase
         ])->getJson('/api/me');
 
         $response->assertStatus(200)
-            ->assertJson([
-                'id' => $user->id,
-                'email' => $user->email,
-            ]);
+            ->assertJsonPath('id', $user->id)
+            ->assertJsonPath('email', $user->email);
     }
 
     public function test_authenticated_user_can_logout(): void
@@ -109,7 +113,7 @@ class AuthenticationTest extends TestCase
         ])->postJson('/api/logout');
 
         $response->assertStatus(200)
-            ->assertJson(['message' => 'Successfully logged out']);
+            ->assertJsonPath('success', true);
     }
 
     public function test_user_can_refresh_token(): void
@@ -122,7 +126,10 @@ class AuthenticationTest extends TestCase
         ])->postJson('/api/refresh');
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['token']);
+            ->assertJsonStructure([
+                'success',
+                'data' => ['token'],
+            ]);
     }
 
     public function test_unauthenticated_user_cannot_access_protected_routes(): void

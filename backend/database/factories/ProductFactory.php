@@ -15,8 +15,9 @@ class ProductFactory extends Factory
             'name' => fake()->words(3, true),
             'code' => 'PROD' . fake()->unique()->numberBetween(1000, 9999),
             'description' => fake()->sentence(),
-            'units' => json_encode(['kg', 'g', 'lbs']),
+            'supported_units' => json_encode(['kg', 'g', 'lbs']),
             'base_unit' => 'kg',
+            'is_active' => true,
             'version' => 1,
         ];
     }

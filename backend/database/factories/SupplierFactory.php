@@ -18,7 +18,8 @@ class SupplierFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'email' => fake()->unique()->safeEmail(),
             'address' => fake()->address(),
-            'balance' => 0,
+            'region' => fake()->optional()->state(),
+            'is_active' => true,
             'version' => 1,
         ];
     }
