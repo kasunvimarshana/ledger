@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   permissionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    marginHorizontal: -4, // Negative margin to offset chip margins
   },
   permissionChip: {
     backgroundColor: '#e3f2fd',
@@ -234,6 +234,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#2196F3',
+    margin: 4, // Provides spacing between chips
   },
   permissionText: {
     fontSize: 12,

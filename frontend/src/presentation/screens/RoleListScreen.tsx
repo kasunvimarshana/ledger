@@ -337,6 +337,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
     justifyContent: 'flex-start',
-    gap: 8,
   },
 });

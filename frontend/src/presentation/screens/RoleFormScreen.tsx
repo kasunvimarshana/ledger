@@ -383,12 +383,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#007bff',
   },
   permissionsContainer: {
-    gap: 8,
+    // No gap needed, marginBottom on permissionItem handles spacing
   },
   permissionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 6,
+    marginBottom: 4,
   },
   checkbox: {
     width: 20,
