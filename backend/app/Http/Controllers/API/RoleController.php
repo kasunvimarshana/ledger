@@ -11,6 +11,19 @@ class RoleController extends Controller
 {
     /**
      * Display a listing of roles
+     * 
+     * @OA\Get(
+     *     path="/roles",
+     *     tags={"Roles"},
+     *     summary="Get all roles",
+     *     description="Retrieve a paginated list of roles with user count",
+     *     operationId="getRoles",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="search", in="query", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="per_page", in="query", required=false, @OA\Schema(type="integer", default=15)),
+     *     @OA\Response(response=200, description="Success"),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
      */
     public function index(Request $request)
     {
@@ -37,6 +50,27 @@ class RoleController extends Controller
 
     /**
      * Store a newly created role
+     * 
+     * @OA\Post(
+     *     path="/roles",
+     *     tags={"Roles"},
+     *     summary="Create new role",
+     *     description="Create a new role with permissions",
+     *     operationId="createRole",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","display_name"},
+     *             @OA\Property(property="name", type="string", example="manager"),
+     *             @OA\Property(property="display_name", type="string", example="Manager"),
+     *             @OA\Property(property="description", type="string", example="Role for managers"),
+     *             @OA\Property(property="permissions", type="array", @OA\Items(type="string"), example={"view_reports","manage_collections"})
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Role created"),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
      */
     public function store(Request $request)
     {
@@ -66,6 +100,18 @@ class RoleController extends Controller
 
     /**
      * Display the specified role
+     * 
+     * @OA\Get(
+     *     path="/roles/{id}",
+     *     tags={"Roles"},
+     *     summary="Get role by ID",
+     *     description="Retrieve a single role with user count",
+     *     operationId="getRoleById",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Success"),
+     *     @OA\Response(response=404, description="Role not found")
+     * )
      */
     public function show(Role $role)
     {
@@ -79,6 +125,27 @@ class RoleController extends Controller
 
     /**
      * Update the specified role
+     * 
+     * @OA\Put(
+     *     path="/roles/{id}",
+     *     tags={"Roles"},
+     *     summary="Update role",
+     *     description="Update role information and permissions",
+     *     operationId="updateRole",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="manager"),
+     *             @OA\Property(property="display_name", type="string", example="Manager"),
+     *             @OA\Property(property="description", type="string", example="Role for managers"),
+     *             @OA\Property(property="permissions", type="array", @OA\Items(type="string"), example={"view_reports","manage_collections"})
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Role updated"),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
      */
     public function update(Request $request, Role $role)
     {
@@ -108,6 +175,18 @@ class RoleController extends Controller
 
     /**
      * Remove the specified role
+     * 
+     * @OA\Delete(
+     *     path="/roles/{id}",
+     *     tags={"Roles"},
+     *     summary="Delete role",
+     *     description="Delete a role (only if no users are assigned)",
+     *     operationId="deleteRole",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Role deleted"),
+     *     @OA\Response(response=422, description="Cannot delete role with active users")
+     * )
      */
     public function destroy(Role $role)
     {
