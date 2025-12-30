@@ -15,10 +15,16 @@ import {
   Alert,
   TextInput,
   Modal,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system/build/legacy/FileSystem';
 import apiClient from '../../infrastructure/api/apiClient';
 import { useAuth } from '../contexts/AuthContext';
+import { TOKEN_STORAGE_KEY, API_BASE_URL } from '../../core/constants/api';
 
 interface ReportSummary {
   totalSuppliers: number;
@@ -171,6 +177,296 @@ export const ReportsScreen: React.FC = () => {
     loadReports();
   };
 
+  const generateHTMLReport = () => {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>System Summary Report</title>
+        <style>
+          body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            padding: 20px;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 15px;
+          }
+          h1 {
+            font-size: 24px;
+            color: #007bff;
+            margin: 0 0 5px 0;
+          }
+          h2 {
+            font-size: 18px;
+            color: #666;
+            font-weight: normal;
+            margin: 0;
+          }
+          .meta-info {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+          }
+          .section {
+            margin-bottom: 25px;
+          }
+          .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+          }
+          th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+          }
+          th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+          }
+          tr:nth-child(even) {
+            background-color: #f8f9fa;
+          }
+          .text-right {
+            text-align: right;
+          }
+          .text-success {
+            color: #28a745;
+          }
+          .text-danger {
+            color: #dc3545;
+          }
+          .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Data Collection & Payment Management</h1>
+          <h2>System Summary Report</h2>
+        </div>
+        
+        <div class="meta-info">
+          <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
+          ${activeFilter ? `<p><strong>Period:</strong> ${activeFilter.startDate} to ${activeFilter.endDate}</p>` : '<p><strong>Period:</strong> All Time</p>'}
+        </div>
+        
+        <div class="section">
+          <div class="section-title">System Overview</div>
+          <table>
+            <tbody>
+              <tr>
+                <td><strong>Total Suppliers</strong></td>
+                <td class="text-right">${summary?.totalSuppliers || 0}</td>
+                <td><strong>Active Suppliers</strong></td>
+                <td class="text-right">${summary?.activeSuppliers || 0}</td>
+              </tr>
+              <tr>
+                <td><strong>Total Products</strong></td>
+                <td class="text-right">${summary?.totalProducts || 0}</td>
+                <td><strong>Active Products</strong></td>
+                <td class="text-right">${summary?.activeProducts || 0}</td>
+              </tr>
+              <tr>
+                <td><strong>Total Collections</strong></td>
+                <td class="text-right">${summary?.totalCollections || 0}</td>
+                <td><strong>Total Payments</strong></td>
+                <td class="text-right">${summary?.totalPayments || 0}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">Financial Summary</div>
+          <table>
+            <tbody>
+              <tr>
+                <td><strong>Total Collections Amount</strong></td>
+                <td class="text-right">$${(summary?.totalCollectionAmount || 0).toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td><strong>Total Payments Amount</strong></td>
+                <td class="text-right text-success">$${(summary?.totalPaymentAmount || 0).toFixed(2)}</td>
+              </tr>
+              <tr style="background-color: #e9ecef;">
+                <td><strong>Outstanding Balance</strong></td>
+                <td class="text-right ${(summary?.outstandingBalance || 0) > 0 ? 'text-danger' : 'text-success'}">
+                  <strong>$${Math.abs(summary?.outstandingBalance || 0).toFixed(2)}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">Top Supplier Balances</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Supplier Code</th>
+                <th>Supplier Name</th>
+                <th class="text-right">Collections</th>
+                <th class="text-right">Payments</th>
+                <th class="text-right">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${topBalances.map(balance => `
+                <tr>
+                  <td>${balance.supplier_code}</td>
+                  <td>${balance.supplier_name}</td>
+                  <td class="text-right">$${balance.total_collections.toFixed(2)}</td>
+                  <td class="text-right">$${balance.total_payments.toFixed(2)}</td>
+                  <td class="text-right ${balance.balance > 0 ? 'text-danger' : 'text-success'}">
+                    $${Math.abs(balance.balance).toFixed(2)}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="footer">
+          <p>This is a system-generated report. For official purposes only.</p>
+          <p>&copy; ${new Date().getFullYear()} Data Collection & Payment Management System</p>
+        </div>
+      </body>
+      </html>
+    `;
+  };
+
+  const handlePrint = async () => {
+    try {
+      const html = generateHTMLReport();
+      await Print.printAsync({
+        html,
+      });
+    } catch (error) {
+      console.error('Error printing report:', error);
+      Alert.alert('Error', 'Failed to print report');
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    try {
+      const html = generateHTMLReport();
+      const { uri } = await Print.printToFileAsync({
+        html,
+      });
+
+      // Share the PDF file
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, {
+          mimeType: 'application/pdf',
+          dialogTitle: 'Save System Summary Report',
+          UTI: 'com.adobe.pdf',
+        });
+      } else {
+        Alert.alert('Success', `PDF saved to: ${uri}`);
+      }
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      Alert.alert('Error', 'Failed to generate PDF');
+    }
+  };
+
+  const handleDownloadFromBackend = async () => {
+    try {
+      Alert.alert(
+        'Download PDF',
+        'Choose PDF download option:',
+        [
+          {
+            text: 'System Summary',
+            onPress: () => downloadPDFFromBackend('/reports/summary/pdf'),
+          },
+          {
+            text: 'Supplier Balances',
+            onPress: () => downloadPDFFromBackend('/reports/supplier-balances/pdf'),
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ]
+      );
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const downloadPDFFromBackend = async (endpoint: string) => {
+    try {
+      // Get the auth token from AsyncStorage
+      const token = await AsyncStorage.getItem(TOKEN_STORAGE_KEY);
+      if (!token) {
+        Alert.alert('Error', 'Authentication required');
+        return;
+      }
+
+      // Construct URL with query parameters
+      const baseURL = API_BASE_URL;
+      let url = `${baseURL}${endpoint}`;
+      
+      if (activeFilter && activeFilter.startDate && activeFilter.endDate) {
+        url += `?start_date=${activeFilter.startDate}&end_date=${activeFilter.endDate}`;
+      }
+
+      // Download the PDF
+      const filename = `report-${Date.now()}.pdf`;
+      const downloadDest = `${FileSystem.documentDirectory}${filename}`;
+
+      const downloadResumable = FileSystem.createDownloadResumable(
+        url,
+        downloadDest,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await downloadResumable.downloadAsync();
+      if (result && result.uri) {
+        // Share the downloaded PDF
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(result.uri, {
+            mimeType: 'application/pdf',
+            dialogTitle: 'Save Report',
+            UTI: 'com.adobe.pdf',
+          });
+        } else {
+          Alert.alert('Success', `PDF saved to: ${result.uri}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error downloading PDF from backend:', error);
+      Alert.alert('Error', 'Failed to download PDF from server');
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -224,6 +520,28 @@ export const ReportsScreen: React.FC = () => {
             <Text style={styles.filterButtonText}>Custom Range</Text>
           </TouchableOpacity>
         </ScrollView>
+      </View>
+
+      {/* Action Buttons for Print and PDF */}
+      <View style={styles.actionBar}>
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={handlePrint}
+        >
+          <Text style={styles.actionButtonText}>🖨️ Print</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.actionButtonPrimary]}
+          onPress={handleDownloadPDF}
+        >
+          <Text style={styles.actionButtonTextWhite}>📄 Export PDF</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.actionButtonSuccess]}
+          onPress={handleDownloadFromBackend}
+        >
+          <Text style={styles.actionButtonTextWhite}>⬇️ Download</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -692,5 +1010,40 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  actionBar: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  actionButton: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 5,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionButtonPrimary: {
+    backgroundColor: '#007bff',
+  },
+  actionButtonSuccess: {
+    backgroundColor: '#28a745',
+  },
+  actionButtonText: {
+    fontSize: 13,
+    color: '#333',
+    fontWeight: '600',
+  },
+  actionButtonTextWhite: {
+    fontSize: 13,
+    color: '#fff',
+    fontWeight: '600',
   },
 });
