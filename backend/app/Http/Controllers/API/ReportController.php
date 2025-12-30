@@ -528,9 +528,13 @@ class ReportController extends Controller
         $totalPayments = $paymentsQuery->sum('amount');
         $netBalance = $totalCollections - $totalPayments;
         
-        // Get monthly breakdown
+        // Get monthly breakdown - using SQLite-compatible date formatting
+        $dateFormat = DB::connection()->getDriverName() === 'sqlite' 
+            ? "strftime('%Y-%m', collection_date)"
+            : "DATE_FORMAT(collection_date, '%Y-%m')";
+        
         $monthlyData = Collection::select([
-                DB::raw('DATE_FORMAT(collection_date, "%Y-%m") as month'),
+                DB::raw("$dateFormat as month"),
                 DB::raw('COALESCE(SUM(collections.total_amount), 0) as collections'),
                 DB::raw('0 as payments')
             ])
@@ -544,8 +548,12 @@ class ReportController extends Controller
             ->get()
             ->keyBy('month');
         
+        $paymentDateFormat = DB::connection()->getDriverName() === 'sqlite' 
+            ? "strftime('%Y-%m', payment_date)"
+            : "DATE_FORMAT(payment_date, '%Y-%m')";
+        
         Payment::select([
-                DB::raw('DATE_FORMAT(payment_date, "%Y-%m") as month'),
+                DB::raw("$paymentDateFormat as month"),
                 DB::raw('COALESCE(SUM(amount), 0) as payments')
             ])
             ->when($request->has('start_date'), function ($q) use ($request) {
