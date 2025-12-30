@@ -167,9 +167,9 @@ export const useNetworkStatus = () => {
   };
 
   /**
-   * Get status icon name
+   * Get status icon name (valid Ionicons name)
    */
-  const getStatusIcon = (): string => {
+  const getStatusIcon = (): 'sync' | 'alert-circle' | 'cloud-upload' | 'cloud-offline' | 'cloud-done' => {
     if (syncStatus.isSyncing) return 'sync';
     if (syncStatus.syncError) return 'alert-circle';
     if (syncStatus.hasPendingChanges) return 'cloud-upload';
