@@ -13,6 +13,8 @@ import {
   RefreshControl,
   TouchableOpacity,
   Alert,
+  TextInput,
+  Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../infrastructure/api/apiClient';
@@ -30,6 +32,8 @@ interface ReportSummary {
   outstandingBalance: number;
   collectionsThisMonth: number;
   paymentsThisMonth: number;
+  collectionAmountThisMonth: number;
+  paymentAmountThisMonth: number;
 }
 
 interface SupplierBalance {
@@ -39,6 +43,13 @@ interface SupplierBalance {
   total_collections: number;
   total_payments: number;
   balance: number;
+  collection_count?: number;
+  payment_count?: number;
+}
+
+interface DateFilter {
+  startDate: string;
+  endDate: string;
 }
 
 export const ReportsScreen: React.FC = () => {
@@ -48,6 +59,12 @@ export const ReportsScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState<ReportSummary | null>(null);
   const [topBalances, setTopBalances] = useState<SupplierBalance[]>([]);
+  const [showDateFilter, setShowDateFilter] = useState(false);
+  const [dateFilter, setDateFilter] = useState<DateFilter>({
+    startDate: '',
+    endDate: '',
+  });
+  const [activeFilter, setActiveFilter] = useState<DateFilter | null>(null);
 
   useEffect(() => {
     loadReports();
@@ -113,6 +130,49 @@ export const ReportsScreen: React.FC = () => {
     navigation.goBack();
   };
 
+  const handleDateFilterApply = () => {
+    setActiveFilter(dateFilter);
+    setShowDateFilter(false);
+    loadReports();
+  };
+
+  const handleDateFilterClear = () => {
+    setDateFilter({ startDate: '', endDate: '' });
+    setActiveFilter(null);
+    setShowDateFilter(false);
+    loadReports();
+  };
+
+  const handleQuickFilter = (filter: 'today' | 'week' | 'month' | 'all') => {
+    const today = new Date();
+    let startDate = '';
+    let endDate = today.toISOString().split('T')[0];
+
+    switch (filter) {
+      case 'today':
+        startDate = endDate;
+        break;
+      case 'week':
+        const weekAgo = new Date(today);
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        startDate = weekAgo.toISOString().split('T')[0];
+        break;
+      case 'month':
+        const monthAgo = new Date(today);
+        monthAgo.setMonth(monthAgo.getMonth() - 1);
+        startDate = monthAgo.toISOString().split('T')[0];
+        break;
+      case 'all':
+        startDate = '';
+        endDate = '';
+        break;
+    }
+
+    setDateFilter({ startDate, endDate });
+    setActiveFilter({ startDate, endDate });
+    loadReports();
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -128,6 +188,44 @@ export const ReportsScreen: React.FC = () => {
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Reports & Analytics</Text>
+      </View>
+
+      {/* Quick Filters */}
+      <View style={styles.filterBar}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity 
+            style={[styles.filterButton, !activeFilter && styles.filterButtonActive]}
+            onPress={() => handleQuickFilter('all')}
+          >
+            <Text style={[styles.filterButtonText, !activeFilter && styles.filterButtonTextActive]}>
+              All Time
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => handleQuickFilter('today')}
+          >
+            <Text style={styles.filterButtonText}>Today</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => handleQuickFilter('week')}
+          >
+            <Text style={styles.filterButtonText}>Last 7 Days</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => handleQuickFilter('month')}
+          >
+            <Text style={styles.filterButtonText}>Last 30 Days</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.filterButton, styles.filterButtonCustom]}
+            onPress={() => setShowDateFilter(true)}
+          >
+            <Text style={styles.filterButtonText}>Custom Range</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
 
       <ScrollView
@@ -246,6 +344,59 @@ export const ReportsScreen: React.FC = () => {
           <Text style={styles.footerText}>Last updated: {new Date().toLocaleString()}</Text>
         </View>
       </ScrollView>
+
+      {/* Date Filter Modal */}
+      <Modal
+        visible={showDateFilter}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowDateFilter(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Custom Date Range</Text>
+            
+            <Text style={styles.inputLabel}>Start Date (YYYY-MM-DD)</Text>
+            <TextInput
+              style={styles.input}
+              value={dateFilter.startDate}
+              onChangeText={(text) => setDateFilter({...dateFilter, startDate: text})}
+              placeholder="2025-01-01"
+              placeholderTextColor="#999"
+            />
+            
+            <Text style={styles.inputLabel}>End Date (YYYY-MM-DD)</Text>
+            <TextInput
+              style={styles.input}
+              value={dateFilter.endDate}
+              onChangeText={(text) => setDateFilter({...dateFilter, endDate: text})}
+              placeholder="2025-12-31"
+              placeholderTextColor="#999"
+            />
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonSecondary]}
+                onPress={handleDateFilterClear}
+              >
+                <Text style={styles.modalButtonTextSecondary}>Clear</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonCancel]}
+                onPress={() => setShowDateFilter(false)}
+              >
+                <Text style={styles.modalButtonTextCancel}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonPrimary]}
+                onPress={handleDateFilterApply}
+              >
+                <Text style={styles.modalButtonTextPrimary}>Apply</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -444,5 +595,104 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#999',
     fontStyle: 'italic',
+  },
+  filterBar: {
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  filterButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+  },
+  filterButtonActive: {
+    backgroundColor: '#007bff',
+  },
+  filterButtonCustom: {
+    backgroundColor: '#6c757d',
+  },
+  filterButtonText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  filterButtonTextActive: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    width: '90%',
+    maxWidth: 400,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: '#333',
+    backgroundColor: '#fff',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  modalButtonPrimary: {
+    backgroundColor: '#007bff',
+  },
+  modalButtonSecondary: {
+    backgroundColor: '#6c757d',
+  },
+  modalButtonCancel: {
+    backgroundColor: '#dc3545',
+  },
+  modalButtonTextPrimary: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalButtonTextSecondary: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalButtonTextCancel: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
