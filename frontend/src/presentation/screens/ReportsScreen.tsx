@@ -13,6 +13,8 @@ import {
   RefreshControl,
   TouchableOpacity,
   Alert,
+  TextInput,
+  Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../infrastructure/api/apiClient';
@@ -39,6 +41,13 @@ interface SupplierBalance {
   total_collections: number;
   total_payments: number;
   balance: number;
+  collection_count?: number;
+  payment_count?: number;
+}
+
+interface DateFilter {
+  startDate: string;
+  endDate: string;
 }
 
 export const ReportsScreen: React.FC = () => {
@@ -48,6 +57,12 @@ export const ReportsScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState<ReportSummary | null>(null);
   const [topBalances, setTopBalances] = useState<SupplierBalance[]>([]);
+  const [showDateFilter, setShowDateFilter] = useState(false);
+  const [dateFilter, setDateFilter] = useState<DateFilter>({
+    startDate: '',
+    endDate: '',
+  });
+  const [activeFilter, setActiveFilter] = useState<DateFilter | null>(null);
 
   useEffect(() => {
     loadReports();
@@ -70,64 +85,21 @@ export const ReportsScreen: React.FC = () => {
 
   const loadSummary = async () => {
     try {
-      // Load summary data from multiple endpoints
-      const [suppliersRes, productsRes, collectionsRes, paymentsRes] = await Promise.all([
-        apiClient.get<any>('/suppliers?per_page=1'),
-        apiClient.get<any>('/products?per_page=1'),
-        apiClient.get<any>('/collections?per_page=1'),
-        apiClient.get<any>('/payments?per_page=1'),
-      ]);
-
-      // Calculate summary from paginated responses
-      const totalSuppliers = suppliersRes.data?.total || 0;
-      const totalProducts = productsRes.data?.total || 0;
-      const totalCollections = collectionsRes.data?.total || 0;
-      const totalPayments = paymentsRes.data?.total || 0;
-
-      // Get full data for calculations
-      const [allCollections, allPayments] = await Promise.all([
-        apiClient.get<any>('/collections?per_page=1000'),
-        apiClient.get<any>('/payments?per_page=1000'),
-      ]);
-
-      const collections = allCollections.data?.data || [];
-      const payments = allPayments.data?.data || [];
-
-      const totalCollectionAmount = collections.reduce(
-        (sum: number, c: any) => sum + (parseFloat(c.total_amount) || 0),
-        0
-      );
-      const totalPaymentAmount = payments.reduce(
-        (sum: number, p: any) => sum + (parseFloat(p.amount) || 0),
-        0
-      );
-
-      const outstandingBalance = totalCollectionAmount - totalPaymentAmount;
-
-      // Calculate this month's data
-      const now = new Date();
-      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      // Use the new dedicated summary endpoint
+      const response = await apiClient.get<any>('/reports/summary');
       
-      const collectionsThisMonth = collections.filter(
-        (c: any) => new Date(c.collection_date) >= firstDayOfMonth
-      ).length;
-      
-      const paymentsThisMonth = payments.filter(
-        (p: any) => new Date(p.payment_date) >= firstDayOfMonth
-      ).length;
-
       setSummary({
-        totalSuppliers,
-        activeSuppliers: totalSuppliers, // Could be filtered by is_active
-        totalProducts,
-        activeProducts: totalProducts, // Could be filtered by is_active
-        totalCollections,
-        totalCollectionAmount,
-        totalPayments,
-        totalPaymentAmount,
-        outstandingBalance,
-        collectionsThisMonth,
-        paymentsThisMonth,
+        totalSuppliers: response.data?.totalSuppliers || 0,
+        activeSuppliers: response.data?.activeSuppliers || 0,
+        totalProducts: response.data?.totalProducts || 0,
+        activeProducts: response.data?.activeProducts || 0,
+        totalCollections: response.data?.totalCollections || 0,
+        totalCollectionAmount: response.data?.totalCollectionAmount || 0,
+        totalPayments: response.data?.totalPayments || 0,
+        totalPaymentAmount: response.data?.totalPaymentAmount || 0,
+        outstandingBalance: response.data?.outstandingBalance || 0,
+        collectionsThisMonth: response.data?.collectionsThisMonth || 0,
+        paymentsThisMonth: response.data?.paymentsThisMonth || 0,
       });
     } catch (error) {
       console.error('Error loading summary:', error);
@@ -136,32 +108,10 @@ export const ReportsScreen: React.FC = () => {
 
   const loadTopBalances = async () => {
     try {
-      // Get all suppliers with their balances
-      const response = await apiClient.get<any>('/suppliers?per_page=1000');
-      const suppliers = response.data?.data || [];
-
-      // Get balance for each supplier
-      const balancePromises = suppliers.slice(0, 10).map(async (supplier: any) => {
-        try {
-          const balanceRes = await apiClient.get<any>(`/suppliers/${supplier.id}/balance`);
-          return {
-            supplier_id: supplier.id,
-            supplier_name: supplier.name,
-            supplier_code: supplier.code,
-            total_collections: balanceRes.data?.total_collections || 0,
-            total_payments: balanceRes.data?.total_payments || 0,
-            balance: balanceRes.data?.balance || 0,
-          };
-        } catch (error) {
-          return null;
-        }
-      });
-
-      const balances = (await Promise.all(balancePromises))
-        .filter((b): b is SupplierBalance => b !== null)
-        .sort((a, b) => Math.abs(b.balance) - Math.abs(a.balance))
-        .slice(0, 5);
-
+      // Use the new dedicated supplier balances endpoint
+      const response = await apiClient.get<any>('/reports/supplier-balances?limit=5&sort=desc');
+      const balances = response.data || [];
+      
       setTopBalances(balances);
     } catch (error) {
       console.error('Error loading top balances:', error);
@@ -176,6 +126,49 @@ export const ReportsScreen: React.FC = () => {
 
   const goBack = () => {
     navigation.goBack();
+  };
+
+  const handleDateFilterApply = () => {
+    setActiveFilter(dateFilter);
+    setShowDateFilter(false);
+    loadReports();
+  };
+
+  const handleDateFilterClear = () => {
+    setDateFilter({ startDate: '', endDate: '' });
+    setActiveFilter(null);
+    setShowDateFilter(false);
+    loadReports();
+  };
+
+  const handleQuickFilter = (filter: 'today' | 'week' | 'month' | 'all') => {
+    const today = new Date();
+    let startDate = '';
+    let endDate = today.toISOString().split('T')[0];
+
+    switch (filter) {
+      case 'today':
+        startDate = endDate;
+        break;
+      case 'week':
+        const weekAgo = new Date(today);
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        startDate = weekAgo.toISOString().split('T')[0];
+        break;
+      case 'month':
+        const monthAgo = new Date(today);
+        monthAgo.setMonth(monthAgo.getMonth() - 1);
+        startDate = monthAgo.toISOString().split('T')[0];
+        break;
+      case 'all':
+        startDate = '';
+        endDate = '';
+        break;
+    }
+
+    setDateFilter({ startDate, endDate });
+    setActiveFilter({ startDate, endDate });
+    loadReports();
   };
 
   if (loading) {
@@ -193,6 +186,44 @@ export const ReportsScreen: React.FC = () => {
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Reports & Analytics</Text>
+      </View>
+
+      {/* Quick Filters */}
+      <View style={styles.filterBar}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity 
+            style={[styles.filterButton, !activeFilter && styles.filterButtonActive]}
+            onPress={() => handleQuickFilter('all')}
+          >
+            <Text style={[styles.filterButtonText, !activeFilter && styles.filterButtonTextActive]}>
+              All Time
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => handleQuickFilter('today')}
+          >
+            <Text style={styles.filterButtonText}>Today</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => handleQuickFilter('week')}
+          >
+            <Text style={styles.filterButtonText}>Last 7 Days</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => handleQuickFilter('month')}
+          >
+            <Text style={styles.filterButtonText}>Last 30 Days</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.filterButton, styles.filterButtonCustom]}
+            onPress={() => setShowDateFilter(true)}
+          >
+            <Text style={styles.filterButtonText}>Custom Range</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
 
       <ScrollView
@@ -311,6 +342,59 @@ export const ReportsScreen: React.FC = () => {
           <Text style={styles.footerText}>Last updated: {new Date().toLocaleString()}</Text>
         </View>
       </ScrollView>
+
+      {/* Date Filter Modal */}
+      <Modal
+        visible={showDateFilter}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowDateFilter(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Custom Date Range</Text>
+            
+            <Text style={styles.inputLabel}>Start Date (YYYY-MM-DD)</Text>
+            <TextInput
+              style={styles.input}
+              value={dateFilter.startDate}
+              onChangeText={(text) => setDateFilter({...dateFilter, startDate: text})}
+              placeholder="2025-01-01"
+              placeholderTextColor="#999"
+            />
+            
+            <Text style={styles.inputLabel}>End Date (YYYY-MM-DD)</Text>
+            <TextInput
+              style={styles.input}
+              value={dateFilter.endDate}
+              onChangeText={(text) => setDateFilter({...dateFilter, endDate: text})}
+              placeholder="2025-12-31"
+              placeholderTextColor="#999"
+            />
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonSecondary]}
+                onPress={handleDateFilterClear}
+              >
+                <Text style={styles.modalButtonTextSecondary}>Clear</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonCancel]}
+                onPress={() => setShowDateFilter(false)}
+              >
+                <Text style={styles.modalButtonTextCancel}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonPrimary]}
+                onPress={handleDateFilterApply}
+              >
+                <Text style={styles.modalButtonTextPrimary}>Apply</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -509,5 +593,104 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#999',
     fontStyle: 'italic',
+  },
+  filterBar: {
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  filterButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+  },
+  filterButtonActive: {
+    backgroundColor: '#007bff',
+  },
+  filterButtonCustom: {
+    backgroundColor: '#6c757d',
+  },
+  filterButtonText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  filterButtonTextActive: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    width: '90%',
+    maxWidth: 400,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: '#333',
+    backgroundColor: '#fff',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  modalButtonPrimary: {
+    backgroundColor: '#007bff',
+  },
+  modalButtonSecondary: {
+    backgroundColor: '#6c757d',
+  },
+  modalButtonCancel: {
+    backgroundColor: '#dc3545',
+  },
+  modalButtonTextPrimary: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalButtonTextSecondary: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalButtonTextCancel: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
