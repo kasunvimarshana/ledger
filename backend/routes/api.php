@@ -78,4 +78,12 @@ Route::middleware(['auth:api', 'audit'])->group(function () {
     Route::get('/reports/payments-summary', [ReportController::class, 'paymentsSummary']);
     Route::get('/reports/product-performance', [ReportController::class, 'productPerformance']);
     Route::get('/reports/financial-summary', [ReportController::class, 'financialSummary']);
+    
+    // PDF Report routes
+    Route::get('/reports/summary/pdf', [ReportController::class, 'summaryPdf']);
+    Route::get('/reports/supplier-balances/pdf', [ReportController::class, 'supplierBalancesPdf']);
+    Route::get('/reports/collections-summary/pdf', [ReportController::class, 'collectionsSummaryPdf']);
+    Route::get('/reports/payments-summary/pdf', [ReportController::class, 'paymentsSummaryPdf']);
+    Route::get('/reports/product-performance/pdf', [ReportController::class, 'productPerformancePdf']);
+    Route::get('/reports/financial-summary/pdf', [ReportController::class, 'financialSummaryPdf']);
 });
