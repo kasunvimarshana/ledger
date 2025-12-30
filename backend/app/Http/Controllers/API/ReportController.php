@@ -484,6 +484,16 @@ class ReportController extends Controller
     }
 
     /**
+     * Get database-specific date format for month grouping
+     */
+    private function getMonthDateFormat(string $column): string
+    {
+        return DB::connection()->getDriverName() === 'sqlite' 
+            ? "strftime('%Y-%m', $column)"
+            : "DATE_FORMAT($column, '%Y-%m')";
+    }
+
+    /**
      * @OA\Get(
      *     path="/api/reports/financial-summary",
      *     summary="Get comprehensive financial summary",
@@ -528,13 +538,9 @@ class ReportController extends Controller
         $totalPayments = $paymentsQuery->sum('amount');
         $netBalance = $totalCollections - $totalPayments;
         
-        // Get monthly breakdown - using SQLite-compatible date formatting
-        $dateFormat = DB::connection()->getDriverName() === 'sqlite' 
-            ? "strftime('%Y-%m', collection_date)"
-            : "DATE_FORMAT(collection_date, '%Y-%m')";
-        
+        // Get monthly breakdown - using database-compatible date formatting
         $monthlyData = Collection::select([
-                DB::raw("$dateFormat as month"),
+                DB::raw("{$this->getMonthDateFormat('collection_date')} as month"),
                 DB::raw('COALESCE(SUM(collections.total_amount), 0) as collections'),
                 DB::raw('0 as payments')
             ])
@@ -548,12 +554,8 @@ class ReportController extends Controller
             ->get()
             ->keyBy('month');
         
-        $paymentDateFormat = DB::connection()->getDriverName() === 'sqlite' 
-            ? "strftime('%Y-%m', payment_date)"
-            : "DATE_FORMAT(payment_date, '%Y-%m')";
-        
         Payment::select([
-                DB::raw("$paymentDateFormat as month"),
+                DB::raw("{$this->getMonthDateFormat('payment_date')} as month"),
                 DB::raw('COALESCE(SUM(amount), 0) as payments')
             ])
             ->when($request->has('start_date'), function ($q) use ($request) {

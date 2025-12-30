@@ -32,8 +32,6 @@ interface ReportSummary {
   outstandingBalance: number;
   collectionsThisMonth: number;
   paymentsThisMonth: number;
-  collectionAmountThisMonth: number;
-  paymentAmountThisMonth: number;
 }
 
 interface SupplierBalance {
