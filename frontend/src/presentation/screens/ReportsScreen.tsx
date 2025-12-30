@@ -426,12 +426,16 @@ export const ReportsScreen: React.FC = () => {
         return;
       }
 
-      // Construct URL with query parameters
+      // Construct URL with query parameters using URLSearchParams
       const baseURL = API_BASE_URL;
       let url = `${baseURL}${endpoint}`;
       
       if (activeFilter && activeFilter.startDate && activeFilter.endDate) {
-        url += `?start_date=${activeFilter.startDate}&end_date=${activeFilter.endDate}`;
+        const params = new URLSearchParams({
+          start_date: activeFilter.startDate,
+          end_date: activeFilter.endDate,
+        });
+        url += `?${params.toString()}`;
       }
 
       // Download the PDF
