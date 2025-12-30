@@ -70,64 +70,21 @@ export const ReportsScreen: React.FC = () => {
 
   const loadSummary = async () => {
     try {
-      // Load summary data from multiple endpoints
-      const [suppliersRes, productsRes, collectionsRes, paymentsRes] = await Promise.all([
-        apiClient.get<any>('/suppliers?per_page=1'),
-        apiClient.get<any>('/products?per_page=1'),
-        apiClient.get<any>('/collections?per_page=1'),
-        apiClient.get<any>('/payments?per_page=1'),
-      ]);
-
-      // Calculate summary from paginated responses
-      const totalSuppliers = suppliersRes.data?.total || 0;
-      const totalProducts = productsRes.data?.total || 0;
-      const totalCollections = collectionsRes.data?.total || 0;
-      const totalPayments = paymentsRes.data?.total || 0;
-
-      // Get full data for calculations
-      const [allCollections, allPayments] = await Promise.all([
-        apiClient.get<any>('/collections?per_page=1000'),
-        apiClient.get<any>('/payments?per_page=1000'),
-      ]);
-
-      const collections = allCollections.data?.data || [];
-      const payments = allPayments.data?.data || [];
-
-      const totalCollectionAmount = collections.reduce(
-        (sum: number, c: any) => sum + (parseFloat(c.total_amount) || 0),
-        0
-      );
-      const totalPaymentAmount = payments.reduce(
-        (sum: number, p: any) => sum + (parseFloat(p.amount) || 0),
-        0
-      );
-
-      const outstandingBalance = totalCollectionAmount - totalPaymentAmount;
-
-      // Calculate this month's data
-      const now = new Date();
-      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      // Use the new dedicated summary endpoint
+      const response = await apiClient.get<any>('/reports/summary');
       
-      const collectionsThisMonth = collections.filter(
-        (c: any) => new Date(c.collection_date) >= firstDayOfMonth
-      ).length;
-      
-      const paymentsThisMonth = payments.filter(
-        (p: any) => new Date(p.payment_date) >= firstDayOfMonth
-      ).length;
-
       setSummary({
-        totalSuppliers,
-        activeSuppliers: totalSuppliers, // Could be filtered by is_active
-        totalProducts,
-        activeProducts: totalProducts, // Could be filtered by is_active
-        totalCollections,
-        totalCollectionAmount,
-        totalPayments,
-        totalPaymentAmount,
-        outstandingBalance,
-        collectionsThisMonth,
-        paymentsThisMonth,
+        totalSuppliers: response.data?.totalSuppliers || 0,
+        activeSuppliers: response.data?.activeSuppliers || 0,
+        totalProducts: response.data?.totalProducts || 0,
+        activeProducts: response.data?.activeProducts || 0,
+        totalCollections: response.data?.totalCollections || 0,
+        totalCollectionAmount: response.data?.totalCollectionAmount || 0,
+        totalPayments: response.data?.totalPayments || 0,
+        totalPaymentAmount: response.data?.totalPaymentAmount || 0,
+        outstandingBalance: response.data?.outstandingBalance || 0,
+        collectionsThisMonth: response.data?.collectionsThisMonth || 0,
+        paymentsThisMonth: response.data?.paymentsThisMonth || 0,
       });
     } catch (error) {
       console.error('Error loading summary:', error);
@@ -136,32 +93,10 @@ export const ReportsScreen: React.FC = () => {
 
   const loadTopBalances = async () => {
     try {
-      // Get all suppliers with their balances
-      const response = await apiClient.get<any>('/suppliers?per_page=1000');
-      const suppliers = response.data?.data || [];
-
-      // Get balance for each supplier
-      const balancePromises = suppliers.slice(0, 10).map(async (supplier: any) => {
-        try {
-          const balanceRes = await apiClient.get<any>(`/suppliers/${supplier.id}/balance`);
-          return {
-            supplier_id: supplier.id,
-            supplier_name: supplier.name,
-            supplier_code: supplier.code,
-            total_collections: balanceRes.data?.total_collections || 0,
-            total_payments: balanceRes.data?.total_payments || 0,
-            balance: balanceRes.data?.balance || 0,
-          };
-        } catch (error) {
-          return null;
-        }
-      });
-
-      const balances = (await Promise.all(balancePromises))
-        .filter((b): b is SupplierBalance => b !== null)
-        .sort((a, b) => Math.abs(b.balance) - Math.abs(a.balance))
-        .slice(0, 5);
-
+      // Use the new dedicated supplier balances endpoint
+      const response = await apiClient.get<any>('/reports/supplier-balances?limit=5&sort=desc');
+      const balances = response.data || [];
+      
       setTopBalances(balances);
     } catch (error) {
       console.error('Error loading top balances:', error);
