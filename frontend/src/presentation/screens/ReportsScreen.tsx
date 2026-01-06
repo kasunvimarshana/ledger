@@ -26,6 +26,8 @@ import * as FileSystem from 'expo-file-system/legacy';
 import apiClient from '../../infrastructure/api/apiClient';
 import { useAuth } from '../contexts/AuthContext';
 import { TOKEN_STORAGE_KEY, API_BASE_URL } from '../../core/constants/api';
+import { ScreenHeader } from '../components';
+import THEME from '../../core/constants/theme';
 
 interface ReportSummary {
   totalSuppliers: number;
@@ -483,12 +485,11 @@ export const ReportsScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
-        <TouchableOpacity onPress={goBack} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Reports & Analytics</Text>
-      </View>
+      <ScreenHeader 
+        title="Reports & Analytics"
+        showBackButton={true}
+        variant="light"
+      />
 
       {/* Quick Filters */}
       <View style={styles.filterBar}>

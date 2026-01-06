@@ -17,6 +17,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import THEME from '../../core/constants/theme';
 
 export const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -109,81 +110,81 @@ export const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: THEME.colors.background,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    padding: THEME.spacing.lg,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: THEME.typography.fontSize.huge,
+    fontWeight: THEME.typography.fontWeight.bold,
+    color: THEME.colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: THEME.spacing.sm,
   },
   subtitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: THEME.typography.fontSize.base,
+    color: THEME.colors.textSecondary,
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: THEME.spacing.xxxl,
   },
   form: {
     width: '100%',
   },
   input: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-    fontSize: 16,
+    backgroundColor: THEME.colors.surface,
+    paddingHorizontal: THEME.spacing.base,
+    paddingVertical: THEME.spacing.md,
+    borderRadius: THEME.borderRadius.base,
+    marginBottom: THEME.spacing.base,
+    fontSize: THEME.typography.fontSize.md,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
   },
   button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
-    borderRadius: 8,
+    backgroundColor: THEME.colors.primary,
+    paddingVertical: THEME.spacing.base,
+    borderRadius: THEME.borderRadius.base,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: THEME.spacing.sm,
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: THEME.colors.gray400,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: THEME.colors.white,
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.bold,
   },
   linkButton: {
-    marginTop: 20,
+    marginTop: THEME.spacing.lg,
     alignItems: 'center',
   },
   linkText: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: THEME.typography.fontSize.base,
+    color: THEME.colors.textSecondary,
   },
   linkTextBold: {
-    color: '#007bff',
-    fontWeight: 'bold',
+    color: THEME.colors.primary,
+    fontWeight: THEME.typography.fontWeight.bold,
   },
   testCredentials: {
-    marginTop: 30,
-    padding: 15,
+    marginTop: THEME.spacing.xl,
+    padding: THEME.spacing.base,
     backgroundColor: '#e3f2fd',
-    borderRadius: 8,
+    borderRadius: THEME.borderRadius.base,
   },
   testCredentialsTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
+    fontSize: THEME.typography.fontSize.base,
+    fontWeight: THEME.typography.fontWeight.bold,
+    color: THEME.colors.textPrimary,
+    marginBottom: THEME.spacing.sm,
   },
   testCredentialsText: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
+    fontSize: THEME.typography.fontSize.sm,
+    color: THEME.colors.textSecondary,
+    marginBottom: THEME.spacing.xs,
   },
 });

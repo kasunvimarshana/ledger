@@ -21,9 +21,8 @@ import apiClient from '../../infrastructure/api/apiClient';
 import { Payment } from '../../domain/entities/Payment';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination } from '../components/Pagination';
-import { SortButton } from '../components/SortButton';
-import { SyncStatusIndicator } from '../components/SyncStatusIndicator';
+import { Pagination, SortButton, ListScreenHeader, SyncStatusIndicator } from '../components';
+import THEME from '../../core/constants/theme';
 
 export const PaymentListScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -191,20 +190,13 @@ export const PaymentListScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
-        <View style={styles.headerTop}>
-          <Text style={styles.title}>Payments</Text>
-          <SyncStatusIndicator showDetails={false} />
-        </View>
-        {canCreate(user, 'payments') && (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddPayment}
-          >
-            <Text style={styles.addButtonText}>+ Add Payment</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      <ListScreenHeader
+        title="Payments"
+        showAddButton={canCreate(user, 'payments')}
+        onAddPress={handleAddPayment}
+        addButtonText="+ Add Payment"
+        rightComponent={<SyncStatusIndicator showDetails={false} />}
+      />
 
       <View style={styles.searchContainer}>
         <TextInput
