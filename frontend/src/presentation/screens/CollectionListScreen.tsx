@@ -283,11 +283,7 @@ const styles = StyleSheet.create({
     padding: THEME.spacing.base,
     borderRadius: THEME.borderRadius.base,
     marginBottom: THEME.spacing.md,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    ...THEME.shadows.base,
   },
   collectionHeader: {
     flexDirection: 'row',

@@ -316,11 +316,7 @@ const styles = StyleSheet.create({
     margin: THEME.spacing.base,
     padding: THEME.spacing.base,
     borderRadius: THEME.borderRadius.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    ...THEME.shadows.base,
   },
   nameRow: {
     flexDirection: 'row',
