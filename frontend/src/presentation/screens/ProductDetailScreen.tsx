@@ -142,19 +142,19 @@ export const ProductDetailScreen: React.FC = () => {
 
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Code:</Text>
-          <Text style={styles.detailValue}>{product.code}</Text>
+          <Text style={styles.detailValue}>{String(product.code)}</Text>
         </View>
 
         {product.description && (
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Description:</Text>
-            <Text style={styles.detailValue}>{product.description}</Text>
+            <Text style={styles.detailValue}>{String(product.description)}</Text>
           </View>
         )}
 
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Base Unit:</Text>
-          <Text style={styles.detailValue}>{product.base_unit}</Text>
+          <Text style={styles.detailValue}>{String(product.base_unit)}</Text>
         </View>
 
         <View style={styles.detailRow}>
@@ -162,7 +162,7 @@ export const ProductDetailScreen: React.FC = () => {
           <Text style={styles.detailValue}>
             {Array.isArray(product.supported_units)
               ? product.supported_units.join(', ')
-              : product.supported_units}
+              : String(product.supported_units)}
           </Text>
         </View>
       </View>
@@ -173,7 +173,7 @@ export const ProductDetailScreen: React.FC = () => {
           <View style={styles.rateCard}>
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Rate:</Text>
-              <Text style={styles.detailValue}>{currentRate.rate} per {currentRate.unit}</Text>
+              <Text style={styles.detailValue}>{String(currentRate.rate)} per {String(currentRate.unit)}</Text>
             </View>
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Effective From:</Text>
