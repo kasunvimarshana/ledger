@@ -242,9 +242,9 @@ export const SearchableSelector: React.FC<SearchableSelectorProps> = ({
               <FlatList
                 data={options}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) =>
-                  renderOption ? renderOption(item) : defaultRenderOption(item)
-                }
+                renderItem={({ item }) => (
+                  <>{renderOption ? renderOption(item) : defaultRenderOption(item)}</>
+                )}
                 onEndReached={handleLoadMore}
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={

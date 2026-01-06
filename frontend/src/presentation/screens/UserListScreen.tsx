@@ -288,18 +288,6 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.base,
     color: THEME.colors.primary,
   },
-  addButton: {
-    backgroundColor: THEME.colors.primary,
-    padding: THEME.spacing.base,
-    margin: THEME.spacing.base,
-    borderRadius: THEME.borderRadius.base,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: THEME.colors.white,
-    fontSize: THEME.typography.fontSize.lg,
-    fontWeight: THEME.typography.fontWeight.bold,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
