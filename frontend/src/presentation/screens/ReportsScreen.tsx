@@ -26,7 +26,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import apiClient from '../../infrastructure/api/apiClient';
 import { useAuth } from '../contexts/AuthContext';
 import { TOKEN_STORAGE_KEY, API_BASE_URL } from '../../core/constants/api';
-import { ScreenHeader } from '../components';
+import { ScreenHeader, DateTimePicker } from '../components';
 import THEME from '../../core/constants/theme';
 
 interface ReportSummary {
@@ -679,22 +679,22 @@ export const ReportsScreen: React.FC = () => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Custom Date Range</Text>
             
-            <Text style={styles.inputLabel}>Start Date (YYYY-MM-DD)</Text>
-            <TextInput
-              style={styles.input}
+            <DateTimePicker
+              label="Start Date"
               value={dateFilter.startDate}
-              onChangeText={(text) => setDateFilter({...dateFilter, startDate: text})}
-              placeholder="2025-01-01"
-              placeholderTextColor="#999"
+              onChange={(date) => setDateFilter({...dateFilter, startDate: date})}
+              mode="date"
+              placeholder="Select start date"
+              containerStyle={styles.datePickerContainer}
             />
             
-            <Text style={styles.inputLabel}>End Date (YYYY-MM-DD)</Text>
-            <TextInput
-              style={styles.input}
+            <DateTimePicker
+              label="End Date"
               value={dateFilter.endDate}
-              onChangeText={(text) => setDateFilter({...dateFilter, endDate: text})}
-              placeholder="2025-12-31"
-              placeholderTextColor="#999"
+              onChange={(date) => setDateFilter({...dateFilter, endDate: date})}
+              mode="date"
+              placeholder="Select end date"
+              containerStyle={styles.datePickerContainer}
             />
             
             <View style={styles.modalButtons}>
@@ -965,6 +965,9 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 20,
     textAlign: 'center',
+  },
+  datePickerContainer: {
+    marginBottom: 12,
   },
   inputLabel: {
     fontSize: 14,

@@ -19,6 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Supplier } from '../../domain/entities/Supplier';
 import { PaymentType } from '../../domain/entities/Payment';
+import { DateTimePicker } from '../components';
 
 interface PaymentFormData {
   supplier_id: string;
@@ -253,18 +254,14 @@ export const PaymentFormScreen: React.FC = () => {
         )}
 
         {/* Payment Date */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Payment Date *</Text>
-          <TextInput
-            style={[styles.input, errors.payment_date && styles.inputError]}
-            placeholder="YYYY-MM-DD"
-            value={formData.payment_date}
-            onChangeText={(value) => updateField('payment_date', value)}
-          />
-          {errors.payment_date && (
-            <Text style={styles.errorText}>{errors.payment_date}</Text>
-          )}
-        </View>
+        <DateTimePicker
+          label="Payment Date *"
+          value={formData.payment_date}
+          onChange={(value) => updateField('payment_date', value)}
+          mode="date"
+          placeholder="Select payment date"
+          error={errors.payment_date}
+        />
 
         {/* Amount */}
         <View style={styles.formGroup}>

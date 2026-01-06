@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Supplier } from '../../domain/entities/Supplier';
 import { Product, Rate } from '../../domain/entities/Product';
+import { DateTimePicker } from '../components';
 
 interface CollectionFormData {
   supplier_id: string;
@@ -322,18 +323,14 @@ export const CollectionFormScreen: React.FC = () => {
         )}
 
         {/* Collection Date */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Collection Date *</Text>
-          <TextInput
-            style={[styles.input, errors.collection_date && styles.inputError]}
-            placeholder="YYYY-MM-DD"
-            value={formData.collection_date}
-            onChangeText={(value) => updateField('collection_date', value)}
-          />
-          {errors.collection_date && (
-            <Text style={styles.errorText}>{errors.collection_date}</Text>
-          )}
-        </View>
+        <DateTimePicker
+          label="Collection Date *"
+          value={formData.collection_date}
+          onChange={(value) => updateField('collection_date', value)}
+          mode="date"
+          placeholder="Select collection date"
+          error={errors.collection_date}
+        />
 
         {/* Quantity */}
         <View style={styles.formGroup}>
