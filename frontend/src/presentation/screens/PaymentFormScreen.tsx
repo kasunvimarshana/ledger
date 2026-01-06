@@ -18,9 +18,8 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
-import { Supplier } from '../../domain/entities/Supplier';
 import { PaymentType } from '../../domain/entities/Payment';
-import { DateTimePicker } from '../components';
+import { DateTimePicker, SearchableSelector } from '../components';
 
 interface PaymentFormData {
   supplier_id: string;
@@ -40,7 +39,6 @@ export const PaymentFormScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   const [loading, setLoading] = useState(false);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [supplierBalance, setSupplierBalance] = useState<number | null>(null);
 
   const [formData, setFormData] = useState<PaymentFormData>({
@@ -58,7 +56,6 @@ export const PaymentFormScreen: React.FC = () => {
   const paymentMethods = ['cash', 'bank_transfer', 'cheque', 'mobile_money'];
 
   useEffect(() => {
-    loadSuppliers();
     if (isEditMode) {
       loadPayment();
     }
@@ -69,21 +66,6 @@ export const PaymentFormScreen: React.FC = () => {
       loadSupplierBalance(formData.supplier_id);
     }
   }, [formData.supplier_id]);
-
-  const loadSuppliers = async () => {
-    try {
-      const response = await apiClient.get<any>('/suppliers');
-      if (response.success && response.data) {
-        // Handle paginated response
-        const suppliers = Array.isArray(response.data) 
-          ? response.data 
-          : ((response.data as any).data || response.data);
-        setSuppliers(suppliers.filter((s: Supplier) => s.is_active));
-      }
-    } catch (error) {
-      console.error('Error loading suppliers:', error);
-    }
-  };
 
   const loadPayment = async () => {
     try {
@@ -211,35 +193,15 @@ export const PaymentFormScreen: React.FC = () => {
 
       <View style={styles.form}>
         {/* Supplier Selection */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Supplier *</Text>
-          <View style={[styles.input, errors.supplier_id && styles.inputError]}>
-            <Text style={styles.selectText}>
-              {formData.supplier_id 
-                ? suppliers.find(s => s.id.toString() === formData.supplier_id)?.name || 'Select supplier'
-                : 'Select supplier'}
-            </Text>
-          </View>
-          {errors.supplier_id && <Text style={styles.errorText}>{errors.supplier_id}</Text>}
-          
-          {/* Simple supplier list */}
-          {suppliers.length > 0 && (
-            <View style={styles.optionsList}>
-              {suppliers.map((supplier) => (
-                <TouchableOpacity
-                  key={supplier.id}
-                  style={[
-                    styles.optionItem,
-                    formData.supplier_id === supplier.id.toString() && styles.optionItemSelected
-                  ]}
-                  onPress={() => updateField('supplier_id', supplier.id.toString())}
-                >
-                  <Text style={styles.optionText}>{supplier.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
+        <SearchableSelector
+          label="Supplier *"
+          placeholder="Select supplier"
+          value={formData.supplier_id}
+          onSelect={(value) => updateField('supplier_id', value)}
+          endpoint="/suppliers"
+          error={errors.supplier_id}
+          queryParams={{ is_active: 1 }}
+        />
 
         {/* Supplier Balance Display */}
         {supplierBalance !== null && (
