@@ -10,11 +10,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
-  TextInput,
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 interface DateTimePickerProps {
   label?: string;
@@ -81,7 +80,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
 
   const displayValue = value ? formatDate(selectedDate) : '';
 
-  const handleDateChange = (event: any, selectedDate?: Date) => {
+  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     // On Android, the picker closes automatically when a date is selected
     if (Platform.OS === 'android') {
       setShowPicker(false);
@@ -96,10 +95,11 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       const formattedDate = formatDate(selectedDate);
       onChange(formattedDate);
       
-      // Close picker on iOS after selection
+      // On iOS, close the picker for date/time only modes after selection
+      // Keep open for datetime mode to allow both date and time selection
       if (Platform.OS === 'ios' && mode !== 'datetime') {
-        // For iOS, we keep it open for datetime to allow time selection
-        // For date/time only, we can close it
+        // Auto-close after a short delay for better UX
+        setTimeout(() => setShowPicker(false), 500);
       }
     }
   };
@@ -139,7 +139,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
         ]}>
           {displayValue || placeholder}
         </Text>
-        <Text style={styles.icon}>📅</Text>
+        <Text style={styles.icon} accessibilityLabel="Calendar icon" accessibilityRole="image">
+          📅
+        </Text>
       </TouchableOpacity>
       
       {error && (
