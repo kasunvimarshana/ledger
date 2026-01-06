@@ -740,7 +740,7 @@ const styles = StyleSheet.create({
     padding: THEME.spacing.lg,
   },
   backButton: {
-    marginBottom: 10,
+    marginBottom: THEME.spacing.sm,
   },
   backButtonText: {
     color: THEME.colors.white,
@@ -761,12 +761,12 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.lg,
     fontWeight: THEME.typography.fontWeight.bold,
     color: THEME.colors.textPrimary,
-    marginBottom: 15,
+    marginBottom: THEME.spacing.base,
   },
   cardRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    marginBottom: THEME.spacing.base,
   },
   card: {
     flex: 1,
@@ -774,7 +774,7 @@ const styles = StyleSheet.create({
     padding: THEME.spacing.lg,
     borderRadius: THEME.borderRadius.md,
     alignItems: 'center',
-    marginHorizontal: 5,
+    marginHorizontal: THEME.spacing.xs,
     ...THEME.shadows.base,
   },
   cardBlue: {
@@ -801,7 +801,7 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.huge,
     fontWeight: THEME.typography.fontWeight.bold,
     color: THEME.colors.textPrimary,
-    marginBottom: 5,
+    marginBottom: THEME.spacing.xs,
   },
   cardLabel: {
     fontSize: THEME.typography.fontSize.sm,
@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: THEME.spacing.sm,
   },
   financialLabel: {
     fontSize: THEME.typography.fontSize.base,
@@ -840,7 +840,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: THEME.colors.border,
-    marginVertical: 10,
+    marginVertical: THEME.spacing.sm,
   },
   textGreen: {
     color: THEME.colors.success,
@@ -852,14 +852,14 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.surface,
     padding: THEME.spacing.base,
     borderRadius: THEME.borderRadius.base,
-    marginBottom: 10,
+    marginBottom: THEME.spacing.sm,
     ...THEME.shadows.sm,
   },
   balanceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: THEME.spacing.sm,
   },
   balanceName: {
     fontSize: THEME.typography.fontSize.md,
@@ -871,8 +871,8 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textSecondary,
     backgroundColor: THEME.colors.gray100,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: THEME.spacing.sm,
+    paddingVertical: THEME.spacing.xs,
     borderRadius: THEME.borderRadius.sm,
   },
   balanceDetails: {
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
   balanceDetailText: {
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textSecondary,
-    marginBottom: 2,
+    marginBottom: THEME.spacing.xs / 2,
   },
   balanceAmount: {
     fontSize: THEME.typography.fontSize.base,
@@ -908,15 +908,15 @@ const styles = StyleSheet.create({
   },
   filterBar: {
     backgroundColor: THEME.colors.surface,
-    paddingVertical: 10,
-    paddingHorizontal: 5,
+    paddingVertical: THEME.spacing.sm,
+    paddingHorizontal: THEME.spacing.xs,
     borderBottomWidth: 1,
     borderBottomColor: THEME.colors.border,
   },
   filterButton: {
     paddingHorizontal: THEME.spacing.base,
     paddingVertical: THEME.spacing.sm,
-    marginHorizontal: 5,
+    marginHorizontal: THEME.spacing.xs,
     borderRadius: 20,
     backgroundColor: THEME.colors.gray100,
   },
@@ -961,7 +961,7 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.base,
     color: THEME.colors.textSecondary,
     marginBottom: THEME.spacing.sm,
-    marginTop: 10,
+    marginTop: THEME.spacing.sm,
   },
   input: {
     borderWidth: 1,
@@ -981,7 +981,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: THEME.spacing.md,
     borderRadius: THEME.borderRadius.base,
-    marginHorizontal: 5,
+    marginHorizontal: THEME.spacing.xs,
     alignItems: 'center',
   },
   modalButtonPrimary: {
@@ -1013,15 +1013,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: THEME.spacing.md,
-    paddingHorizontal: 15,
+    paddingHorizontal: THEME.spacing.base,
     borderBottomWidth: 1,
     borderBottomColor: THEME.colors.border,
   },
   actionButton: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: THEME.spacing.sm,
     paddingHorizontal: THEME.spacing.md,
-    marginHorizontal: 5,
+    marginHorizontal: THEME.spacing.xs,
     borderRadius: THEME.borderRadius.base,
     backgroundColor: THEME.colors.gray100,
     alignItems: 'center',
