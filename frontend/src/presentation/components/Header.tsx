@@ -42,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
         {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       </View>
       {rightComponent && (
-        <View style={[styles.rightComponent, { top: insets.top + 25 }]}>
+        <View style={[styles.rightComponent, { top: insets.top + 20 + 5 }]}>
           {rightComponent}
         </View>
       )}
