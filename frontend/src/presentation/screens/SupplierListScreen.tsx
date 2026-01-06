@@ -240,7 +240,6 @@ export const SupplierListScreen: React.FC = () => {
       />
 
       <View style={[{ paddingBottom: insets.bottom }]}>
-        <View style={[{ paddingBottom: insets.bottom }]}>
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
@@ -250,6 +249,7 @@ export const SupplierListScreen: React.FC = () => {
           hasNextPage={currentPage < totalPages}
           hasPreviousPage={currentPage > 1}
         />
+      </View>
       </View>
     </View>
   );

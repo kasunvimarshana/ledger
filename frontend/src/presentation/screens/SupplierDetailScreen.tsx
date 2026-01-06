@@ -27,8 +27,6 @@ export const SupplierDetailScreen: React.FC = () => {
   const { user } = useAuth();
   const supplierId = (route.params as any)?.supplierId;
   const insets = useSafeAreaInsets();
-  const { user } = useAuth();
-  const supplierId = (route.params as any)?.supplierId;
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

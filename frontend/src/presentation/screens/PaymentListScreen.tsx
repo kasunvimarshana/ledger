@@ -245,7 +245,6 @@ export const PaymentListScreen: React.FC = () => {
       />
 
       <View style={[{ paddingBottom: insets.bottom }]}>
-        <View style={[{ paddingBottom: insets.bottom }]}>
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
