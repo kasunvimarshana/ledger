@@ -37,8 +37,8 @@ export const HomeScreen: React.FC = () => {
         <View style={styles.headerTop}>
           <View>
             <Text style={styles.title}>Ledger Dashboard</Text>
-            <Text style={styles.subtitle}>Welcome, {user?.name || 'User'}</Text>
-            <Text style={styles.role}>Role: {user?.role?.display_name || 'N/A'}</Text>
+            <Text style={styles.subtitle}>Welcome, {String(user?.name || 'User')}</Text>
+            <Text style={styles.role}>Role: {String(user?.role?.display_name || 'N/A')}</Text>
           </View>
           <SyncStatusIndicator showDetails={true} />
         </View>
