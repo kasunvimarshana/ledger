@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: THEME.spacing.lg,
   },
   container: {
     backgroundColor: THEME.colors.surface,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: THEME.spacing.lg,
     paddingBottom: 12,
     gap: 12,
     borderBottomWidth: 1,
@@ -150,10 +150,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 20,
+    padding: THEME.spacing.lg,
   },
   message: {
-    fontSize: 15,
+    fontSize: THEME.typography.fontSize.base,
     color: COLORS.text,
     lineHeight: 22,
     marginBottom: THEME.spacing.sm,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   changeSection: {
     marginTop: 12,
     padding: THEME.spacing.md,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: THEME.colors.background,
     borderRadius: THEME.borderRadius.base,
   },
   sectionTitle: {
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: THEME.spacing.sm,
   },
   changeItem: {
-    fontSize: 13,
+    fontSize: THEME.typography.fontSize.sm,
     color: COLORS.textSecondary,
     lineHeight: 20,
     marginLeft: 8,
@@ -196,11 +196,11 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 16,
     padding: THEME.spacing.md,
-    backgroundColor: '#E3F2FD',
+    backgroundColor: THEME.colors.gray100,
     borderRadius: THEME.borderRadius.base,
   },
   infoText: {
-    fontSize: 13,
+    fontSize: THEME.typography.fontSize.sm,
     color: COLORS.info,
     fontWeight: THEME.typography.fontWeight.medium,
   },
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     gap: 12,
-    padding: 20,
+    padding: THEME.spacing.lg,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
@@ -224,16 +224,16 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   primaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
+    color: THEME.colors.white,
+    fontSize: THEME.typography.fontSize.base,
     fontWeight: THEME.typography.fontWeight.semibold,
   },
   secondaryButton: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: THEME.colors.background,
   },
   secondaryButtonText: {
     color: COLORS.primary,
-    fontSize: 15,
+    fontSize: THEME.typography.fontSize.base,
     fontWeight: THEME.typography.fontWeight.semibold,
   },
 });

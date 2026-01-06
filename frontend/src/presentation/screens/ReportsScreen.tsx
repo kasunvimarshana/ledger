@@ -755,7 +755,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    padding: 15,
+    padding: THEME.spacing.base,
   },
   sectionTitle: {
     fontSize: THEME.typography.fontSize.lg,
@@ -847,18 +847,18 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: THEME.colors.border,
     marginVertical: 10,
   },
   textGreen: {
-    color: '#28a745',
+    color: THEME.colors.success,
   },
   textRed: {
-    color: '#dc3545',
+    color: THEME.colors.error,
   },
   balanceCard: {
     backgroundColor: THEME.colors.surface,
-    padding: 15,
+    padding: THEME.spacing.base,
     borderRadius: THEME.borderRadius.base,
     marginBottom: 10,
     elevation: 1,
@@ -882,7 +882,7 @@ const styles = StyleSheet.create({
   balanceCode: {
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textSecondary,
-    backgroundColor: '#e9ecef',
+    backgroundColor: THEME.colors.gray100,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: THEME.borderRadius.sm,
@@ -901,7 +901,7 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     backgroundColor: THEME.colors.surface,
-    padding: 40,
+    padding: THEME.spacing.xxxl,
     borderRadius: THEME.borderRadius.md,
     alignItems: 'center',
   },
@@ -930,13 +930,13 @@ const styles = StyleSheet.create({
     paddingVertical: THEME.spacing.sm,
     marginHorizontal: 5,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: THEME.colors.gray100,
   },
   filterButtonActive: {
     backgroundColor: THEME.colors.primary,
   },
   filterButtonCustom: {
-    backgroundColor: '#6c757d',
+    backgroundColor: THEME.colors.gray500,
   },
   filterButtonText: {
     fontSize: THEME.typography.fontSize.base,
@@ -1000,10 +1000,10 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.primary,
   },
   modalButtonSecondary: {
-    backgroundColor: '#6c757d',
+    backgroundColor: THEME.colors.gray500,
   },
   modalButtonCancel: {
-    backgroundColor: '#dc3545',
+    backgroundColor: THEME.colors.error,
   },
   modalButtonTextPrimary: {
     color: THEME.colors.white,
@@ -1035,7 +1035,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: THEME.spacing.md,
     marginHorizontal: 5,
     borderRadius: THEME.borderRadius.base,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: THEME.colors.gray100,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1043,15 +1043,15 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.primary,
   },
   actionButtonSuccess: {
-    backgroundColor: '#28a745',
+    backgroundColor: THEME.colors.success,
   },
   actionButtonText: {
-    fontSize: 13,
+    fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textPrimary,
     fontWeight: THEME.typography.fontWeight.semibold,
   },
   actionButtonTextWhite: {
-    fontSize: 13,
+    fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.white,
     fontWeight: THEME.typography.fontWeight.semibold,
   },

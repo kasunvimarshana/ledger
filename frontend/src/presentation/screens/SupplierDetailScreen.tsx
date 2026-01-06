@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: THEME.colors.border,
     marginVertical: 12,
   },
   actionButton: {

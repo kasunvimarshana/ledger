@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     color: THEME.colors.textSecondary,
   },
   emptyContainer: {
-    padding: 32,
+    padding: THEME.spacing.xxl,
     alignItems: 'center',
   },
   emptyText: {

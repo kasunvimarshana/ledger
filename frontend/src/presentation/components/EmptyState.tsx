@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
+    padding: THEME.spacing.xxxl,
     backgroundColor: THEME.colors.surface,
     borderRadius: THEME.borderRadius.md,
     marginVertical: 20,

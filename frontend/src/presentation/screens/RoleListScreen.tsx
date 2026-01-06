@@ -288,8 +288,8 @@ const styles = StyleSheet.create({
     fontWeight: THEME.typography.fontWeight.semibold,
   },
   roleSystemName: {
-    fontSize: 13,
-    color: '#888',
+    fontSize: THEME.typography.fontSize.sm,
+    color: THEME.colors.textTertiary,
     marginBottom: 6,
   },
   roleDescription: {
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     marginBottom: THEME.spacing.sm,
   },
   permissionCount: {
-    fontSize: 13,
+    fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.primary,
     fontWeight: THEME.typography.fontWeight.semibold,
   },

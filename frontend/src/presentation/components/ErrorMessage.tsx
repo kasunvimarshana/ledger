@@ -33,12 +33,12 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: '#fff3cd',
+    padding: THEME.spacing.lg,
+    backgroundColor: THEME.colors.gray100,
     borderRadius: THEME.borderRadius.md,
     borderWidth: 1,
     borderColor: '#ffc107',
-    margin: 15,
+    margin: THEME.spacing.base,
     alignItems: 'center',
   },
   icon: {
@@ -47,19 +47,19 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: THEME.typography.fontSize.base,
-    color: '#856404',
+    color: THEME.colors.textSecondary,
     textAlign: 'center',
     marginBottom: 15,
     lineHeight: 20,
   },
   retryButton: {
-    backgroundColor: '#ffc107',
+    backgroundColor: THEME.colors.warning,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 6,
   },
   retryButtonText: {
-    color: '#856404',
+    color: THEME.colors.textSecondary,
     fontSize: THEME.typography.fontSize.base,
     fontWeight: THEME.typography.fontWeight.bold,
   },

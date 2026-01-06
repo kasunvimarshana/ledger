@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
     marginTop: THEME.spacing.lg,
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: THEME.colors.gray300,
   },
   submitButtonText: {
     color: THEME.colors.white,

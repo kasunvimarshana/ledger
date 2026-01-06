@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     minWidth: 100,
   },
   buttonDisabled: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: THEME.colors.border,
   },
   buttonText: {
     color: THEME.colors.white,

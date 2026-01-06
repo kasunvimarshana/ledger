@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: THEME.typography.fontWeight.medium,
   },
   syncButton: {
-    padding: 4,
+    padding: THEME.spacing.xs,
   },
   offlineBadge: {
     backgroundColor: COLORS.warning,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   offlineText: {
-    color: '#FFFFFF',
+    color: THEME.colors.white,
     fontSize: THEME.typography.fontSize.sm,
     fontWeight: THEME.typography.fontWeight.semibold,
   },
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   pendingText: {
-    color: '#FFFFFF',
+    color: THEME.colors.white,
     fontSize: THEME.typography.fontSize.sm,
     fontWeight: THEME.typography.fontWeight.semibold,
   },

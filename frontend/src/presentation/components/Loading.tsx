@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: THEME.colors.background,
-    padding: 20,
+    padding: THEME.spacing.lg,
   },
   message: {
     marginTop: 15,

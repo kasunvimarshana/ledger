@@ -262,6 +262,6 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: 16,
-    color: '#007bff',
+    color: THEME.colors.primary,
   },
 });

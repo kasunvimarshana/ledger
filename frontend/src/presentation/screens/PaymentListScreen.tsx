@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   typeText: {
     color: THEME.colors.white,
-    fontSize: 11,
+    fontSize: THEME.typography.fontSize.xs,
     fontWeight: THEME.typography.fontWeight.semibold,
   },
   paymentDetails: {
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     color: THEME.colors.textSecondary,
   },
   emptyContainer: {
-    padding: 32,
+    padding: THEME.spacing.xxl,
     alignItems: 'center',
   },
   emptyText: {
