@@ -156,13 +156,9 @@ export const UserListScreen: React.FC = () => {
         title="Users"
         showBackButton={true}
         variant="light"
-        rightComponent={
-          canCreate(currentUser, 'users') ? (
-            <TouchableOpacity style={styles.addButton} onPress={handleAddUser}>
-              <Text style={styles.addButtonText}>+ Add User</Text>
-            </TouchableOpacity>
-          ) : undefined
-        }
+        showAddButton={canCreate(currentUser, 'users')}
+        onAddPress={handleAddUser}
+        addButtonText="+ Add User"
       />
 
       <View style={styles.searchContainer}>
@@ -219,17 +215,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: THEME.colors.background,
-  },
-  addButton: {
-    backgroundColor: THEME.colors.primary,
-    paddingHorizontal: THEME.spacing.base,
-    paddingVertical: THEME.spacing.sm,
-    borderRadius: THEME.borderRadius.base,
-  },
-  addButtonText: {
-    color: THEME.colors.white,
-    fontSize: THEME.typography.fontSize.base,
-    fontWeight: THEME.typography.fontWeight.semibold,
   },
   searchContainer: {
     backgroundColor: THEME.colors.surface,

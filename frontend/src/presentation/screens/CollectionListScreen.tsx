@@ -21,7 +21,7 @@ import apiClient from '../../infrastructure/api/apiClient';
 import { Collection } from '../../domain/entities/Collection';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination, SortButton, ListScreenHeader, SyncStatusIndicator } from '../components';
+import { Pagination, SortButton, ScreenHeader, SyncStatusIndicator } from '../components';
 import THEME from '../../core/constants/theme';
 
 export const CollectionListScreen: React.FC = () => {
@@ -175,8 +175,9 @@ export const CollectionListScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ListScreenHeader
+      <ScreenHeader
         title="Collections"
+        variant="light"
         showAddButton={canCreate(user, 'collections')}
         onAddPress={handleAddCollection}
         addButtonText="+ Add Collection"

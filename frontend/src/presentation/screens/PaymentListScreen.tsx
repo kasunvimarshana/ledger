@@ -21,7 +21,7 @@ import apiClient from '../../infrastructure/api/apiClient';
 import { Payment } from '../../domain/entities/Payment';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination, SortButton, ListScreenHeader, SyncStatusIndicator } from '../components';
+import { Pagination, SortButton, ScreenHeader, SyncStatusIndicator } from '../components';
 import THEME from '../../core/constants/theme';
 
 export const PaymentListScreen: React.FC = () => {
@@ -190,8 +190,9 @@ export const PaymentListScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ListScreenHeader
+      <ScreenHeader
         title="Payments"
+        variant="light"
         showAddButton={canCreate(user, 'payments')}
         onAddPress={handleAddPayment}
         addButtonText="+ Add Payment"

@@ -156,13 +156,9 @@ export const RoleListScreen: React.FC = () => {
         title="Roles"
         showBackButton={true}
         variant="light"
-        rightComponent={
-          canCreate(currentUser, 'roles') ? (
-            <TouchableOpacity style={styles.addButton} onPress={handleAddRole}>
-              <Text style={styles.addButtonText}>+ Add Role</Text>
-            </TouchableOpacity>
-          ) : undefined
-        }
+        showAddButton={canCreate(currentUser, 'roles')}
+        onAddPress={handleAddRole}
+        addButtonText="+ Add Role"
       />
 
       <View style={styles.searchContainer}>
@@ -219,24 +215,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: THEME.colors.background,
-  },
-  header: {
-    backgroundColor: THEME.colors.surface,
-    padding: THEME.spacing.base,
-    borderBottomWidth: 1,
-    borderBottomColor: THEME.colors.border,
-  },
-  backButton: {
-    marginBottom: THEME.spacing.sm,
-  },
-  backButtonText: {
-    fontSize: THEME.typography.fontSize.md,
-    color: THEME.colors.primary,
-  },
-  title: {
-    fontSize: THEME.typography.fontSize.xxl,
-    fontWeight: THEME.typography.fontWeight.bold,
-    color: THEME.colors.textPrimary,
   },
   searchContainer: {
     backgroundColor: THEME.colors.surface,
@@ -301,18 +279,6 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.primary,
     fontWeight: THEME.typography.fontWeight.semibold,
-  },
-  addButton: {
-    backgroundColor: THEME.colors.primary,
-    padding: THEME.spacing.base,
-    margin: THEME.spacing.base,
-    borderRadius: THEME.borderRadius.base,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: THEME.colors.white,
-    fontSize: THEME.typography.fontSize.lg,
-    fontWeight: THEME.typography.fontWeight.bold,
   },
   loadingContainer: {
     flex: 1,
