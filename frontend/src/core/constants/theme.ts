@@ -3,9 +3,6 @@
  * Provides consistent colors, spacing, typography, and layout values
  */
 
-// Import existing colors
-import { COLORS } from './colors';
-
 // Spacing scale
 export const SPACING = {
   xs: 4,

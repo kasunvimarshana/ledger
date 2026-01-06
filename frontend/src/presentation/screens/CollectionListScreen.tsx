@@ -21,8 +21,7 @@ import apiClient from '../../infrastructure/api/apiClient';
 import { Collection } from '../../domain/entities/Collection';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination, SortButton, ListScreenHeader } from '../components';
-import { SyncStatusIndicator } from '../components/SyncStatusIndicator';
+import { Pagination, SortButton, ListScreenHeader, SyncStatusIndicator } from '../components';
 import THEME from '../../core/constants/theme';
 
 export const CollectionListScreen: React.FC = () => {

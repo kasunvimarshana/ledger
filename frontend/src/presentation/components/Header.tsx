@@ -1,6 +1,8 @@
 /**
  * ScreenHeader Component
  * Standardized header component for all screens with consistent layout and theming
+ * 
+ * @deprecated The old "Header" export name is deprecated. Use "ScreenHeader" instead.
  */
 
 import React from 'react';
@@ -89,7 +91,9 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 };
 
-// Keep the old Header name for backward compatibility
+/**
+ * @deprecated Use ScreenHeader instead. This export is maintained for backward compatibility.
+ */
 export const Header = ScreenHeader;
 
 const styles = StyleSheet.create({

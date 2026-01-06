@@ -22,7 +22,7 @@ import LocalStorageService from '../../infrastructure/storage/LocalStorageServic
 import { Supplier } from '../../domain/entities/Supplier';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination, SortButton, ListScreenHeader } from '../components';
+import { Pagination, SortButton, ListScreenHeader, SyncStatusIndicator } from '../components';
 import THEME from '../../core/constants/theme';
 
 export const SupplierListScreen: React.FC = () => {
