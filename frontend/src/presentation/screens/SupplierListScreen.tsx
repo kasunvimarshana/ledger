@@ -250,7 +250,6 @@ export const SupplierListScreen: React.FC = () => {
           hasPreviousPage={currentPage > 1}
         />
       </View>
-      </View>
     </View>
   );
 };
