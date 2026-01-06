@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputError: {
-    borderColor: '#f44336',
+    borderColor: THEME.colors.error,
   },
   inputDisabled: {
     backgroundColor: THEME.colors.background,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   iosPickerContainer: {
     backgroundColor: THEME.colors.surface,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: THEME.colors.border,
     marginTop: THEME.spacing.sm,
   },
   iosPickerHeader: {
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: THEME.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: THEME.colors.border,
   },
   iosPickerDoneButton: {
     fontSize: THEME.typography.fontSize.md,

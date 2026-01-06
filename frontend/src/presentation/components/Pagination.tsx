@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.surface,
     padding: THEME.spacing.md,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: THEME.colors.border,
   },
   info: {
     fontSize: THEME.typography.fontSize.sm,

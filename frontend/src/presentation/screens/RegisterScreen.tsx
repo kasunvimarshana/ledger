@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.gray100,
     borderRadius: THEME.borderRadius.base,
     borderWidth: 1,
-    borderColor: '#ffc107',
+    borderColor: THEME.colors.warning,
   },
   infoTitle: {
     fontSize: THEME.typography.fontSize.base,

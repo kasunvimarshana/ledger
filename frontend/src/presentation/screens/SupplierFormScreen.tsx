@@ -316,13 +316,13 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: THEME.colors.surface,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
     borderRadius: THEME.borderRadius.base,
     padding: THEME.spacing.md,
     fontSize: THEME.typography.fontSize.md,
   },
   inputError: {
-    borderColor: '#F44336',
+    borderColor: THEME.colors.error,
   },
   textArea: {
     minHeight: 80,
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: THEME.colors.surface,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
   },
   submitButton: {
     backgroundColor: THEME.colors.primary,

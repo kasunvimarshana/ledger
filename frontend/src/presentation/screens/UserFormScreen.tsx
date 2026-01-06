@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     padding: THEME.spacing.md,
     fontSize: THEME.typography.fontSize.md,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
   },
   switchGroup: {
     flexDirection: 'row',

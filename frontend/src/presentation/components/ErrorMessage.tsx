@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.gray100,
     borderRadius: THEME.borderRadius.md,
     borderWidth: 1,
-    borderColor: '#ffc107',
+    borderColor: THEME.colors.warning,
     margin: THEME.spacing.base,
     alignItems: 'center',
   },

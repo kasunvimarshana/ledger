@@ -436,13 +436,13 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: THEME.colors.surface,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
     borderRadius: THEME.borderRadius.base,
     padding: THEME.spacing.md,
     fontSize: THEME.typography.fontSize.md,
   },
   inputError: {
-    borderColor: '#f44336',
+    borderColor: THEME.colors.error,
   },
   selectText: {
     color: THEME.colors.textPrimary,
@@ -465,13 +465,13 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.surface,
     padding: THEME.spacing.md,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
     borderRadius: THEME.borderRadius.sm,
     marginBottom: 4,
   },
   optionItemSelected: {
     backgroundColor: THEME.colors.gray100,
-    borderColor: '#007bff',
+    borderColor: THEME.colors.primary,
   },
   optionText: {
     fontSize: THEME.typography.fontSize.base,

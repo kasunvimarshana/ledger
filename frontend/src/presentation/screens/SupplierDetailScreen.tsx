@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     paddingVertical: THEME.spacing.sm,
     backgroundColor: THEME.colors.surface,
     borderWidth: 1,
-    borderColor: '#F44336',
+    borderColor: THEME.colors.error,
     borderRadius: THEME.borderRadius.base,
   },
   deleteButtonText: {

@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: THEME.colors.border,
   },
   totalLabel: {
     fontSize: THEME.typography.fontSize.md,

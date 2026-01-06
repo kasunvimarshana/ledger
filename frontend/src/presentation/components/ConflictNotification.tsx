@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     gap: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: THEME.colors.border,
   },
   title: {
     fontSize: THEME.typography.fontSize.lg,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     padding: THEME.spacing.lg,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: THEME.colors.border,
   },
   button: {
     paddingVertical: 10,

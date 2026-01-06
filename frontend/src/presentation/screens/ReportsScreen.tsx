@@ -783,23 +783,23 @@ const styles = StyleSheet.create({
   },
   cardBlue: {
     borderLeftWidth: 4,
-    borderLeftColor: '#007bff',
+    borderLeftColor: THEME.colors.primary,
   },
   cardGreen: {
     borderLeftWidth: 4,
-    borderLeftColor: '#28a745',
+    borderLeftColor: THEME.colors.success,
   },
   cardOrange: {
     borderLeftWidth: 4,
-    borderLeftColor: '#fd7e14',
+    borderLeftColor: THEME.colors.warning,
   },
   cardPurple: {
     borderLeftWidth: 4,
-    borderLeftColor: '#6f42c1',
+    borderLeftColor: THEME.colors.info,
   },
   cardInfo: {
     borderLeftWidth: 4,
-    borderLeftColor: '#17a2b8',
+    borderLeftColor: THEME.colors.info,
   },
   cardValue: {
     fontSize: THEME.typography.fontSize.huge,
@@ -977,7 +977,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: THEME.colors.border,
     borderRadius: THEME.borderRadius.base,
     padding: THEME.spacing.md,
     fontSize: THEME.typography.fontSize.md,
