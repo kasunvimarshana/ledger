@@ -174,7 +174,7 @@ export const PaymentFormScreen: React.FC = () => {
   if (loading && isEditMode) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading payment...</Text>
       </View>
     );
@@ -321,7 +321,7 @@ export const PaymentFormScreen: React.FC = () => {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={THEME.colors.white} />
           ) : (
             <Text style={styles.submitButtonText}>
               {isEditMode ? 'Update Payment' : 'Create Payment'}

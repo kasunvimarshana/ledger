@@ -199,7 +199,7 @@ export const CollectionFormScreen: React.FC = () => {
   if (loading && isEditMode) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading collection...</Text>
       </View>
     );
@@ -311,7 +311,7 @@ export const CollectionFormScreen: React.FC = () => {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={THEME.colors.white} />
           ) : (
             <Text style={styles.submitButtonText}>
               {isEditMode ? 'Update Collection' : 'Create Collection'}

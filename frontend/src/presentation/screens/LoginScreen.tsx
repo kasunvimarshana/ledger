@@ -81,7 +81,7 @@ export const LoginScreen: React.FC = () => {
             disabled={isLoading}
           >
             {isLoading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={THEME.colors.white} />
             ) : (
               <Text style={styles.buttonText}>Login</Text>
             )}

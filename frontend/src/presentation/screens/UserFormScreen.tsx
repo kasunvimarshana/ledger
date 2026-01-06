@@ -19,6 +19,7 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
+import { SearchableSelector } from '../components';
 
 export const UserFormScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -113,7 +114,7 @@ export const UserFormScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
@@ -178,13 +179,13 @@ export const UserFormScreen: React.FC = () => {
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Role ID</Text>
-          <TextInput
-            style={styles.input}
+          <Text style={styles.label}>Role</Text>
+          <SearchableSelector
+            label=""
+            placeholder="Select role (optional)"
             value={roleId}
-            onChangeText={setRoleId}
-            placeholder="Enter role ID (optional)"
-            keyboardType="numeric"
+            onSelect={(value) => setRoleId(value)}
+            endpoint="/roles"
           />
         </View>
 
@@ -204,7 +205,7 @@ export const UserFormScreen: React.FC = () => {
           disabled={submitting}
         >
           {submitting ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={THEME.colors.white} />
           ) : (
             <Text style={styles.submitButtonText}>
               {isEditMode ? 'Update User' : 'Create User'}
