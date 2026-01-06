@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
   balanceDetailText: {
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textSecondary,
-    marginBottom: THEME.spacing.xs / 2,
+    marginBottom: 2,
   },
   balanceAmount: {
     fontSize: THEME.typography.fontSize.base,
