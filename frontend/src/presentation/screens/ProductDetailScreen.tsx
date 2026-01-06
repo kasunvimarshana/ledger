@@ -14,6 +14,7 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Product, Rate } from '../../domain/entities/Product';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,6 +25,7 @@ export const ProductDetailScreen: React.FC = () => {
   const route = useRoute();
   const { user } = useAuth();
   const productId = (route.params as any)?.productId;
+  const insets = useSafeAreaInsets();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [currentRate, setCurrentRate] = useState<Rate | null>(null);
@@ -117,8 +119,8 @@ export const ProductDetailScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}>
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
