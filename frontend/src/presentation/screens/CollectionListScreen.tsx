@@ -21,9 +21,9 @@ import apiClient from '../../infrastructure/api/apiClient';
 import { Collection } from '../../domain/entities/Collection';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination } from '../components/Pagination';
-import { SortButton } from '../components/SortButton';
+import { Pagination, SortButton, ListScreenHeader } from '../components';
 import { SyncStatusIndicator } from '../components/SyncStatusIndicator';
+import THEME from '../../core/constants/theme';
 
 export const CollectionListScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -176,20 +176,13 @@ export const CollectionListScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
-        <View style={styles.headerTop}>
-          <Text style={styles.title}>Collections</Text>
-          <SyncStatusIndicator showDetails={false} />
-        </View>
-        {canCreate(user, 'collections') && (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddCollection}
-          >
-            <Text style={styles.addButtonText}>+ Add Collection</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      <ListScreenHeader
+        title="Collections"
+        showAddButton={canCreate(user, 'collections')}
+        onAddPress={handleAddCollection}
+        addButtonText="+ Add Collection"
+        rightComponent={<SyncStatusIndicator showDetails={false} />}
+      />
 
       <View style={styles.searchContainer}>
         <TextInput
