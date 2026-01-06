@@ -222,7 +222,7 @@ export const CollectionFormScreen: React.FC = () => {
           label="Supplier *"
           placeholder="Select supplier"
           value={formData.supplier_id}
-          onSelect={(value) => updateField('supplier_id', value)}
+          onSelect={(value, option) => updateField('supplier_id', value)}
           endpoint="/suppliers"
           error={errors.supplier_id}
           queryParams={{ is_active: 1 }}
@@ -233,7 +233,7 @@ export const CollectionFormScreen: React.FC = () => {
           label="Product *"
           placeholder="Select product"
           value={formData.product_id}
-          onSelect={(value) => updateField('product_id', value)}
+          onSelect={(value, option) => updateField('product_id', value)}
           endpoint="/products"
           error={errors.product_id}
           queryParams={{ is_active: 1 }}

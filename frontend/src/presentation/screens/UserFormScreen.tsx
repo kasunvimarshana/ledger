@@ -184,7 +184,7 @@ export const UserFormScreen: React.FC = () => {
             label=""
             placeholder="Select role (optional)"
             value={roleId}
-            onSelect={(value) => setRoleId(value)}
+            onSelect={(value, option) => setRoleId(value)}
             endpoint="/roles"
           />
         </View>

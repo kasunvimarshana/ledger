@@ -4,7 +4,7 @@
  * Supports search, pagination, and loading states
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -29,7 +29,7 @@ interface SearchableSelectorProps {
   label: string;
   placeholder?: string;
   value: string;
-  onSelect: (value: string, option: SearchableSelectorOption) => void;
+  onSelect: (value: string, option?: SearchableSelectorOption) => void;
   endpoint: string;
   searchKey?: string;
   renderOption?: (option: SearchableSelectorOption) => React.ReactNode;

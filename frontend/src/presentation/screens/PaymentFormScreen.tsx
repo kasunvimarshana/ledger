@@ -197,7 +197,7 @@ export const PaymentFormScreen: React.FC = () => {
           label="Supplier *"
           placeholder="Select supplier"
           value={formData.supplier_id}
-          onSelect={(value) => updateField('supplier_id', value)}
+          onSelect={(value, option) => updateField('supplier_id', value)}
           endpoint="/suppliers"
           error={errors.supplier_id}
           queryParams={{ is_active: 1 }}
