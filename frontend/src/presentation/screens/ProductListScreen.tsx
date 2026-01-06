@@ -138,7 +138,7 @@ export const ProductListScreen: React.FC = () => {
         <Text style={styles.productName}>{item.name}</Text>
         <View style={[
           styles.statusBadge,
-          { backgroundColor: item.is_active ? '#4CAF50' : '#F44336' }
+          { backgroundColor: item.is_active ? THEME.colors.success : THEME.colors.error }
         ]}>
           <Text style={styles.statusText}>
             {item.is_active ? 'Active' : 'Inactive'}

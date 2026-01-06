@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import THEME from '../../core/constants/theme';
 import {
   View,
   Text,
@@ -240,8 +241,8 @@ export const CollectionFormScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}>
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom + THEME.spacing.lg }}>
+      <View style={[styles.header, { paddingTop: insets.top + THEME.spacing.base }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
@@ -400,60 +401,60 @@ export const CollectionFormScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: THEME.colors.background,
   },
   header: {
-    backgroundColor: '#fff',
-    padding: 16,
+    backgroundColor: THEME.colors.surface,
+    padding: THEME.spacing.base,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: THEME.colors.border,
   },
   backButton: {
-    marginBottom: 8,
+    marginBottom: THEME.spacing.sm,
   },
   backButtonText: {
-    fontSize: 16,
-    color: '#007bff',
+    fontSize: THEME.typography.fontSize.md,
+    color: THEME.colors.primary,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: THEME.typography.fontSize.xxl,
+    fontWeight: THEME.typography.fontWeight.bold,
+    color: THEME.colors.textPrimary,
   },
   form: {
-    padding: 16,
+    padding: THEME.spacing.base,
   },
   formGroup: {
-    marginBottom: 20,
+    marginBottom: THEME.spacing.lg,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
+    color: THEME.colors.textPrimary,
+    marginBottom: THEME.spacing.sm,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: THEME.colors.surface,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+    borderColor: THEME.colors.border,
+    borderRadius: THEME.borderRadius.base,
+    padding: THEME.spacing.md,
+    fontSize: THEME.typography.fontSize.md,
   },
   inputError: {
-    borderColor: '#f44336',
+    borderColor: THEME.colors.error,
   },
   selectText: {
-    color: '#333',
-    fontSize: 16,
+    color: THEME.colors.textPrimary,
+    fontSize: THEME.typography.fontSize.md,
   },
   textArea: {
     minHeight: 100,
     textAlignVertical: 'top',
   },
   errorText: {
-    color: '#f44336',
-    fontSize: 14,
+    color: THEME.colors.error,
+    fontSize: THEME.typography.fontSize.base,
     marginTop: 4,
   },
   optionsList: {
@@ -461,75 +462,75 @@ const styles = StyleSheet.create({
     maxHeight: 200,
   },
   optionItem: {
-    backgroundColor: '#fff',
-    padding: 12,
+    backgroundColor: THEME.colors.surface,
+    padding: THEME.spacing.md,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 4,
+    borderColor: THEME.colors.border,
+    borderRadius: THEME.borderRadius.sm,
     marginBottom: 4,
   },
   optionItemSelected: {
-    backgroundColor: '#e3f2fd',
-    borderColor: '#007bff',
+    backgroundColor: THEME.colors.gray100,
+    borderColor: THEME.colors.primary,
   },
   optionText: {
-    fontSize: 14,
-    color: '#333',
+    fontSize: THEME.typography.fontSize.base,
+    color: THEME.colors.textPrimary,
   },
   rateInfo: {
-    backgroundColor: '#e8f5e9',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
+    backgroundColor: THEME.colors.gray100,
+    padding: THEME.spacing.md,
+    borderRadius: THEME.borderRadius.base,
+    marginBottom: THEME.spacing.base,
   },
   rateInfoText: {
-    fontSize: 14,
-    color: '#2e7d32',
-    fontWeight: '600',
+    fontSize: THEME.typography.fontSize.base,
+    color: THEME.colors.success,
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
   amountInfo: {
-    backgroundColor: '#e3f2fd',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
+    backgroundColor: THEME.colors.gray100,
+    padding: THEME.spacing.base,
+    borderRadius: THEME.borderRadius.base,
+    marginBottom: THEME.spacing.base,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   amountLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
+    color: THEME.colors.textPrimary,
   },
   amountValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#007bff',
+    fontSize: THEME.typography.fontSize.xl,
+    fontWeight: THEME.typography.fontWeight.bold,
+    color: THEME.colors.primary,
   },
   submitButton: {
-    backgroundColor: '#007bff',
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: THEME.colors.primary,
+    padding: THEME.spacing.base,
+    borderRadius: THEME.borderRadius.base,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: THEME.spacing.lg,
   },
   submitButtonDisabled: {
     opacity: 0.6,
   },
   submitButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    color: THEME.colors.white,
+    fontSize: THEME.typography.fontSize.lg,
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: THEME.colors.background,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#666',
+    marginTop: THEME.spacing.md,
+    fontSize: THEME.typography.fontSize.md,
+    color: THEME.colors.textSecondary,
   },
 });
