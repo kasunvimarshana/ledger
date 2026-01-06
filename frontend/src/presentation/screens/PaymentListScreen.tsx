@@ -192,18 +192,18 @@ export const PaymentListScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
-        <View style={styles.headerLeft}>
+        <View style={styles.headerTop}>
           <Text style={styles.title}>Payments</Text>
-          {canCreate(user, 'payments') && (
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={handleAddPayment}
-            >
-              <Text style={styles.addButtonText}>+ Add Payment</Text>
-            </TouchableOpacity>
-          )}
+          <SyncStatusIndicator showDetails={false} />
         </View>
-        <SyncStatusIndicator showDetails={true} />
+        {canCreate(user, 'payments') && (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={handleAddPayment}
+          >
+            <Text style={styles.addButtonText}>+ Add Payment</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={styles.searchContainer}>
@@ -265,19 +265,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
-  headerLeft: {
+  headerTop: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
-    flex: 1,
+    marginBottom: 12,
   },
   title: {
     fontSize: 24,
