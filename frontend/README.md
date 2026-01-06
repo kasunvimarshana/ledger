@@ -55,12 +55,35 @@ This project follows Clean Architecture principles with clear separation of conc
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 20.x+
-- npm 10.x+
+- **Node.js 20.x** (v20.17.0 or later recommended)
+- **npm 10.x** (v10.0.0 or later)
 - Expo CLI
 - iOS Simulator (macOS) or Android Emulator
 
+> ⚠️ **Important**: This project requires Node.js v20.x and npm v10.x. Do NOT use Node.js v24.x with npm v11.6.x as it has a known bug that causes "Class extends value undefined is not a constructor or null" error.
+
 ### Installation
+
+#### Step 1: Verify Node and npm Versions
+
+```bash
+node --version  # Should show v20.x.x
+npm --version   # Should show 10.x.x
+```
+
+If you're using the wrong version, use nvm (Node Version Manager) to switch:
+
+```bash
+# Install nvm if you haven't already (see https://github.com/nvm-sh/nvm)
+
+# Use Node v20
+nvm use 20
+
+# Or install Node v20 if not available
+nvm install 20
+```
+
+#### Step 2: Install Dependencies
 
 ```bash
 # Install dependencies
@@ -221,3 +244,40 @@ Follow Clean Architecture principles:
 ## 📄 License
 
 [Specify your license here]
+
+## 🐛 Troubleshooting
+
+### npm Error: "Class extends value undefined is not a constructor or null"
+
+**Problem**: This error occurs when using npm v11.6.x (bundled with Node.js v24.x) due to a bug in the minizlib package.
+
+**Solution**:
+1. Switch to Node.js v20.x using nvm:
+   ```bash
+   nvm use 20
+   ```
+2. Verify your versions:
+   ```bash
+   node --version  # Should show v20.x.x
+   npm --version   # Should show 10.x.x
+   ```
+3. Clear npm cache and reinstall:
+   ```bash
+   npm cache clean --force
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+### Other Common Issues
+
+**Error: "Cannot find module 'expo'"**
+- Run `npm install` to install all dependencies
+
+**Metro bundler issues**
+- Clear Metro cache: `npx expo start --clear`
+- Clear node_modules: `rm -rf node_modules && npm install`
+
+**Network connectivity issues**
+- Check your backend API URL in `src/core/constants/api.ts`
+- Ensure your backend server is running
+- Check your firewall and network settings
