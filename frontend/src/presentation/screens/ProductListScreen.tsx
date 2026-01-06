@@ -22,7 +22,7 @@ import LocalStorageService from '../../infrastructure/storage/LocalStorageServic
 import { Product } from '../../domain/entities/Product';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
-import { Pagination, SortButton, ListScreenHeader } from '../components';
+import { Pagination, SortButton, ScreenHeader } from '../components';
 import THEME from '../../core/constants/theme';
 
 export const ProductListScreen: React.FC = () => {
@@ -180,8 +180,9 @@ export const ProductListScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ListScreenHeader
+      <ScreenHeader
         title="Products"
+        variant="light"
         showAddButton={canCreate(user, 'products')}
         onAddPress={handleAddProduct}
         addButtonText="+ Add Product"

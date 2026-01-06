@@ -167,11 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: THEME.borderRadius.base,
     padding: THEME.spacing.base,
     marginBottom: THEME.spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    ...THEME.shadows.base,
   },
   cardHeader: {
     flexDirection: 'row',

@@ -128,11 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: THEME.borderRadius.md,
     width: '100%',
     maxWidth: 400,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    ...THEME.shadows.md,
   },
   header: {
     flexDirection: 'row',

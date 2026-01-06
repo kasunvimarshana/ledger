@@ -156,13 +156,9 @@ export const UserListScreen: React.FC = () => {
         title="Users"
         showBackButton={true}
         variant="light"
-        rightComponent={
-          canCreate(currentUser, 'users') ? (
-            <TouchableOpacity style={styles.addButton} onPress={handleAddUser}>
-              <Text style={styles.addButtonText}>+ Add User</Text>
-            </TouchableOpacity>
-          ) : undefined
-        }
+        showAddButton={canCreate(currentUser, 'users')}
+        onAddPress={handleAddUser}
+        addButtonText="+ Add User"
       />
 
       <View style={styles.searchContainer}>
@@ -220,17 +216,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: THEME.colors.background,
   },
-  addButton: {
-    backgroundColor: THEME.colors.primary,
-    paddingHorizontal: THEME.spacing.base,
-    paddingVertical: THEME.spacing.sm,
-    borderRadius: THEME.borderRadius.base,
-  },
-  addButtonText: {
-    color: THEME.colors.white,
-    fontSize: THEME.typography.fontSize.base,
-    fontWeight: THEME.typography.fontWeight.semibold,
-  },
   searchContainer: {
     backgroundColor: THEME.colors.surface,
     padding: THEME.spacing.base,
@@ -251,11 +236,7 @@ const styles = StyleSheet.create({
     borderRadius: THEME.borderRadius.base,
     padding: THEME.spacing.base,
     marginBottom: THEME.spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    ...THEME.shadows.base,
   },
   userHeader: {
     flexDirection: 'row',
