@@ -14,6 +14,7 @@ import {
   TextStyle,
 } from 'react-native';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import THEME from '../../core/constants/theme';
 
 interface DateTimePickerProps {
   label?: string;
@@ -187,23 +188,23 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: THEME.spacing.base,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
+    color: THEME.colors.textPrimary,
+    marginBottom: THEME.spacing.sm,
   },
   labelError: {
-    color: '#f44336',
+    color: THEME.colors.error,
   },
   inputContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: THEME.colors.surface,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
+    borderColor: THEME.colors.border,
+    borderRadius: THEME.borderRadius.base,
+    padding: THEME.spacing.md,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -212,45 +213,45 @@ const styles = StyleSheet.create({
     borderColor: '#f44336',
   },
   inputDisabled: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: THEME.colors.background,
     opacity: 0.6,
   },
   inputText: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: THEME.typography.fontSize.md,
+    color: THEME.colors.textPrimary,
     flex: 1,
   },
   placeholderText: {
-    color: '#999',
+    color: THEME.colors.textTertiary,
   },
   disabledText: {
-    color: '#999',
+    color: THEME.colors.textTertiary,
   },
   icon: {
-    fontSize: 20,
+    fontSize: THEME.typography.fontSize.xl,
     marginLeft: 8,
   },
   errorText: {
-    color: '#f44336',
-    fontSize: 14,
+    color: THEME.colors.error,
+    fontSize: THEME.typography.fontSize.base,
     marginTop: 4,
   },
   iosPickerContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: THEME.colors.surface,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
-    marginTop: 8,
+    marginTop: THEME.spacing.sm,
   },
   iosPickerHeader: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    padding: 12,
+    padding: THEME.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
   iosPickerDoneButton: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#007bff',
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
+    color: THEME.colors.primary,
   },
 });

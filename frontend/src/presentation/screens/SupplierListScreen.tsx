@@ -146,7 +146,7 @@ export const SupplierListScreen: React.FC = () => {
         <Text style={styles.supplierName}>{item.name}</Text>
         <View style={[
           styles.statusBadge,
-          { backgroundColor: item.is_active ? '#4CAF50' : '#F44336' }
+          { backgroundColor: item.is_active ? THEME.colors.success : THEME.colors.error }
         ]}>
           <Text style={styles.statusText}>
             {item.is_active ? 'Active' : 'Inactive'}
@@ -217,7 +217,7 @@ export const SupplierListScreen: React.FC = () => {
         data={suppliers}
         renderItem={renderSupplierItem}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={[styles.listContainer, { paddingBottom: insets.bottom + 16 }]}
+        contentContainerStyle={[styles.listContainer, { paddingBottom: insets.bottom + THEME.spacing.base }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

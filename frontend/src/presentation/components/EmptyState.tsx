@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import THEME from '../../core/constants/theme';
 
 interface EmptyStateProps {
   message: string;
@@ -31,8 +32,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 40,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: THEME.colors.surface,
+    borderRadius: THEME.borderRadius.md,
     marginVertical: 20,
   },
   icon: {
@@ -40,8 +41,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   message: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: THEME.typography.fontSize.md,
+    color: THEME.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
   },

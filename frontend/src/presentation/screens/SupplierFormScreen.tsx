@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import THEME from '../../core/constants/theme';
 import {
   View,
   Text,
@@ -146,13 +147,13 @@ export const SupplierFormScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+      <View style={[styles.header, { paddingTop: insets.top + THEME.spacing.base }]}>
         <Text style={styles.title}>
           {isEditMode ? 'Edit Supplier' : 'New Supplier'}
         </Text>
       </View>
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={[styles.form, { paddingBottom: insets.bottom + 20 }]}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={[styles.form, { paddingBottom: insets.bottom + THEME.spacing.lg }]}>
         <View style={styles.formGroup}>
           <Text style={styles.label}>Name *</Text>
           <TextInput
@@ -275,7 +276,7 @@ export const SupplierFormScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: THEME.colors.background,
   },
   centerContainer: {
     flex: 1,
@@ -284,41 +285,41 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 10,
-    color: '#666',
+    color: THEME.colors.textSecondary,
   },
   header: {
-    padding: 16,
-    backgroundColor: '#fff',
+    padding: THEME.spacing.base,
+    backgroundColor: THEME.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: THEME.colors.border,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: THEME.typography.fontSize.xxl,
+    fontWeight: THEME.typography.fontWeight.bold,
+    color: THEME.colors.textPrimary,
   },
   scrollView: {
     flex: 1,
   },
   form: {
-    padding: 16,
+    padding: THEME.spacing.base,
   },
   formGroup: {
-    marginBottom: 20,
+    marginBottom: THEME.spacing.lg,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
+    color: THEME.colors.textPrimary,
+    marginBottom: THEME.spacing.sm,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: THEME.colors.surface,
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+    borderRadius: THEME.borderRadius.base,
+    padding: THEME.spacing.md,
+    fontSize: THEME.typography.fontSize.md,
   },
   inputError: {
     borderColor: '#F44336',
@@ -328,49 +329,49 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   errorText: {
-    color: '#F44336',
-    fontSize: 12,
+    color: THEME.colors.error,
+    fontSize: THEME.typography.fontSize.sm,
     marginTop: 4,
   },
   switchContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: THEME.colors.surface,
+    padding: THEME.spacing.md,
+    borderRadius: THEME.borderRadius.base,
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 20,
+    marginTop: THEME.spacing.lg,
     marginBottom: 40,
   },
   button: {
     flex: 1,
-    padding: 16,
-    borderRadius: 8,
+    padding: THEME.spacing.base,
+    borderRadius: THEME.borderRadius.base,
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#fff',
+    backgroundColor: THEME.colors.surface,
     borderWidth: 1,
     borderColor: '#ddd',
   },
   submitButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: THEME.colors.primary,
   },
   buttonDisabled: {
     opacity: 0.6,
   },
   cancelButtonText: {
-    color: '#666',
-    fontSize: 16,
-    fontWeight: '600',
+    color: THEME.colors.textSecondary,
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
   submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: THEME.colors.white,
+    fontSize: THEME.typography.fontSize.md,
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
 });

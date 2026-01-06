@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import THEME from '../../core/constants/theme';
 
 interface ErrorMessageProps {
   message: string;
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#fff3cd',
-    borderRadius: 12,
+    borderRadius: THEME.borderRadius.md,
     borderWidth: 1,
     borderColor: '#ffc107',
     margin: 15,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   message: {
-    fontSize: 14,
+    fontSize: THEME.typography.fontSize.base,
     color: '#856404',
     textAlign: 'center',
     marginBottom: 15,
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     color: '#856404',
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: THEME.typography.fontSize.base,
+    fontWeight: THEME.typography.fontWeight.bold,
   },
 });

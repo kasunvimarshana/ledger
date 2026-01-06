@@ -127,7 +127,7 @@ export const UserListScreen: React.FC = () => {
         <Text style={styles.userName}>{item.name}</Text>
         <View style={[
           styles.statusBadge,
-          { backgroundColor: item.is_active ? '#4CAF50' : '#F44336' }
+          { backgroundColor: item.is_active ? THEME.colors.success : THEME.colors.error }
         ]}>
           <Text style={styles.statusText}>
             {item.is_active ? 'Active' : 'Inactive'}
@@ -192,7 +192,7 @@ export const UserListScreen: React.FC = () => {
         data={users}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderUserItem}
-        contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 16 }]}
+        contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + THEME.spacing.base }]}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No users found</Text>
@@ -261,71 +261,71 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: THEME.spacing.sm,
   },
   userName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: THEME.typography.fontSize.lg,
+    fontWeight: THEME.typography.fontWeight.bold,
+    color: THEME.colors.textPrimary,
     flex: 1,
   },
   statusBadge: {
-    paddingHorizontal: 12,
+    paddingHorizontal: THEME.spacing.md,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: THEME.borderRadius.md,
   },
   statusText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
+    color: THEME.colors.white,
+    fontSize: THEME.typography.fontSize.sm,
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
   userEmail: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: THEME.typography.fontSize.base,
+    color: THEME.colors.textSecondary,
     marginBottom: 4,
   },
   userRole: {
-    fontSize: 14,
-    color: '#007bff',
+    fontSize: THEME.typography.fontSize.base,
+    color: THEME.colors.primary,
   },
   addButton: {
-    backgroundColor: '#007bff',
-    padding: 16,
-    margin: 16,
-    borderRadius: 8,
+    backgroundColor: THEME.colors.primary,
+    padding: THEME.spacing.base,
+    margin: THEME.spacing.base,
+    borderRadius: THEME.borderRadius.base,
     alignItems: 'center',
   },
   addButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: THEME.colors.white,
+    fontSize: THEME.typography.fontSize.lg,
+    fontWeight: THEME.typography.fontWeight.bold,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: THEME.colors.background,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#666',
+    marginTop: THEME.spacing.md,
+    fontSize: THEME.typography.fontSize.md,
+    color: THEME.colors.textSecondary,
   },
   emptyContainer: {
-    padding: 20,
+    padding: THEME.spacing.lg,
     alignItems: 'center',
   },
   emptyText: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: THEME.typography.fontSize.md,
+    color: THEME.colors.textSecondary,
   },
   sortContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#fff',
+    paddingHorizontal: THEME.spacing.base,
+    paddingVertical: THEME.spacing.sm,
+    backgroundColor: THEME.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: THEME.colors.border,
     justifyContent: 'flex-start',
     gap: 8,
   },

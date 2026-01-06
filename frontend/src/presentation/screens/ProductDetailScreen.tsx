@@ -132,7 +132,7 @@ export const ProductDetailScreen: React.FC = () => {
         <View style={styles.statusRow}>
           <View style={[
             styles.statusBadge,
-            { backgroundColor: product.is_active ? '#4CAF50' : '#F44336' }
+            { backgroundColor: product.is_active ? THEME.colors.success : THEME.colors.error }
           ]}>
             <Text style={styles.statusText}>
               {product.is_active ? 'Active' : 'Inactive'}

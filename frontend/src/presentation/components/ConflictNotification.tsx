@@ -7,6 +7,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../core/constants/colors';
+import THEME from '../../core/constants/theme';
 
 export interface ConflictInfo {
   entity: string;
@@ -123,8 +124,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   container: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: THEME.colors.surface,
+    borderRadius: THEME.borderRadius.md,
     width: '100%',
     maxWidth: 400,
     shadowColor: '#000',
@@ -143,8 +144,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: THEME.typography.fontSize.lg,
+    fontWeight: THEME.typography.fontWeight.bold,
     color: COLORS.text,
     flex: 1,
   },
@@ -155,29 +156,29 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: COLORS.text,
     lineHeight: 22,
-    marginBottom: 8,
+    marginBottom: THEME.spacing.sm,
   },
   entityName: {
-    fontWeight: '700',
+    fontWeight: THEME.typography.fontWeight.bold,
     color: COLORS.primary,
   },
   subMessage: {
-    fontSize: 14,
+    fontSize: THEME.typography.fontSize.base,
     color: COLORS.textSecondary,
     lineHeight: 20,
-    marginBottom: 16,
+    marginBottom: THEME.spacing.base,
   },
   changeSection: {
     marginTop: 12,
-    padding: 12,
+    padding: THEME.spacing.md,
     backgroundColor: '#F5F5F5',
-    borderRadius: 8,
+    borderRadius: THEME.borderRadius.base,
   },
   sectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: THEME.typography.fontSize.base,
+    fontWeight: THEME.typography.fontWeight.semibold,
     color: COLORS.text,
-    marginBottom: 8,
+    marginBottom: THEME.spacing.sm,
   },
   changeItem: {
     fontSize: 13,
@@ -187,21 +188,21 @@ const styles = StyleSheet.create({
   },
   serverChange: {
     color: COLORS.success,
-    fontWeight: '500',
+    fontWeight: THEME.typography.fontWeight.medium,
   },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     marginTop: 16,
-    padding: 12,
+    padding: THEME.spacing.md,
     backgroundColor: '#E3F2FD',
-    borderRadius: 8,
+    borderRadius: THEME.borderRadius.base,
   },
   infoText: {
     fontSize: 13,
     color: COLORS.info,
-    fontWeight: '500',
+    fontWeight: THEME.typography.fontWeight.medium,
   },
   actions: {
     flexDirection: 'row',
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: THEME.borderRadius.base,
     minWidth: 80,
     alignItems: 'center',
   },
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
   secondaryButton: {
     backgroundColor: '#F5F5F5',
@@ -233,6 +234,6 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     color: COLORS.primary,
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: THEME.typography.fontWeight.semibold,
   },
 });
