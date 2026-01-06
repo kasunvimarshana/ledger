@@ -134,7 +134,7 @@ export const RegisterScreen: React.FC = () => {
               disabled={isLoading}
             >
               {isLoading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={THEME.colors.white} />
               ) : (
                 <Text style={styles.buttonText}>Register</Text>
               )}

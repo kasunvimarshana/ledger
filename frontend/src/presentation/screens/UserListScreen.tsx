@@ -144,7 +144,7 @@ export const UserListScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading users...</Text>
       </View>
     );
@@ -287,18 +287,6 @@ const styles = StyleSheet.create({
   userRole: {
     fontSize: THEME.typography.fontSize.base,
     color: THEME.colors.primary,
-  },
-  addButton: {
-    backgroundColor: THEME.colors.primary,
-    padding: THEME.spacing.base,
-    margin: THEME.spacing.base,
-    borderRadius: THEME.borderRadius.base,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: THEME.colors.white,
-    fontSize: THEME.typography.fontSize.lg,
-    fontWeight: THEME.typography.fontWeight.bold,
   },
   loadingContainer: {
     flex: 1,

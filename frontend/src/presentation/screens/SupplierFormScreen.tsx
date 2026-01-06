@@ -139,7 +139,7 @@ export const SupplierFormScreen: React.FC = () => {
   if (loading && isEditMode) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#2196F3" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading supplier...</Text>
       </View>
     );
@@ -260,7 +260,7 @@ export const SupplierFormScreen: React.FC = () => {
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={THEME.colors.white} />
             ) : (
               <Text style={styles.submitButtonText}>
                 {isEditMode ? 'Update' : 'Create'}

@@ -19,9 +19,8 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
-import { Supplier } from '../../domain/entities/Supplier';
 import { Product, Rate } from '../../domain/entities/Product';
-import { DateTimePicker } from '../components';
+import { DateTimePicker, SearchableSelector } from '../components';
 
 interface CollectionFormData {
   supplier_id: string;
@@ -40,8 +39,6 @@ export const CollectionFormScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   const [loading, setLoading] = useState(false);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
   const [currentRate, setCurrentRate] = useState<Rate | null>(null);
   const [calculatedAmount, setCalculatedAmount] = useState<number>(0);
 
@@ -56,8 +53,6 @@ export const CollectionFormScreen: React.FC = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof CollectionFormData, string>>>({});
 
   useEffect(() => {
-    loadSuppliers();
-    loadProducts();
     if (isEditMode) {
       loadCollection();
     }
@@ -72,36 +67,6 @@ export const CollectionFormScreen: React.FC = () => {
   useEffect(() => {
     calculateAmount();
   }, [formData.quantity, currentRate]);
-
-  const loadSuppliers = async () => {
-    try {
-      const response = await apiClient.get<{data: Supplier[]}>('/suppliers');
-      if (response.success && response.data) {
-        // Handle paginated response: response.data might be {data: [], ...pagination}
-        const suppliers = Array.isArray(response.data) 
-          ? response.data 
-          : ((response.data as any).data || response.data);
-        setSuppliers((suppliers as Supplier[]).filter((s: Supplier) => s.is_active));
-      }
-    } catch (error) {
-      console.error('Error loading suppliers:', error);
-    }
-  };
-
-  const loadProducts = async () => {
-    try {
-      const response = await apiClient.get<{data: Product[]}>('/products');
-      if (response.success && response.data) {
-        // Handle paginated response: response.data might be {data: [], ...pagination}
-        const products = Array.isArray(response.data) 
-          ? response.data 
-          : ((response.data as any).data || response.data);
-        setProducts((products as Product[]).filter((p: Product) => p.is_active));
-      }
-    } catch (error) {
-      console.error('Error loading products:', error);
-    }
-  };
 
   const loadCollection = async () => {
     try {
@@ -234,7 +199,7 @@ export const CollectionFormScreen: React.FC = () => {
   if (loading && isEditMode) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading collection...</Text>
       </View>
     );
@@ -253,66 +218,26 @@ export const CollectionFormScreen: React.FC = () => {
 
       <View style={styles.form}>
         {/* Supplier Selection */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Supplier *</Text>
-          <View style={[styles.input, errors.supplier_id && styles.inputError]}>
-            <Text style={styles.selectText}>
-              {formData.supplier_id 
-                ? suppliers.find(s => s.id.toString() === formData.supplier_id)?.name || 'Select supplier'
-                : 'Select supplier'}
-            </Text>
-          </View>
-          {errors.supplier_id && <Text style={styles.errorText}>{errors.supplier_id}</Text>}
-          
-          {/* Simple supplier list */}
-          {suppliers.length > 0 && (
-            <View style={styles.optionsList}>
-              {suppliers.map((supplier) => (
-                <TouchableOpacity
-                  key={supplier.id}
-                  style={[
-                    styles.optionItem,
-                    formData.supplier_id === supplier.id.toString() && styles.optionItemSelected
-                  ]}
-                  onPress={() => updateField('supplier_id', supplier.id.toString())}
-                >
-                  <Text style={styles.optionText}>{supplier.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
+        <SearchableSelector
+          label="Supplier *"
+          placeholder="Select supplier"
+          value={formData.supplier_id}
+          onSelect={(value, option) => updateField('supplier_id', value)}
+          endpoint="/suppliers"
+          error={errors.supplier_id}
+          queryParams={{ is_active: 1 }}
+        />
 
         {/* Product Selection */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Product *</Text>
-          <View style={[styles.input, errors.product_id && styles.inputError]}>
-            <Text style={styles.selectText}>
-              {formData.product_id 
-                ? products.find(p => p.id.toString() === formData.product_id)?.name || 'Select product'
-                : 'Select product'}
-            </Text>
-          </View>
-          {errors.product_id && <Text style={styles.errorText}>{errors.product_id}</Text>}
-          
-          {/* Simple product list */}
-          {products.length > 0 && (
-            <View style={styles.optionsList}>
-              {products.map((product) => (
-                <TouchableOpacity
-                  key={product.id}
-                  style={[
-                    styles.optionItem,
-                    formData.product_id === product.id.toString() && styles.optionItemSelected
-                  ]}
-                  onPress={() => updateField('product_id', product.id.toString())}
-                >
-                  <Text style={styles.optionText}>{product.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
+        <SearchableSelector
+          label="Product *"
+          placeholder="Select product"
+          value={formData.product_id}
+          onSelect={(value, option) => updateField('product_id', value)}
+          endpoint="/products"
+          error={errors.product_id}
+          queryParams={{ is_active: 1 }}
+        />
 
         {/* Current Rate Display */}
         {currentRate && (
@@ -386,7 +311,7 @@ export const CollectionFormScreen: React.FC = () => {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={THEME.colors.white} />
           ) : (
             <Text style={styles.submitButtonText}>
               {isEditMode ? 'Update Collection' : 'Create Collection'}

@@ -14,3 +14,5 @@ export { ListScreenHeader } from './ListScreenHeader';
 export { SyncStatusIndicator } from './SyncStatusIndicator';
 export { ConflictNotification } from './ConflictNotification';
 export { DateTimePicker } from './DateTimePicker';
+export { SearchableSelector } from './SearchableSelector';
+export type { SearchableSelectorOption } from './SearchableSelector';

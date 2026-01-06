@@ -172,7 +172,7 @@ export const ProductListScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading products...</Text>
       </View>
     );

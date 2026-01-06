@@ -182,7 +182,7 @@ export const PaymentListScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color={THEME.colors.primary} />
         <Text style={styles.loadingText}>Loading payments...</Text>
       </View>
     );
