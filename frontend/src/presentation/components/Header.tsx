@@ -6,6 +6,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HeaderProps {
   title: string;
@@ -23,13 +24,14 @@ export const Header: React.FC<HeaderProps> = ({
   style 
 }) => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   const goBack = () => {
     navigation.goBack();
   };
 
   return (
-    <View style={[styles.header, style]}>
+    <View style={[styles.header, { paddingTop: insets.top + 20 }, style]}>
       {showBackButton && (
         <TouchableOpacity onPress={goBack} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Back</Text>
@@ -40,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
         {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       </View>
       {rightComponent && (
-        <View style={styles.rightComponent}>
+        <View style={[styles.rightComponent, { top: insets.top + 25 }]}>
           {rightComponent}
         </View>
       )}
@@ -52,7 +54,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#007bff',
     padding: 20,
-    paddingTop: 50,
   },
   backButton: {
     marginBottom: 10,
@@ -77,6 +78,5 @@ const styles = StyleSheet.create({
   rightComponent: {
     position: 'absolute',
     right: 20,
-    top: 55,
   },
 });

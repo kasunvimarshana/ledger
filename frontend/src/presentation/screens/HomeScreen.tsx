@@ -12,6 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { canView } from '../../core/utils/permissions';
 import { SyncStatusIndicator } from '../components/SyncStatusIndicator';
@@ -19,6 +20,7 @@ import { SyncStatusIndicator } from '../components/SyncStatusIndicator';
 export const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
   const { user, logout } = useAuth();
+  const insets = useSafeAreaInsets();
 
   const handleLogout = async () => {
     await logout();
@@ -30,7 +32,7 @@ export const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
         <View style={styles.headerTop}>
           <View>
             <Text style={styles.title}>Ledger Dashboard</Text>
@@ -129,7 +131,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#007bff',
     padding: 20,
-    paddingTop: 50,
   },
   headerTop: {
     flexDirection: 'row',
