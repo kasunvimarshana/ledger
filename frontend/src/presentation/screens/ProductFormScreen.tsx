@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 
 interface ProductFormData {
@@ -32,6 +33,7 @@ export const ProductFormScreen: React.FC = () => {
   const route = useRoute();
   const productId = (route.params as any)?.productId;
   const isEditMode = !!productId;
+  const insets = useSafeAreaInsets();
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<ProductFormData>({
@@ -148,8 +150,8 @@ export const ProductFormScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}>
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
