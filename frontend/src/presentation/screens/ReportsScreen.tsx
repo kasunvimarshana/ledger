@@ -13,9 +13,7 @@ import {
   RefreshControl,
   TouchableOpacity,
   Alert,
-  TextInput,
   Modal,
-  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

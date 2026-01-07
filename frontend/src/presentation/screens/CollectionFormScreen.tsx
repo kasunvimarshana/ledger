@@ -14,12 +14,11 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Platform,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
-import { Product, Rate } from '../../domain/entities/Product';
+import { Rate } from '../../domain/entities/Product';
 import { DateTimePicker, SearchableSelector, ScreenHeader } from '../components';
 
 interface CollectionFormData {
