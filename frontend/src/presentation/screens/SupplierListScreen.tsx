@@ -141,6 +141,9 @@ export const SupplierListScreen: React.FC = () => {
     <TouchableOpacity
       style={styles.supplierCard}
       onPress={() => handleSupplierPress(item)}
+      accessibilityRole="button"
+      accessibilityLabel={`Supplier: ${item.name}, Code: ${item.code}, Status: ${item.is_active ? 'Active' : 'Inactive'}`}
+      accessibilityHint="Press to view supplier details"
     >
       <View style={styles.supplierHeader}>
         <Text style={styles.supplierName}>{String(item.name)}</Text>

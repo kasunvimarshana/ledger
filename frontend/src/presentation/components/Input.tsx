@@ -18,6 +18,8 @@ interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   containerStyle?: ViewStyle;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -25,6 +27,8 @@ export const Input: React.FC<InputProps> = ({
   error,
   containerStyle,
   style,
+  accessibilityLabel,
+  accessibilityHint,
   ...textInputProps
 }) => {
   return (
@@ -37,6 +41,9 @@ export const Input: React.FC<InputProps> = ({
           style,
         ]}
         placeholderTextColor={THEME.colors.textTertiary}
+        accessibilityLabel={accessibilityLabel || label || textInputProps.placeholder}
+        accessibilityHint={accessibilityHint}
+        accessibilityState={{ disabled: textInputProps.editable === false }}
         {...textInputProps}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
