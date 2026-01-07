@@ -106,7 +106,6 @@ export const RoleFormScreen: React.FC = () => {
           ? response.data.permissions 
           : [];
         
-        console.log('Loaded role permissions:', permissions);
         setSelectedPermissions(permissions);
       }
     } catch (error) {
