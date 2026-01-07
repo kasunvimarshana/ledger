@@ -71,6 +71,10 @@ export const RateListScreen: React.FC = () => {
         sort_order: sortOrder,
       });
       
+      if (searchTerm.trim()) {
+        params.append('search', searchTerm.trim());
+      }
+      
       const response = await apiClient.get<any>(`/rates?${params.toString()}`);
       if (response.success && response.data) {
         // Handle Laravel pagination response
