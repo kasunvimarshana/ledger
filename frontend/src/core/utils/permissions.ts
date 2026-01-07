@@ -121,21 +121,22 @@ export const hasAnyRole = (user: User | null, roles: string[]): boolean => {
 
 /**
  * Check if user can perform CRUD operations on a resource
+ * Uses dot notation to match backend format: resource.action
  */
 export const canCreate = (user: User | null, resource: string): boolean => {
-  return hasPermission(user, `create_${resource}`);
+  return hasPermission(user, `${resource}.create`);
 };
 
 export const canView = (user: User | null, resource: string): boolean => {
-  return hasPermission(user, `view_${resource}`);
+  return hasPermission(user, `${resource}.view`);
 };
 
 export const canUpdate = (user: User | null, resource: string): boolean => {
-  return hasPermission(user, `update_${resource}`);
+  return hasPermission(user, `${resource}.edit`);
 };
 
 export const canDelete = (user: User | null, resource: string): boolean => {
-  return hasPermission(user, `delete_${resource}`);
+  return hasPermission(user, `${resource}.delete`);
 };
 
 /**
