@@ -27,7 +27,8 @@ export const useProductRate = (productId: string | undefined): UseProductRateRes
     try {
       setLoading(true);
       setError(null);
-      const response = await apiClient.get<{ data: Rate }>(`/products/${productId}/current-rate`);
+      // ApiResponse<Rate> means the response.data field contains a Rate
+      const response = await apiClient.get<Rate>(`/products/${productId}/current-rate`);
       if (response.success && response.data) {
         setCurrentRate(response.data);
       }

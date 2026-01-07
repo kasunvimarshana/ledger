@@ -106,7 +106,6 @@ export const ProductDetailScreen: React.FC = () => {
       {currentRate && (
         <RateInfo 
           rate={currentRate}
-          productName={product.name}
           onViewHistory={handleViewRateHistory}
         />
       )}

@@ -11,7 +11,6 @@ import THEME from '../../core/constants/theme';
 
 interface RateInfoProps {
   rate: Rate;
-  productName?: string;
   onViewHistory: () => void;
 }
 

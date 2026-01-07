@@ -29,7 +29,8 @@ export const useProduct = (productId: string | undefined): UseProductResult => {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiClient.get<{ data: Product }>(`/products/${productId}`);
+      // ApiResponse<Product> means the response.data field contains a Product
+      const response = await apiClient.get<Product>(`/products/${productId}`);
       if (response.success && response.data) {
         setProduct(response.data);
       }
