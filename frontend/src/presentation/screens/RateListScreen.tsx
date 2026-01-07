@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     fontWeight: THEME.typography.fontWeight.semibold,
   },
   cardBody: {
-    marginTop: 4,
+    marginTop: THEME.spacing.xs,
   },
   detailRow: {
     flexDirection: 'row',
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: THEME.spacing.lg,
-    marginTop: 60,
+    marginTop: THEME.spacing.xxxl,
   },
   emptyText: {
     fontSize: THEME.typography.fontSize.md,
@@ -393,10 +393,10 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    ...THEME.shadows.large,
+    ...THEME.shadows.lg,
   },
   fabText: {
-    fontSize: 32,
+    fontSize: THEME.typography.fontSize.huge,
     color: THEME.colors.white,
     fontWeight: THEME.typography.fontWeight.bold,
   },

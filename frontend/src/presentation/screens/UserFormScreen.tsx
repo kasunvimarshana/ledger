@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     padding: THEME.spacing.base,
     borderRadius: THEME.borderRadius.base,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: THEME.spacing.sm,
   },
   submitButtonDisabled: {
     opacity: 0.6,

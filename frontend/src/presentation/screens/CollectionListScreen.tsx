@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   totalRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
+    marginTop: THEME.spacing.sm,
     paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: THEME.colors.border,
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     color: THEME.colors.primary,
   },
   notesContainer: {
-    marginTop: 8,
+    marginTop: THEME.spacing.sm,
     padding: THEME.spacing.sm,
     backgroundColor: THEME.colors.gray50,
     borderRadius: THEME.borderRadius.sm,

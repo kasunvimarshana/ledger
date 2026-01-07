@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     ...THEME.shadows.base,
   },
   menuIcon: {
-    fontSize: 40,
+    fontSize: THEME.typography.fontSize.huge,
     marginBottom: THEME.spacing.sm,
   },
   menuText: {

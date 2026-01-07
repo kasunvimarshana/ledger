@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    marginTop: 10,
+    marginTop: THEME.spacing.sm,
     color: THEME.colors.textSecondary,
   },
   errorText: {

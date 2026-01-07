@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   helpText: {
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textSecondary,
-    marginTop: 4,
+    marginTop: THEME.spacing.xs,
   },
   permissionGroup: {
     backgroundColor: THEME.colors.surface,
