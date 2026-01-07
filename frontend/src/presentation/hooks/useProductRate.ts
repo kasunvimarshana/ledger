@@ -3,7 +3,7 @@
  * Encapsulates rate loading logic with loading and error states
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Rate } from '../../domain/entities/Product';
 
@@ -19,7 +19,7 @@ export const useProductRate = (productId: string | undefined): UseProductRateRes
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const loadCurrentRate = async () => {
+  const loadCurrentRate = useCallback(async () => {
     if (!productId) {
       return;
     }
@@ -40,11 +40,11 @@ export const useProductRate = (productId: string | undefined): UseProductRateRes
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId]);
 
   useEffect(() => {
     loadCurrentRate();
-  }, [productId]);
+  }, [loadCurrentRate]);
 
   return {
     currentRate,

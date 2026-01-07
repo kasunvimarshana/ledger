@@ -3,7 +3,7 @@
  * Encapsulates product loading logic with loading and error states
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Product } from '../../domain/entities/Product';
@@ -20,7 +20,7 @@ export const useProduct = (productId: string | undefined): UseProductResult => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const loadProduct = async () => {
+  const loadProduct = useCallback(async () => {
     if (!productId) {
       setLoading(false);
       return;
@@ -42,11 +42,11 @@ export const useProduct = (productId: string | undefined): UseProductResult => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId]);
 
   useEffect(() => {
     loadProduct();
-  }, [productId]);
+  }, [loadProduct]);
 
   return {
     product,
