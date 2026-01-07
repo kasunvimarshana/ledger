@@ -447,15 +447,4 @@ const styles = StyleSheet.create({
     fontSize: THEME.typography.fontSize.lg,
     fontWeight: THEME.typography.fontWeight.semibold,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: THEME.colors.background,
-  },
-  loadingText: {
-    marginTop: THEME.spacing.md,
-    fontSize: THEME.typography.fontSize.md,
-    color: THEME.colors.textSecondary,
-  },
 });

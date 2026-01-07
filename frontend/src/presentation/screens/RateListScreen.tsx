@@ -182,7 +182,8 @@ export const RateListScreen: React.FC = () => {
       <ScreenHeader
         title="Rates"
         subtitle={`${totalItems} total`}
-        onBack={() => navigation.goBack()}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
         rightComponent={<SyncStatusIndicator />}
       />
 
@@ -199,20 +200,17 @@ export const RateListScreen: React.FC = () => {
         <View style={styles.sortContainer}>
           <SortButton
             label="Rate"
-            active={sortBy === 'rate'}
-            order={sortBy === 'rate' ? sortOrder : undefined}
+            direction={sortBy === 'rate' ? sortOrder : null}
             onPress={() => handleSort('rate')}
           />
           <SortButton
             label="Date"
-            active={sortBy === 'effective_from'}
-            order={sortBy === 'effective_from' ? sortOrder : undefined}
+            direction={sortBy === 'effective_from' ? sortOrder : null}
             onPress={() => handleSort('effective_from')}
           />
           <SortButton
             label="Version"
-            active={sortBy === 'version'}
-            order={sortBy === 'version' ? sortOrder : undefined}
+            direction={sortBy === 'version' ? sortOrder : null}
             onPress={() => handleSort('version')}
           />
         </View>
@@ -245,7 +243,9 @@ export const RateListScreen: React.FC = () => {
               totalPages={totalPages}
               onPageChange={setCurrentPage}
               totalItems={totalItems}
-              itemsPerPage={perPage}
+              perPage={perPage}
+              hasNextPage={currentPage < totalPages}
+              hasPreviousPage={currentPage > 1}
             />
           )}
         </>
