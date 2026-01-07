@@ -227,23 +227,23 @@ class ReportTest extends TestCase
 
     public function test_can_get_product_performance()
     {
-        // Clear existing data to ensure clean test
-        Product::query()->delete();
-        Collection::query()->delete();
-        
-        $product = Product::factory()->create(['name' => 'Test Product']);
+        // Use isolated test to avoid interference from other tests
+        $product = Product::factory()->create(['name' => 'Unique Test Product ' . uniqid()]);
         $supplier = Supplier::factory()->create();
         $rate = Rate::factory()->create([
             'product_id' => $product->id,
             'rate' => 100.00,
+            'unit' => 'kg',
+            'effective_from' => '2025-01-01',
         ]);
         
-        // Create multiple collections for the product
+        // Create exactly 3 collections for this specific product
         Collection::factory()->count(3)->create([
             'supplier_id' => $supplier->id,
             'product_id' => $product->id,
             'quantity' => 10,
             'total_amount' => 1000.00,
+            'collection_date' => '2025-01-15',
         ]);
 
         $response = $this->withHeaders([
@@ -265,10 +265,12 @@ class ReportTest extends TestCase
                  ]);
 
         $data = $response->json();
-        $this->assertCount(1, $data);
-        $this->assertEquals('Test Product', $data[0]['product_name']);
-        $this->assertEquals(3, $data[0]['collection_count']);
-        $this->assertEquals(30, $data[0]['total_quantity']);
+        // Find our specific test product in the results
+        $testProduct = collect($data)->firstWhere('product_id', $product->id);
+        $this->assertNotNull($testProduct, 'Test product not found in results');
+        $this->assertEquals($product->name, $testProduct['product_name']);
+        $this->assertEquals(3, $testProduct['collection_count']);
+        $this->assertEquals(30, $testProduct['total_quantity']);
     }
 
     public function test_can_get_financial_summary()
