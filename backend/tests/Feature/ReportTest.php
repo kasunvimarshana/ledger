@@ -1,0 +1,423 @@
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\User;
+use App\Models\Supplier;
+use App\Models\Product;
+use App\Models\Collection;
+use App\Models\Payment;
+use App\Models\Rate;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Carbon\Carbon;
+
+class ReportTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected $user;
+    protected $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create user and get token
+        $this->user = User::factory()->create();
+        $this->token = auth('api')->login($this->user);
+    }
+
+    public function test_can_get_system_summary()
+    {
+        // Create test data
+        Supplier::factory()->count(5)->create(['is_active' => true]);
+        Supplier::factory()->count(2)->create(['is_active' => false]);
+        Product::factory()->count(3)->create(['is_active' => true]);
+        
+        $supplier = Supplier::factory()->create();
+        $product = Product::factory()->create();
+        $rate = Rate::factory()->create([
+            'product_id' => $product->id,
+            'rate' => 100.00,
+        ]);
+        
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'total_amount' => 1000.00,
+        ]);
+        
+        Payment::factory()->create([
+            'supplier_id' => $supplier->id,
+            'amount' => 500.00,
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/summary');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'totalSuppliers',
+                     'activeSuppliers',
+                     'totalProducts',
+                     'activeProducts',
+                     'totalCollections',
+                     'totalCollectionAmount',
+                     'totalPayments',
+                     'totalPaymentAmount',
+                     'outstandingBalance',
+                     'collectionsThisMonth',
+                     'paymentsThisMonth',
+                     'collectionAmountThisMonth',
+                     'paymentAmountThisMonth',
+                 ])
+                 ->assertJson([
+                     'totalSuppliers' => 8,
+                     'activeSuppliers' => 6,
+                     'totalCollections' => 1,
+                     'totalPayments' => 1,
+                 ]);
+        
+        // Verify totals exist and are numeric
+        $data = $response->json();
+        $this->assertIsNumeric($data['totalProducts']);
+        $this->assertIsNumeric($data['totalCollectionAmount']);
+    }
+
+    public function test_can_get_supplier_balances()
+    {
+        $supplier1 = Supplier::factory()->create(['name' => 'Supplier 1', 'code' => 'SUP001']);
+        $supplier2 = Supplier::factory()->create(['name' => 'Supplier 2', 'code' => 'SUP002']);
+        $product = Product::factory()->create();
+        
+        // Supplier 1: 1000 collections, 300 payments = 700 balance
+        Collection::factory()->create([
+            'supplier_id' => $supplier1->id,
+            'product_id' => $product->id,
+            'total_amount' => 1000.00,
+        ]);
+        Payment::factory()->create([
+            'supplier_id' => $supplier1->id,
+            'amount' => 300.00,
+        ]);
+        
+        // Supplier 2: 500 collections, 100 payments = 400 balance
+        Collection::factory()->create([
+            'supplier_id' => $supplier2->id,
+            'product_id' => $product->id,
+            'total_amount' => 500.00,
+        ]);
+        Payment::factory()->create([
+            'supplier_id' => $supplier2->id,
+            'amount' => 100.00,
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/supplier-balances?limit=10&sort=desc');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     '*' => [
+                         'supplier_id',
+                         'supplier_name',
+                         'supplier_code',
+                         'total_collections',
+                         'total_payments',
+                         'balance',
+                         'collection_count',
+                         'payment_count',
+                     ]
+                 ]);
+
+        // Verify supplier 1 has higher balance and comes first (desc order)
+        $data = $response->json();
+        $this->assertEquals('Supplier 1', $data[0]['supplier_name']);
+        $this->assertEquals(700.00, $data[0]['balance']);
+        $this->assertEquals('Supplier 2', $data[1]['supplier_name']);
+        $this->assertEquals(400.00, $data[1]['balance']);
+    }
+
+    public function test_can_get_collections_summary()
+    {
+        $supplier = Supplier::factory()->create();
+        $product = Product::factory()->create(['name' => 'Test Product']);
+        $rate = Rate::factory()->create([
+            'product_id' => $product->id,
+            'rate' => 100.00,
+        ]);
+        
+        // Create collections with specific dates
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'collection_date' => '2025-01-15',
+            'quantity' => 10,
+            'total_amount' => 1000.00,
+        ]);
+        
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'collection_date' => '2025-01-20',
+            'quantity' => 5,
+            'total_amount' => 500.00,
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/collections-summary?start_date=2025-01-01&end_date=2025-01-31');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'summary' => [
+                         'total_count',
+                         'total_quantity',
+                         'total_amount',
+                     ],
+                     'by_product',
+                     'by_supplier',
+                 ]);
+
+        $data = $response->json();
+        $this->assertEquals(2, $data['summary']['total_count']);
+        $this->assertEquals(15, $data['summary']['total_quantity']);
+        $this->assertEquals(1500.00, $data['summary']['total_amount']);
+    }
+
+    public function test_can_get_payments_summary()
+    {
+        $supplier = Supplier::factory()->create(['name' => 'Test Supplier']);
+        
+        // Create different types of payments
+        Payment::factory()->create([
+            'supplier_id' => $supplier->id,
+            'payment_date' => '2025-01-15',
+            'amount' => 1000.00,
+            'type' => 'advance',
+        ]);
+        
+        Payment::factory()->create([
+            'supplier_id' => $supplier->id,
+            'payment_date' => '2025-01-20',
+            'amount' => 500.00,
+            'type' => 'partial',
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/payments-summary?start_date=2025-01-01&end_date=2025-01-31');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'summary' => [
+                         'total_count',
+                         'total_amount',
+                     ],
+                     'by_type',
+                     'by_supplier',
+                 ]);
+
+        $data = $response->json();
+        $this->assertEquals(2, $data['summary']['total_count']);
+        $this->assertEquals(1500.00, $data['summary']['total_amount']);
+    }
+
+    public function test_can_get_product_performance()
+    {
+        // Clear existing data to ensure clean test
+        Product::query()->delete();
+        Collection::query()->delete();
+        
+        $product = Product::factory()->create(['name' => 'Test Product']);
+        $supplier = Supplier::factory()->create();
+        $rate = Rate::factory()->create([
+            'product_id' => $product->id,
+            'rate' => 100.00,
+        ]);
+        
+        // Create multiple collections for the product
+        Collection::factory()->count(3)->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'quantity' => 10,
+            'total_amount' => 1000.00,
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/product-performance');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     '*' => [
+                         'product_id',
+                         'product_name',
+                         'product_code',
+                         'collection_count',
+                         'total_quantity',
+                         'total_amount',
+                         'unique_suppliers',
+                         'avg_rate',
+                     ]
+                 ]);
+
+        $data = $response->json();
+        $this->assertCount(1, $data);
+        $this->assertEquals('Test Product', $data[0]['product_name']);
+        $this->assertEquals(3, $data[0]['collection_count']);
+        $this->assertEquals(30, $data[0]['total_quantity']);
+    }
+
+    public function test_can_get_financial_summary()
+    {
+        $supplier = Supplier::factory()->create();
+        $product = Product::factory()->create();
+        
+        // Create data for different months
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'collection_date' => '2025-01-15',
+            'total_amount' => 1000.00,
+        ]);
+        
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'collection_date' => '2025-02-15',
+            'total_amount' => 2000.00,
+        ]);
+        
+        Payment::factory()->create([
+            'supplier_id' => $supplier->id,
+            'payment_date' => '2025-01-20',
+            'amount' => 500.00,
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/financial-summary?start_date=2025-01-01&end_date=2025-12-31');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'summary' => [
+                         'total_collections',
+                         'total_payments',
+                         'net_balance',
+                     ],
+                     'monthly_breakdown',
+                 ]);
+
+        $data = $response->json();
+        $this->assertEquals(3000.00, $data['summary']['total_collections']);
+        $this->assertEquals(500.00, $data['summary']['total_payments']);
+        $this->assertEquals(2500.00, $data['summary']['net_balance']);
+    }
+
+    public function test_authenticated_user_can_access_reports()
+    {
+        // Reports require authentication
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/summary');
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/supplier-balances');
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/collections-summary');
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/payments-summary');
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/product-performance');
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/financial-summary');
+        $response->assertStatus(200);
+    }
+
+    public function test_collections_summary_respects_date_filters()
+    {
+        $supplier = Supplier::factory()->create();
+        $product = Product::factory()->create();
+        
+        // Collection in range
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'collection_date' => '2025-01-15',
+            'total_amount' => 1000.00,
+        ]);
+        
+        // Collection out of range
+        Collection::factory()->create([
+            'supplier_id' => $supplier->id,
+            'product_id' => $product->id,
+            'collection_date' => '2025-03-15',
+            'total_amount' => 2000.00,
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/collections-summary?start_date=2025-01-01&end_date=2025-01-31');
+
+        $response->assertStatus(200);
+        $data = $response->json();
+        
+        // Should only include the January collection
+        $this->assertEquals(1, $data['summary']['total_count']);
+        $this->assertEquals(1000.00, $data['summary']['total_amount']);
+    }
+
+    public function test_supplier_balances_respects_sort_order()
+    {
+        $supplier1 = Supplier::factory()->create(['name' => 'Low Balance']);
+        $supplier2 = Supplier::factory()->create(['name' => 'High Balance']);
+        $product = Product::factory()->create();
+        
+        // Low balance supplier
+        Collection::factory()->create([
+            'supplier_id' => $supplier1->id,
+            'product_id' => $product->id,
+            'total_amount' => 100.00,
+        ]);
+        
+        // High balance supplier
+        Collection::factory()->create([
+            'supplier_id' => $supplier2->id,
+            'product_id' => $product->id,
+            'total_amount' => 1000.00,
+        ]);
+
+        // Test descending order (default)
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/supplier-balances?sort=desc');
+
+        $data = $response->json();
+        $this->assertEquals('High Balance', $data[0]['supplier_name']);
+        
+        // Test ascending order
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer {$this->token}",
+        ])->getJson('/api/reports/supplier-balances?sort=asc');
+
+        $data = $response->json();
+        $this->assertEquals('Low Balance', $data[0]['supplier_name']);
+    }
+}
