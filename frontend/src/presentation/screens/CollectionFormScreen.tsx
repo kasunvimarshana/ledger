@@ -20,7 +20,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Product, Rate } from '../../domain/entities/Product';
-import { DateTimePicker, SearchableSelector } from '../components';
+import { DateTimePicker, SearchableSelector, ScreenHeader } from '../components';
 
 interface CollectionFormData {
   supplier_id: string;
@@ -206,47 +206,45 @@ export const CollectionFormScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom + THEME.spacing.lg }}>
-      <View style={[styles.header, { paddingTop: insets.top + THEME.spacing.base }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>
-          {isEditMode ? 'Edit Collection' : 'New Collection'}
-        </Text>
-      </View>
+    <View style={styles.container}>
+      <ScreenHeader
+        title={isEditMode ? 'Edit Collection' : 'New Collection'}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
+      
+      <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: insets.bottom + THEME.spacing.lg }}>
+        <View style={styles.form}>
+          {/* Supplier Selection */}
+          <SearchableSelector
+            label="Supplier *"
+            placeholder="Select supplier"
+            value={formData.supplier_id}
+            onSelect={(value, option) => updateField('supplier_id', value)}
+            endpoint="/suppliers"
+            error={errors.supplier_id}
+            queryParams={{ is_active: 1 }}
+          />
 
-      <View style={styles.form}>
-        {/* Supplier Selection */}
-        <SearchableSelector
-          label="Supplier *"
-          placeholder="Select supplier"
-          value={formData.supplier_id}
-          onSelect={(value, option) => updateField('supplier_id', value)}
-          endpoint="/suppliers"
-          error={errors.supplier_id}
-          queryParams={{ is_active: 1 }}
-        />
+          {/* Product Selection */}
+          <SearchableSelector
+            label="Product *"
+            placeholder="Select product"
+            value={formData.product_id}
+            onSelect={(value, option) => updateField('product_id', value)}
+            endpoint="/products"
+            error={errors.product_id}
+            queryParams={{ is_active: 1 }}
+          />
 
-        {/* Product Selection */}
-        <SearchableSelector
-          label="Product *"
-          placeholder="Select product"
-          value={formData.product_id}
-          onSelect={(value, option) => updateField('product_id', value)}
-          endpoint="/products"
-          error={errors.product_id}
-          queryParams={{ is_active: 1 }}
-        />
-
-        {/* Current Rate Display */}
-        {currentRate && (
-          <View style={styles.rateInfo}>
-            <Text style={styles.rateInfoText}>
-              Current Rate: {String(currentRate.rate)} per {String(currentRate.unit)}
-            </Text>
-          </View>
-        )}
+          {/* Current Rate Display */}
+          {currentRate && (
+            <View style={styles.rateInfo}>
+              <Text style={styles.rateInfoText}>
+                Current Rate: {String(currentRate.rate)} per {String(currentRate.unit)}
+              </Text>
+            </View>
+          )}
 
         {/* Collection Date */}
         <DateTimePicker
@@ -320,6 +318,7 @@ export const CollectionFormScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </View>
   );
 };
 
@@ -328,18 +327,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: THEME.colors.background,
   },
-  header: {
-    backgroundColor: THEME.colors.surface,
-    padding: THEME.spacing.base,
-    borderBottomWidth: 1,
-    borderBottomColor: THEME.colors.border,
+  scrollView: {
+    flex: 1,
   },
-  backButton: {
-    marginBottom: THEME.spacing.sm,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: THEME.colors.background,
   },
-  backButtonText: {
+  loadingText: {
+    marginTop: THEME.spacing.md,
     fontSize: THEME.typography.fontSize.md,
-    color: THEME.colors.primary,
+    color: THEME.colors.textSecondary,
   },
   title: {
     fontSize: THEME.typography.fontSize.xxl,
