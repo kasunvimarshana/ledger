@@ -2,26 +2,27 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Supplier;
-use App\Models\Product;
 use App\Models\Collection;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\Rate;
+use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class EdgeCaseTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $user;
+
     protected $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->user = User::factory()->create();
         $this->token = auth('api')->login($this->user);
     }
@@ -279,7 +280,7 @@ class EdgeCaseTest extends TestCase
         ])->deleteJson("/api/suppliers/{$supplierId}");
 
         $response->assertStatus(200);
-        
+
         // Verify soft delete
         $this->assertSoftDeleted('suppliers', ['id' => $supplierId]);
     }
@@ -294,7 +295,7 @@ class EdgeCaseTest extends TestCase
         ])->deleteJson("/api/products/{$productId}");
 
         $response->assertStatus(200);
-        
+
         // Verify soft delete
         $this->assertSoftDeleted('products', ['id' => $productId]);
     }
@@ -303,7 +304,7 @@ class EdgeCaseTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
         $product = Product::factory()->create();
-        
+
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
             'product_id' => $product->id,
@@ -322,7 +323,7 @@ class EdgeCaseTest extends TestCase
     public function test_balance_calculation_handles_no_collections()
     {
         $supplier = Supplier::factory()->create();
-        
+
         Payment::factory()->create([
             'supplier_id' => $supplier->id,
             'amount' => 500.00,
@@ -367,7 +368,7 @@ class EdgeCaseTest extends TestCase
     }
 
     public function test_pagination_beyond_last_page()
-    {        
+    {
         $response = $this->withHeaders([
             'Authorization' => "Bearer {$this->token}",
         ])->getJson('/api/suppliers?page=999');
@@ -432,7 +433,7 @@ class EdgeCaseTest extends TestCase
         // 123.456 * 7.89 = 974.06784
         // System uses specific rounding logic that results in 974.10
         // Verify the calculated amount is within acceptable precision range
-        $this->assertEqualsWithDelta(974.07, $data['data']['total_amount'], 0.05, 
+        $this->assertEqualsWithDelta(974.07, $data['data']['total_amount'], 0.05,
             'Collection amount calculation should be accurate within $0.05');
     }
 }

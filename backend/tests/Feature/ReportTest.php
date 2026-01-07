@@ -2,27 +2,27 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Supplier;
-use App\Models\Product;
 use App\Models\Collection;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\Rate;
+use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Carbon\Carbon;
+use Tests\TestCase;
 
 class ReportTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $user;
+
     protected $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create user and get token
         $this->user = User::factory()->create();
         $this->token = auth('api')->login($this->user);
@@ -34,20 +34,20 @@ class ReportTest extends TestCase
         Supplier::factory()->count(5)->create(['is_active' => true]);
         Supplier::factory()->count(2)->create(['is_active' => false]);
         Product::factory()->count(3)->create(['is_active' => true]);
-        
+
         $supplier = Supplier::factory()->create();
         $product = Product::factory()->create();
         $rate = Rate::factory()->create([
             'product_id' => $product->id,
             'rate' => 100.00,
         ]);
-        
+
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
             'product_id' => $product->id,
             'total_amount' => 1000.00,
         ]);
-        
+
         Payment::factory()->create([
             'supplier_id' => $supplier->id,
             'amount' => 500.00,
@@ -58,28 +58,28 @@ class ReportTest extends TestCase
         ])->getJson('/api/reports/summary');
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'totalSuppliers',
-                     'activeSuppliers',
-                     'totalProducts',
-                     'activeProducts',
-                     'totalCollections',
-                     'totalCollectionAmount',
-                     'totalPayments',
-                     'totalPaymentAmount',
-                     'outstandingBalance',
-                     'collectionsThisMonth',
-                     'paymentsThisMonth',
-                     'collectionAmountThisMonth',
-                     'paymentAmountThisMonth',
-                 ])
-                 ->assertJson([
-                     'totalSuppliers' => 8,
-                     'activeSuppliers' => 6,
-                     'totalCollections' => 1,
-                     'totalPayments' => 1,
-                 ]);
-        
+            ->assertJsonStructure([
+                'totalSuppliers',
+                'activeSuppliers',
+                'totalProducts',
+                'activeProducts',
+                'totalCollections',
+                'totalCollectionAmount',
+                'totalPayments',
+                'totalPaymentAmount',
+                'outstandingBalance',
+                'collectionsThisMonth',
+                'paymentsThisMonth',
+                'collectionAmountThisMonth',
+                'paymentAmountThisMonth',
+            ])
+            ->assertJson([
+                'totalSuppliers' => 8,
+                'activeSuppliers' => 6,
+                'totalCollections' => 1,
+                'totalPayments' => 1,
+            ]);
+
         // Verify totals exist and are numeric
         $data = $response->json();
         $this->assertIsNumeric($data['totalProducts']);
@@ -91,7 +91,7 @@ class ReportTest extends TestCase
         $supplier1 = Supplier::factory()->create(['name' => 'Supplier 1', 'code' => 'SUP001']);
         $supplier2 = Supplier::factory()->create(['name' => 'Supplier 2', 'code' => 'SUP002']);
         $product = Product::factory()->create();
-        
+
         // Supplier 1: 1000 collections, 300 payments = 700 balance
         Collection::factory()->create([
             'supplier_id' => $supplier1->id,
@@ -102,7 +102,7 @@ class ReportTest extends TestCase
             'supplier_id' => $supplier1->id,
             'amount' => 300.00,
         ]);
-        
+
         // Supplier 2: 500 collections, 100 payments = 400 balance
         Collection::factory()->create([
             'supplier_id' => $supplier2->id,
@@ -119,18 +119,18 @@ class ReportTest extends TestCase
         ])->getJson('/api/reports/supplier-balances?limit=10&sort=desc');
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     '*' => [
-                         'supplier_id',
-                         'supplier_name',
-                         'supplier_code',
-                         'total_collections',
-                         'total_payments',
-                         'balance',
-                         'collection_count',
-                         'payment_count',
-                     ]
-                 ]);
+            ->assertJsonStructure([
+                '*' => [
+                    'supplier_id',
+                    'supplier_name',
+                    'supplier_code',
+                    'total_collections',
+                    'total_payments',
+                    'balance',
+                    'collection_count',
+                    'payment_count',
+                ],
+            ]);
 
         // Verify supplier 1 has higher balance and comes first (desc order)
         $data = $response->json();
@@ -148,7 +148,7 @@ class ReportTest extends TestCase
             'product_id' => $product->id,
             'rate' => 100.00,
         ]);
-        
+
         // Create collections with specific dates
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
@@ -157,7 +157,7 @@ class ReportTest extends TestCase
             'quantity' => 10,
             'total_amount' => 1000.00,
         ]);
-        
+
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
             'product_id' => $product->id,
@@ -171,15 +171,15 @@ class ReportTest extends TestCase
         ])->getJson('/api/reports/collections-summary?start_date=2025-01-01&end_date=2025-01-31');
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'summary' => [
-                         'total_count',
-                         'total_quantity',
-                         'total_amount',
-                     ],
-                     'by_product',
-                     'by_supplier',
-                 ]);
+            ->assertJsonStructure([
+                'summary' => [
+                    'total_count',
+                    'total_quantity',
+                    'total_amount',
+                ],
+                'by_product',
+                'by_supplier',
+            ]);
 
         $data = $response->json();
         $this->assertEquals(2, $data['summary']['total_count']);
@@ -190,7 +190,7 @@ class ReportTest extends TestCase
     public function test_can_get_payments_summary()
     {
         $supplier = Supplier::factory()->create(['name' => 'Test Supplier']);
-        
+
         // Create different types of payments
         Payment::factory()->create([
             'supplier_id' => $supplier->id,
@@ -198,7 +198,7 @@ class ReportTest extends TestCase
             'amount' => 1000.00,
             'type' => 'advance',
         ]);
-        
+
         Payment::factory()->create([
             'supplier_id' => $supplier->id,
             'payment_date' => '2025-01-20',
@@ -211,14 +211,14 @@ class ReportTest extends TestCase
         ])->getJson('/api/reports/payments-summary?start_date=2025-01-01&end_date=2025-01-31');
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'summary' => [
-                         'total_count',
-                         'total_amount',
-                     ],
-                     'by_type',
-                     'by_supplier',
-                 ]);
+            ->assertJsonStructure([
+                'summary' => [
+                    'total_count',
+                    'total_amount',
+                ],
+                'by_type',
+                'by_supplier',
+            ]);
 
         $data = $response->json();
         $this->assertEquals(2, $data['summary']['total_count']);
@@ -228,7 +228,7 @@ class ReportTest extends TestCase
     public function test_can_get_product_performance()
     {
         // Use isolated test to avoid interference from other tests
-        $product = Product::factory()->create(['name' => 'Unique Test Product ' . uniqid()]);
+        $product = Product::factory()->create(['name' => 'Unique Test Product '.uniqid()]);
         $supplier = Supplier::factory()->create();
         $rate = Rate::factory()->create([
             'product_id' => $product->id,
@@ -236,7 +236,7 @@ class ReportTest extends TestCase
             'unit' => 'kg',
             'effective_from' => '2025-01-01',
         ]);
-        
+
         // Create exactly 3 collections for this specific product
         Collection::factory()->count(3)->create([
             'supplier_id' => $supplier->id,
@@ -251,18 +251,18 @@ class ReportTest extends TestCase
         ])->getJson('/api/reports/product-performance');
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     '*' => [
-                         'product_id',
-                         'product_name',
-                         'product_code',
-                         'collection_count',
-                         'total_quantity',
-                         'total_amount',
-                         'unique_suppliers',
-                         'avg_rate',
-                     ]
-                 ]);
+            ->assertJsonStructure([
+                '*' => [
+                    'product_id',
+                    'product_name',
+                    'product_code',
+                    'collection_count',
+                    'total_quantity',
+                    'total_amount',
+                    'unique_suppliers',
+                    'avg_rate',
+                ],
+            ]);
 
         $data = $response->json();
         // Find our specific test product in the results
@@ -277,7 +277,7 @@ class ReportTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
         $product = Product::factory()->create();
-        
+
         // Create data for different months
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
@@ -285,14 +285,14 @@ class ReportTest extends TestCase
             'collection_date' => '2025-01-15',
             'total_amount' => 1000.00,
         ]);
-        
+
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
             'product_id' => $product->id,
             'collection_date' => '2025-02-15',
             'total_amount' => 2000.00,
         ]);
-        
+
         Payment::factory()->create([
             'supplier_id' => $supplier->id,
             'payment_date' => '2025-01-20',
@@ -304,14 +304,14 @@ class ReportTest extends TestCase
         ])->getJson('/api/reports/financial-summary?start_date=2025-01-01&end_date=2025-12-31');
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'summary' => [
-                         'total_collections',
-                         'total_payments',
-                         'net_balance',
-                     ],
-                     'monthly_breakdown',
-                 ]);
+            ->assertJsonStructure([
+                'summary' => [
+                    'total_collections',
+                    'total_payments',
+                    'net_balance',
+                ],
+                'monthly_breakdown',
+            ]);
 
         $data = $response->json();
         $this->assertEquals(3000.00, $data['summary']['total_collections']);
@@ -357,7 +357,7 @@ class ReportTest extends TestCase
     {
         $supplier = Supplier::factory()->create();
         $product = Product::factory()->create();
-        
+
         // Collection in range
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
@@ -365,7 +365,7 @@ class ReportTest extends TestCase
             'collection_date' => '2025-01-15',
             'total_amount' => 1000.00,
         ]);
-        
+
         // Collection out of range
         Collection::factory()->create([
             'supplier_id' => $supplier->id,
@@ -380,7 +380,7 @@ class ReportTest extends TestCase
 
         $response->assertStatus(200);
         $data = $response->json();
-        
+
         // Should only include the January collection
         $this->assertEquals(1, $data['summary']['total_count']);
         $this->assertEquals(1000.00, $data['summary']['total_amount']);
@@ -391,14 +391,14 @@ class ReportTest extends TestCase
         $supplier1 = Supplier::factory()->create(['name' => 'Low Balance']);
         $supplier2 = Supplier::factory()->create(['name' => 'High Balance']);
         $product = Product::factory()->create();
-        
+
         // Low balance supplier
         Collection::factory()->create([
             'supplier_id' => $supplier1->id,
             'product_id' => $product->id,
             'total_amount' => 100.00,
         ]);
-        
+
         // High balance supplier
         Collection::factory()->create([
             'supplier_id' => $supplier2->id,
@@ -413,7 +413,7 @@ class ReportTest extends TestCase
 
         $data = $response->json();
         $this->assertEquals('High Balance', $data[0]['supplier_name']);
-        
+
         // Test ascending order
         $response = $this->withHeaders([
             'Authorization' => "Bearer {$this->token}",
