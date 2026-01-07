@@ -66,6 +66,16 @@ export const HomeScreen: React.FC = () => {
             </TouchableOpacity>
           )}
 
+          {canView(user, 'rates') && (
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => navigateTo('RateList')}
+            >
+              <Text style={styles.menuIcon}>💵</Text>
+              <Text style={styles.menuText}>Rates</Text>
+            </TouchableOpacity>
+          )}
+
           {canView(user, 'collections') && (
             <TouchableOpacity 
               style={styles.menuItem}
