@@ -22,7 +22,7 @@ import { Payment } from '../../domain/entities/Payment';
 import { useAuth } from '../contexts/AuthContext';
 import { canCreate } from '../../core/utils/permissions';
 import { Pagination, SortButton, ScreenHeader, SyncStatusIndicator } from '../components';
-import THEME from '../../core/constants/theme';
+import THEME, { getPaymentTypeColor } from '../../core/constants/theme';
 
 export const PaymentListScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -119,18 +119,7 @@ export const PaymentListScreen: React.FC = () => {
   };
 
   const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'advance':
-        return '#FF9800';
-      case 'partial':
-        return '#2196F3';
-      case 'full':
-        return '#4CAF50';
-      case 'adjustment':
-        return '#9C27B0';
-      default:
-        return '#666';
-    }
+    return getPaymentTypeColor(type);
   };
 
   const renderPaymentItem = ({ item }: { item: Payment }) => (
