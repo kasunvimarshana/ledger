@@ -11,10 +11,12 @@ import { Card } from './Card';
 interface SupplierBalanceInfoProps {
   balance: {
     balance: number;
-    total_collections: number;
-    total_payments: number;
-    collection_count?: number;
-    payment_count?: number;
+    total_collected: number;
+    total_paid: number;
+    period?: {
+      start_date?: string;
+      end_date?: string;
+    };
   };
   onViewCollections?: () => void;
   onViewPayments?: () => void;
@@ -36,14 +38,14 @@ export const SupplierBalanceInfo: React.FC<SupplierBalanceInfoProps> = ({
       <View style={styles.infoRow}>
         <Text style={styles.label}>Total Collections:</Text>
         <Text style={[styles.value, styles.collectionAmount]}>
-          {formatCurrency(balance.total_collections)}
+          {formatCurrency(balance.total_collected)}
         </Text>
       </View>
 
       <View style={styles.infoRow}>
         <Text style={styles.label}>Total Payments:</Text>
         <Text style={[styles.value, styles.paymentAmount]}>
-          {formatCurrency(balance.total_payments)}
+          {formatCurrency(balance.total_paid)}
         </Text>
       </View>
 
@@ -61,49 +63,32 @@ export const SupplierBalanceInfo: React.FC<SupplierBalanceInfoProps> = ({
         </Text>
       </View>
 
-      {(balance.collection_count !== undefined || balance.payment_count !== undefined) && (
+      {(onViewCollections || onViewPayments) && (
         <>
           <View style={styles.divider} />
-          <View style={styles.countsRow}>
-            {balance.collection_count !== undefined && (
-              <View style={styles.countItem}>
-                <Text style={styles.countValue}>{balance.collection_count}</Text>
-                <Text style={styles.countLabel}>Collections</Text>
-              </View>
+          <View style={styles.actionButtons}>
+            {onViewCollections && (
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={onViewCollections}
+                accessibilityRole="button"
+                accessibilityLabel="View collections"
+              >
+                <Text style={styles.actionButtonText}>View Collections</Text>
+              </TouchableOpacity>
             )}
-            {balance.payment_count !== undefined && (
-              <View style={styles.countItem}>
-                <Text style={styles.countValue}>{balance.payment_count}</Text>
-                <Text style={styles.countLabel}>Payments</Text>
-              </View>
+            {onViewPayments && (
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={onViewPayments}
+                accessibilityRole="button"
+                accessibilityLabel="View payments"
+              >
+                <Text style={styles.actionButtonText}>View Payments</Text>
+              </TouchableOpacity>
             )}
           </View>
         </>
-      )}
-
-      {(onViewCollections || onViewPayments) && (
-        <View style={styles.actionButtons}>
-          {onViewCollections && (
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={onViewCollections}
-              accessibilityRole="button"
-              accessibilityLabel="View collections"
-            >
-              <Text style={styles.actionButtonText}>View Collections</Text>
-            </TouchableOpacity>
-          )}
-          {onViewPayments && (
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={onViewPayments}
-              accessibilityRole="button"
-              accessibilityLabel="View payments"
-            >
-              <Text style={styles.actionButtonText}>View Payments</Text>
-            </TouchableOpacity>
-          )}
-        </View>
       )}
     </Card>
   );
@@ -152,24 +137,6 @@ const styles = StyleSheet.create({
   balanceValue: {
     fontSize: THEME.typography.fontSize.xl,
     fontWeight: THEME.typography.fontWeight.bold,
-  },
-  countsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: THEME.spacing.base,
-  },
-  countItem: {
-    alignItems: 'center',
-  },
-  countValue: {
-    fontSize: THEME.typography.fontSize.xxl,
-    fontWeight: THEME.typography.fontWeight.bold,
-    color: THEME.colors.primary,
-  },
-  countLabel: {
-    fontSize: THEME.typography.fontSize.sm,
-    color: THEME.colors.textSecondary,
-    marginTop: THEME.spacing.xs,
   },
   actionButtons: {
     marginTop: THEME.spacing.base,

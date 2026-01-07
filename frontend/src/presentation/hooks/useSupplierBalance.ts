@@ -8,10 +8,12 @@ import apiClient from '../../infrastructure/api/apiClient';
 
 interface SupplierBalance {
   balance: number;
-  total_collections: number;
-  total_payments: number;
-  collection_count: number;
-  payment_count: number;
+  total_collected: number;
+  total_paid: number;
+  period?: {
+    start_date?: string;
+    end_date?: string;
+  };
 }
 
 interface UseSupplierBalanceResult {
@@ -35,7 +37,7 @@ export const useSupplierBalance = (supplierId: string | number | undefined): Use
     try {
       setLoading(true);
       setError(null);
-      const response = await apiClient.get<any>(`/suppliers/${supplierId}/balance`);
+      const response = await apiClient.get<SupplierBalance>(`/suppliers/${supplierId}/balance`);
       if (response.success && response.data) {
         setBalance(response.data);
       }
