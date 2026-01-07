@@ -126,6 +126,9 @@ export const PaymentListScreen: React.FC = () => {
     <TouchableOpacity
       style={styles.paymentCard}
       onPress={() => handlePaymentPress(item)}
+      accessibilityRole="button"
+      accessibilityLabel={`Payment from ${item.supplier?.name || 'Unknown Supplier'}, Type: ${item.type}, Amount: $${typeof item.amount === 'number' ? item.amount.toFixed(2) : '0.00'}, Date: ${new Date(item.payment_date).toLocaleDateString()}`}
+      accessibilityHint="Press to view payment details"
     >
       <View style={styles.paymentHeader}>
         <Text style={styles.supplierName}>{String(item.supplier?.name || 'Unknown Supplier')}</Text>

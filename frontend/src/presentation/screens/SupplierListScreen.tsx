@@ -195,6 +195,8 @@ export const SupplierListScreen: React.FC = () => {
           placeholder="Search by name, code, or region..."
           value={searchQuery}
           onChangeText={setSearchQuery}
+          accessibilityLabel="Search suppliers"
+          accessibilityHint="Enter text to search suppliers by name, code, or region"
         />
       </View>
 

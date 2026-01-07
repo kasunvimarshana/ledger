@@ -122,6 +122,9 @@ export const CollectionListScreen: React.FC = () => {
     <TouchableOpacity
       style={styles.collectionCard}
       onPress={() => handleCollectionPress(item)}
+      accessibilityRole="button"
+      accessibilityLabel={`Collection from ${item.supplier?.name || 'Unknown Supplier'}, Product: ${item.product?.name || 'Unknown'}, Quantity: ${item.quantity} ${item.unit}, Amount: $${typeof item.total_amount === 'number' ? item.total_amount.toFixed(2) : '0.00'}`}
+      accessibilityHint="Press to view collection details"
     >
       <View style={styles.collectionHeader}>
         <Text style={styles.supplierName}>{String(item.supplier?.name || 'Unknown Supplier')}</Text>
