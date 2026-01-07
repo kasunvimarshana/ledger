@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    ...THEME.shadows.large,
+    ...THEME.shadows.lg,
   },
   fabText: {
     fontSize: THEME.typography.fontSize.huge,
