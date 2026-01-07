@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     borderBottomColor: THEME.colors.border,
   },
   rateAmount: {
-    fontSize: THEME.typography.fontSize.xxxl,
+    fontSize: THEME.typography.fontSize.huge,
     fontWeight: THEME.typography.fontWeight.bold,
     color: THEME.colors.primary,
   },
