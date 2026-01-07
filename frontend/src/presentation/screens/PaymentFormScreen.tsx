@@ -193,7 +193,8 @@ export const PaymentFormScreen: React.FC = () => {
     <View style={styles.container}>
       <ScreenHeader
         title={isEditMode ? 'Edit Payment' : 'New Payment'}
-        onBack={() => navigation.goBack()}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
       />
       
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: insets.bottom + THEME.spacing.lg }}>

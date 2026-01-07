@@ -162,7 +162,8 @@ export const UserFormScreen: React.FC = () => {
     <View style={styles.container}>
       <ScreenHeader
         title={isEditMode ? 'Edit User' : 'Add User'}
-        onBack={() => navigation.goBack()}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
       />
 
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: insets.bottom + THEME.spacing.lg }}>

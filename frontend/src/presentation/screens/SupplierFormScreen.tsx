@@ -170,7 +170,8 @@ export const SupplierFormScreen: React.FC = () => {
     <View style={styles.container}>
       <ScreenHeader
         title={isEditMode ? 'Edit Supplier' : 'New Supplier'}
-        onBack={() => navigation.goBack()}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
       />
 
       <ScrollView style={styles.scrollView} contentContainerStyle={[styles.form, { paddingBottom: insets.bottom + THEME.spacing.lg }]}>

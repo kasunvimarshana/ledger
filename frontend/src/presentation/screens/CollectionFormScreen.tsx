@@ -209,7 +209,8 @@ export const CollectionFormScreen: React.FC = () => {
     <View style={styles.container}>
       <ScreenHeader
         title={isEditMode ? 'Edit Collection' : 'New Collection'}
-        onBack={() => navigation.goBack()}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
       />
       
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: insets.bottom + THEME.spacing.lg }}>
