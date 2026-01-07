@@ -125,6 +125,9 @@ export const RateListScreen: React.FC = () => {
       <TouchableOpacity
         style={styles.rateCard}
         onPress={() => handleViewDetails(item.id)}
+        accessibilityRole="button"
+        accessibilityLabel={`Rate for ${item.product?.name || 'Product'}: ${item.rate} per ${item.unit}, ${isActive ? 'Active' : 'Inactive'}`}
+        accessibilityHint="Press to view rate details"
       >
         <View style={styles.cardHeader}>
           <View style={styles.rateInfo}>

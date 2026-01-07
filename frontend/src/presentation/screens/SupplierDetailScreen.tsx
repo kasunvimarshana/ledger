@@ -138,12 +138,24 @@ export const SupplierDetailScreen: React.FC = () => {
       <View style={[styles.header, { paddingTop: insets.top + THEME.spacing.base }]}>
         <View style={styles.headerActions}>
           {canUpdate(user, 'suppliers') && (
-            <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+            <TouchableOpacity 
+              style={styles.editButton} 
+              onPress={handleEdit}
+              accessibilityRole="button"
+              accessibilityLabel="Edit supplier"
+              accessibilityHint="Press to edit supplier information"
+            >
               <Text style={styles.editButtonText}>Edit</Text>
             </TouchableOpacity>
           )}
           {canDelete(user, 'suppliers') && (
-            <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+            <TouchableOpacity 
+              style={styles.deleteButton} 
+              onPress={handleDelete}
+              accessibilityRole="button"
+              accessibilityLabel="Delete supplier"
+              accessibilityHint="Press to delete this supplier"
+            >
               <Text style={styles.deleteButtonText}>Delete</Text>
             </TouchableOpacity>
           )}
@@ -245,6 +257,9 @@ export const SupplierDetailScreen: React.FC = () => {
         <TouchableOpacity
           style={styles.actionButton}
           onPress={handleViewCollections}
+          accessibilityRole="button"
+          accessibilityLabel="View collections"
+          accessibilityHint="Press to view this supplier's collections"
         >
           <Text style={styles.actionButtonText}>View Collections</Text>
         </TouchableOpacity>
@@ -252,6 +267,9 @@ export const SupplierDetailScreen: React.FC = () => {
         <TouchableOpacity
           style={styles.actionButton}
           onPress={handleViewPayments}
+          accessibilityRole="button"
+          accessibilityLabel="View payments"
+          accessibilityHint="Press to view this supplier's payments"
         >
           <Text style={styles.actionButtonText}>View Payments</Text>
         </TouchableOpacity>
