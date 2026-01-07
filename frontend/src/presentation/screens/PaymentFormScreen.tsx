@@ -390,10 +390,10 @@ const styles = StyleSheet.create({
   errorText: {
     color: THEME.colors.error,
     fontSize: THEME.typography.fontSize.base,
-    marginTop: 4,
+    marginTop: THEME.spacing.xs,
   },
   optionsList: {
-    marginTop: 8,
+    marginTop: THEME.spacing.sm,
     maxHeight: 200,
   },
   optionItem: {

@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    marginTop: 10,
+    marginTop: THEME.spacing.sm,
     color: THEME.colors.textSecondary,
   },
   header: {
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: THEME.colors.error,
     fontSize: THEME.typography.fontSize.sm,
-    marginTop: 4,
+    marginTop: THEME.spacing.xs,
   },
   switchContainer: {
     flexDirection: 'row',

@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
   pickerItemSubtext: {
     fontSize: THEME.typography.fontSize.sm,
     color: THEME.colors.textSecondary,
-    marginTop: 2,
+    marginTop: THEME.spacing.xs,
   },
   submitButton: {
     backgroundColor: THEME.colors.primary,

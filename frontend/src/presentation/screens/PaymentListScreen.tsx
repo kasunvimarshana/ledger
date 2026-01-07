@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   notesContainer: {
-    marginTop: 8,
+    marginTop: THEME.spacing.sm,
     padding: THEME.spacing.sm,
     backgroundColor: THEME.colors.gray50,
     borderRadius: THEME.borderRadius.sm,

@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: THEME.spacing.xxxl,
-    marginTop: 64,
+    marginTop: THEME.spacing.xxxl * 1.5,
   },
   emptyText: {
     fontSize: THEME.typography.fontSize.lg,
