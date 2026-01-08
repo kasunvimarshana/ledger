@@ -302,7 +302,17 @@ class PaymentController extends Controller
      *
      *     @OA\Response(response=422, description="Validation error"),
      *     @OA\Response(response=404, description="Payment not found"),
-     *     @OA\Response(response=401, description="Unauthenticated")
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(
+     *         response=409,
+     *         description="Version conflict - resource was modified by another user",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Version conflict detected")
+     *         )
+     *     )
      * )
      */
     public function update(Request $request, Payment $payment)
