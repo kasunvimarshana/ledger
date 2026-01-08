@@ -164,7 +164,7 @@ export const PaymentFormScreen: React.FC = () => {
       if (isEditMode) {
         const response = await apiClient.put(`/payments/${paymentId}`, submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Your changes will be synced when you\'re back online.');
         } else {
           Alert.alert('Success', 'Payment updated successfully');
@@ -172,7 +172,7 @@ export const PaymentFormScreen: React.FC = () => {
       } else {
         const response = await apiClient.post('/payments', submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Payment will be created when you\'re back online.');
         } else {
           Alert.alert('Success', 'Payment created successfully');

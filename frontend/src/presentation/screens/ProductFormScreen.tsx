@@ -130,7 +130,7 @@ export const ProductFormScreen: React.FC = () => {
       if (isEditMode) {
         const response = await apiClient.put(`/products/${productId}`, submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Your changes will be synced when you\'re back online.');
         } else {
           Alert.alert('Success', 'Product updated successfully');
@@ -138,7 +138,7 @@ export const ProductFormScreen: React.FC = () => {
       } else {
         const response = await apiClient.post('/products', submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Product will be created when you\'re back online.');
         } else {
           Alert.alert('Success', 'Product created successfully');

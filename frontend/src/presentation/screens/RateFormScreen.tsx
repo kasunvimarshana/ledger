@@ -171,7 +171,7 @@ export const RateFormScreen: React.FC = () => {
       if (isEditMode) {
         const response = await apiClient.put(`/rates/${rateId}`, submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Your changes will be synced when you\'re back online.');
         } else {
           Alert.alert('Success', 'Rate updated successfully');
@@ -179,7 +179,7 @@ export const RateFormScreen: React.FC = () => {
       } else {
         const response = await apiClient.post('/rates', submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Rate will be created when you\'re back online.');
         } else {
           Alert.alert('Success', 'Rate created successfully');

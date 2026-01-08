@@ -139,7 +139,7 @@ export const SupplierFormScreen: React.FC = () => {
       if (isEditMode) {
         const response = await apiClient.put(`/suppliers/${supplierId}`, formData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Your changes will be synced when you\'re back online.');
         } else {
           Alert.alert('Success', 'Supplier updated successfully');
@@ -147,7 +147,7 @@ export const SupplierFormScreen: React.FC = () => {
       } else {
         const response = await apiClient.post('/suppliers', formData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Supplier will be created when you\'re back online.');
         } else {
           Alert.alert('Success', 'Supplier created successfully');

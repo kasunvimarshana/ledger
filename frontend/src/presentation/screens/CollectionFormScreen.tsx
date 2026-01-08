@@ -179,7 +179,7 @@ export const CollectionFormScreen: React.FC = () => {
       if (isEditMode) {
         const response = await apiClient.put(`/collections/${collectionId}`, submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Your changes will be synced when you\'re back online.');
         } else {
           Alert.alert('Success', 'Collection updated successfully');
@@ -187,7 +187,7 @@ export const CollectionFormScreen: React.FC = () => {
       } else {
         const response = await apiClient.post('/collections', submitData);
         // Check if operation was queued for offline sync
-        if (response.message?.includes('queued')) {
+        if (response.queued) {
           Alert.alert('Queued for Sync', 'Collection will be created when you\'re back online.');
         } else {
           Alert.alert('Success', 'Collection created successfully');
