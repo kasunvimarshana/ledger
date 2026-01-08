@@ -266,6 +266,7 @@ class ReportController extends Controller
      *
      *                     @OA\Items(
      *                         type="object",
+     *
      *                         @OA\Property(property="product_id", type="integer"),
      *                         @OA\Property(property="product_name", type="string"),
      *                         @OA\Property(property="count", type="integer"),
@@ -279,6 +280,7 @@ class ReportController extends Controller
      *
      *                     @OA\Items(
      *                         type="object",
+     *
      *                         @OA\Property(property="supplier_id", type="integer"),
      *                         @OA\Property(property="supplier_name", type="string"),
      *                         @OA\Property(property="supplier_code", type="string"),
@@ -451,6 +453,7 @@ class ReportController extends Controller
      *
      *                     @OA\Items(
      *                         type="object",
+     *
      *                         @OA\Property(property="type", type="string", example="partial"),
      *                         @OA\Property(property="count", type="integer", example=30),
      *                         @OA\Property(property="total_amount", type="number", format="float", example=30000.00)
@@ -462,6 +465,7 @@ class ReportController extends Controller
      *
      *                     @OA\Items(
      *                         type="object",
+     *
      *                         @OA\Property(property="supplier_id", type="integer"),
      *                         @OA\Property(property="supplier_name", type="string"),
      *                         @OA\Property(property="supplier_code", type="string"),
@@ -598,6 +602,7 @@ class ReportController extends Controller
      *
      *                 @OA\Items(
      *                     type="object",
+     *
      *                     @OA\Property(property="product_id", type="integer", example=1),
      *                     @OA\Property(property="product_name", type="string", example="Tea Leaves"),
      *                     @OA\Property(property="product_code", type="string", example="PROD001"),
@@ -716,6 +721,7 @@ class ReportController extends Controller
      *
      *                     @OA\Items(
      *                         type="object",
+     *
      *                         @OA\Property(property="month", type="string", example="2025-01"),
      *                         @OA\Property(property="collections", type="number", format="float", example=10000.00),
      *                         @OA\Property(property="payments", type="number", format="float", example=8000.00),
