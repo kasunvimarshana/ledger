@@ -27,15 +27,16 @@ class CollectionSeeder extends Seeder
         }
 
         // Create sample collections for the past 3 months
+        $now = Carbon::now();
         $collectionData = [
             // Green Valley Farms - Coconuts
             [
                 'supplier' => 'Green Valley Farms',
                 'product' => 'Coconuts',
                 'collections' => [
-                    ['date' => '2025-10-15', 'quantity' => 150.500, 'unit' => 'kg'],
-                    ['date' => '2025-11-10', 'quantity' => 200.750, 'unit' => 'kg'],
-                    ['date' => '2025-12-05', 'quantity' => 180.250, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(2)->subDays(15), 'quantity' => 150.500, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(1)->subDays(20), 'quantity' => 200.750, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subDays(3), 'quantity' => 180.250, 'unit' => 'kg'],
                 ],
             ],
             // Mountain Fresh Produce - Coffee Beans
@@ -43,9 +44,9 @@ class CollectionSeeder extends Seeder
                 'supplier' => 'Mountain Fresh Produce',
                 'product' => 'Coffee Beans',
                 'collections' => [
-                    ['date' => '2025-10-20', 'quantity' => 50.000, 'unit' => 'kg'],
-                    ['date' => '2025-11-15', 'quantity' => 75.500, 'unit' => 'kg'],
-                    ['date' => '2025-12-10', 'quantity' => 60.250, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(2)->subDays(10), 'quantity' => 50.000, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(1)->subDays(15), 'quantity' => 75.500, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subDays(8), 'quantity' => 60.250, 'unit' => 'kg'],
                 ],
             ],
             // Coastal Growers Co. - Tea Leaves
@@ -53,9 +54,9 @@ class CollectionSeeder extends Seeder
                 'supplier' => 'Coastal Growers Co.',
                 'product' => 'Tea Leaves',
                 'collections' => [
-                    ['date' => '2025-10-25', 'quantity' => 300.000, 'unit' => 'kg'],
-                    ['date' => '2025-11-20', 'quantity' => 350.750, 'unit' => 'kg'],
-                    ['date' => '2025-12-15', 'quantity' => 325.500, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(2)->subDays(5), 'quantity' => 300.000, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(1)->subDays(10), 'quantity' => 350.750, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subDays(13), 'quantity' => 325.500, 'unit' => 'kg'],
                 ],
             ],
             // Sunrise Agriculture - Latex
@@ -63,9 +64,9 @@ class CollectionSeeder extends Seeder
                 'supplier' => 'Sunrise Agriculture',
                 'product' => 'Latex',
                 'collections' => [
-                    ['date' => '2025-10-12', 'quantity' => 80.000, 'unit' => 'kg'],
-                    ['date' => '2025-11-08', 'quantity' => 95.250, 'unit' => 'kg'],
-                    ['date' => '2025-12-03', 'quantity' => 110.500, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(2)->subDays(18), 'quantity' => 80.000, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(1)->subDays(22), 'quantity' => 95.250, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subDays(5), 'quantity' => 110.500, 'unit' => 'kg'],
                 ],
             ],
             // Valley Harvest Inc. - Cocoa Beans
@@ -73,9 +74,9 @@ class CollectionSeeder extends Seeder
                 'supplier' => 'Valley Harvest Inc.',
                 'product' => 'Cocoa Beans',
                 'collections' => [
-                    ['date' => '2025-10-18', 'quantity' => 45.000, 'unit' => 'kg'],
-                    ['date' => '2025-11-12', 'quantity' => 55.750, 'unit' => 'kg'],
-                    ['date' => '2025-12-08', 'quantity' => 50.250, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(2)->subDays(12), 'quantity' => 45.000, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subMonths(1)->subDays(18), 'quantity' => 55.750, 'unit' => 'kg'],
+                    ['date' => $now->copy()->subDays(10), 'quantity' => 50.250, 'unit' => 'kg'],
                 ],
             ],
         ];
