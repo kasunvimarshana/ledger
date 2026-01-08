@@ -46,8 +46,8 @@ A production-ready, end-to-end data collection and payment management applicatio
 - ✅ **Security Verified**: 0 vulnerabilities, JWT auth, RBAC/ABAC, audit logging
 - ✅ **Offline Support**: Complete SQLite storage with sync queue and retry logic
 - ✅ **Multi-device Ready**: Deterministic synchronization with optimistic locking
-- ✅ **Data Integrity Guide**: Comprehensive 12KB documentation (DATA_INTEGRITY_GUIDE.md)
-- ✅ **Final Documentation**: Complete system documentation including SYNC_GUIDE.md  
+- ✅ **Data Integrity Guide**: Comprehensive 12KB documentation (documents/guides/DATA_INTEGRITY_GUIDE.md)
+- ✅ **Final Documentation**: Complete system documentation including documents/guides/SYNC_GUIDE.md  
 
 ## 🎯 Overview
 
