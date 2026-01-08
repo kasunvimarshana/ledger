@@ -15,7 +15,7 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Payment } from '../../domain/entities/Payment';
@@ -26,8 +26,10 @@ import THEME, { getPaymentTypeColor } from '../../core/constants/theme';
 
 export const PaymentListScreen: React.FC = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
+  const supplierId = (route.params as any)?.supplierId;
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -68,6 +70,9 @@ export const PaymentListScreen: React.FC = () => {
       });
       if (searchTerm.trim()) {
         params.append('search', searchTerm.trim());
+      }
+      if (supplierId) {
+        params.append('supplier_id', supplierId.toString());
       }
       const response = await apiClient.get<any>(`/payments?${params.toString()}`);
       if (response.success && response.data) {

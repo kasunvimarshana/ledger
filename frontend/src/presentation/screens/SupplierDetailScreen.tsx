@@ -69,13 +69,11 @@ export const SupplierDetailScreen: React.FC = () => {
   };
 
   const handleViewCollections = () => {
-    // TODO: Navigate to collections list filtered by this supplier
-    Alert.alert('Coming Soon', 'Collections view will be available soon');
+    (navigation.navigate as any)('CollectionList', { supplierId });
   };
 
   const handleViewPayments = () => {
-    // TODO: Navigate to payments list filtered by this supplier
-    Alert.alert('Coming Soon', 'Payments view will be available soon');
+    (navigation.navigate as any)('PaymentList', { supplierId });
   };
 
   if (loading) {

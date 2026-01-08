@@ -2,14 +2,12 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\Supplier;
-use App\Models\Product;
-use App\Models\Collection;
-use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class SecurityTest extends TestCase
 {
@@ -21,7 +19,7 @@ class SecurityTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth('api')->login($user);
-        
+
         Supplier::factory()->create(['name' => 'Test Supplier']);
 
         // Attempt SQL injection
@@ -40,7 +38,7 @@ class SecurityTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer {$token}",
-        ])->getJson("/api/suppliers?sort_by=name; DROP TABLE suppliers;--");
+        ])->getJson('/api/suppliers?sort_by=name; DROP TABLE suppliers;--');
 
         // Should handle gracefully without SQL injection
         $response->assertStatus(200);
@@ -63,7 +61,7 @@ class SecurityTest extends TestCase
 
         $response->assertStatus(201);
         $data = $response->json();
-        
+
         // Name should be stored as-is (sanitization happens on output)
         $this->assertStringContainsString('script', $data['data']['name']);
     }
@@ -91,7 +89,7 @@ class SecurityTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth('api')->login($user);
-        
+
         // Invalidate the token
         auth('api')->logout();
 
@@ -146,7 +144,7 @@ class SecurityTest extends TestCase
 
         // Should return 401 unauthorized for wrong credentials
         $response->assertStatus(401);
-        
+
         // Note: Rate limiting configuration is not active by default in tests
     }
 
@@ -192,7 +190,7 @@ class SecurityTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth('api')->login($user);
-        
+
         Supplier::factory()->create(['code' => 'DUP001']);
 
         $response = $this->withHeaders([
@@ -210,7 +208,7 @@ class SecurityTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth('api')->login($user);
-        
+
         Product::factory()->create(['code' => 'DUP001']);
 
         $response = $this->withHeaders([
@@ -285,7 +283,7 @@ class SecurityTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        
+
         $supplier->refresh();
         // Version should be auto-incremented to 2
         $this->assertEquals(2, $supplier->version);
@@ -340,7 +338,7 @@ class SecurityTest extends TestCase
     {
         // Create user with explicit password hashing
         $user = User::factory()->create();
-        
+
         // Verify password is hashed using bcrypt (Laravel's default)
         $this->assertNotEquals('password', $user->password);
         $this->assertTrue(\Hash::check('password', $user->password));

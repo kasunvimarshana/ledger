@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,7 +11,7 @@ class TestUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     * 
+     *
      * WARNING: This seeder is for development/testing only.
      * Do not run in production environments.
      */
@@ -20,6 +20,7 @@ class TestUserSeeder extends Seeder
         // Prevent running in production
         if (app()->environment('production')) {
             $this->command->error('Cannot run TestUserSeeder in production environment!');
+
             return;
         }
 

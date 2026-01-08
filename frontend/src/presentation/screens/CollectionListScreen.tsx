@@ -15,7 +15,7 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '../../infrastructure/api/apiClient';
 import { Collection } from '../../domain/entities/Collection';
@@ -26,8 +26,10 @@ import THEME from '../../core/constants/theme';
 
 export const CollectionListScreen: React.FC = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
+  const supplierId = (route.params as any)?.supplierId;
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -68,6 +70,9 @@ export const CollectionListScreen: React.FC = () => {
       });
       if (searchTerm.trim()) {
         params.append('search', searchTerm.trim());
+      }
+      if (supplierId) {
+        params.append('supplier_id', supplierId.toString());
       }
       const response = await apiClient.get<any>(`/collections?${params.toString()}`);
       if (response.success && response.data) {
