@@ -2449,73 +2449,88 @@
                 "operationId": "98d48ba832818d097f5ccd0e82b5e3fb",
                 "responses": {
                     "200": {
-                        "description": "Summary data retrieved successfully",
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "totalSuppliers": {
-                                            "type": "integer",
-                                            "example": 50
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
                                         },
-                                        "activeSuppliers": {
-                                            "type": "integer",
-                                            "example": 45
-                                        },
-                                        "totalProducts": {
-                                            "type": "integer",
-                                            "example": 20
-                                        },
-                                        "activeProducts": {
-                                            "type": "integer",
-                                            "example": 18
-                                        },
-                                        "totalCollections": {
-                                            "type": "integer",
-                                            "example": 1500
-                                        },
-                                        "totalCollectionAmount": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 125000.5
-                                        },
-                                        "totalPayments": {
-                                            "type": "integer",
-                                            "example": 300
-                                        },
-                                        "totalPaymentAmount": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 100000
-                                        },
-                                        "outstandingBalance": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 25000.5
-                                        },
-                                        "collectionsThisMonth": {
-                                            "type": "integer",
-                                            "example": 120
-                                        },
-                                        "paymentsThisMonth": {
-                                            "type": "integer",
-                                            "example": 25
-                                        },
-                                        "collectionAmountThisMonth": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 10000
-                                        },
-                                        "paymentAmountThisMonth": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 8000
+                                        "data": {
+                                            "properties": {
+                                                "totalSuppliers": {
+                                                    "type": "integer",
+                                                    "example": 50
+                                                },
+                                                "activeSuppliers": {
+                                                    "type": "integer",
+                                                    "example": 45
+                                                },
+                                                "totalProducts": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "activeProducts": {
+                                                    "type": "integer",
+                                                    "example": 18
+                                                },
+                                                "totalCollections": {
+                                                    "type": "integer",
+                                                    "example": 1500
+                                                },
+                                                "totalCollectionAmount": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 125000.5
+                                                },
+                                                "totalPayments": {
+                                                    "type": "integer",
+                                                    "example": 300
+                                                },
+                                                "totalPaymentAmount": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100000
+                                                },
+                                                "outstandingBalance": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 25000.5
+                                                },
+                                                "collectionsThisMonth": {
+                                                    "type": "integer",
+                                                    "example": 120
+                                                },
+                                                "paymentsThisMonth": {
+                                                    "type": "integer",
+                                                    "example": 25
+                                                },
+                                                "collectionAmountThisMonth": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 10000
+                                                },
+                                                "paymentAmountThisMonth": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 8000
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2564,50 +2579,65 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "supplier_id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "supplier_name": {
-                                                "type": "string",
-                                                "example": "John Supplier"
-                                            },
-                                            "supplier_code": {
-                                                "type": "string",
-                                                "example": "SUP001"
-                                            },
-                                            "total_collections": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 50000
-                                            },
-                                            "total_payments": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 45000
-                                            },
-                                            "balance": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 5000
-                                            },
-                                            "collection_count": {
-                                                "type": "integer",
-                                                "example": 50
-                                            },
-                                            "payment_count": {
-                                                "type": "integer",
-                                                "example": 10
-                                            }
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
                                         },
-                                        "type": "object"
-                                    }
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "supplier_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "supplier_name": {
+                                                        "type": "string",
+                                                        "example": "John Supplier"
+                                                    },
+                                                    "supplier_code": {
+                                                        "type": "string",
+                                                        "example": "SUP001"
+                                                    },
+                                                    "total_collections": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 50000
+                                                    },
+                                                    "total_payments": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 45000
+                                                    },
+                                                    "balance": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 5000
+                                                    },
+                                                    "collection_count": {
+                                                        "type": "integer",
+                                                        "example": 50
+                                                    },
+                                                    "payment_count": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2668,7 +2698,103 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Collections summary retrieved successfully"
+                        "description": "Collections summary retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "summary": {
+                                                    "properties": {
+                                                        "total_count": {
+                                                            "type": "integer",
+                                                            "example": 150
+                                                        },
+                                                        "total_amount": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 75000
+                                                        },
+                                                        "total_quantity": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 2500.5
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "by_product": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "product_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "product_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer"
+                                                            },
+                                                            "total_quantity": {
+                                                                "type": "number",
+                                                                "format": "float"
+                                                            },
+                                                            "total_amount": {
+                                                                "type": "number",
+                                                                "format": "float"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "by_supplier": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "supplier_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "supplier_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "supplier_code": {
+                                                                "type": "string"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer"
+                                                            },
+                                                            "total_quantity": {
+                                                                "type": "number",
+                                                                "format": "float"
+                                                            },
+                                                            "total_amount": {
+                                                                "type": "number",
+                                                                "format": "float"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2718,7 +2844,90 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Payments summary retrieved successfully"
+                        "description": "Payments summary retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "summary": {
+                                                    "properties": {
+                                                        "total_count": {
+                                                            "type": "integer",
+                                                            "example": 50
+                                                        },
+                                                        "total_amount": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 50000
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "by_type": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "type": {
+                                                                "type": "string",
+                                                                "example": "partial"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer",
+                                                                "example": 30
+                                                            },
+                                                            "total_amount": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 30000
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "by_supplier": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "supplier_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "supplier_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "supplier_code": {
+                                                                "type": "string"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer"
+                                                            },
+                                                            "total_amount": {
+                                                                "type": "number",
+                                                                "format": "float"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2759,7 +2968,69 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Product performance retrieved successfully"
+                        "description": "Product performance retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "product_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "product_name": {
+                                                        "type": "string",
+                                                        "example": "Tea Leaves"
+                                                    },
+                                                    "product_code": {
+                                                        "type": "string",
+                                                        "example": "PROD001"
+                                                    },
+                                                    "collection_count": {
+                                                        "type": "integer",
+                                                        "example": 150
+                                                    },
+                                                    "total_quantity": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 2500.5
+                                                    },
+                                                    "total_amount": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 75000
+                                                    },
+                                                    "unique_suppliers": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "avg_rate": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 30
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2800,7 +3071,78 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Financial summary retrieved successfully"
+                        "description": "Financial summary retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "summary": {
+                                                    "properties": {
+                                                        "total_collections": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 125000
+                                                        },
+                                                        "total_payments": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 100000
+                                                        },
+                                                        "net_balance": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 25000
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "monthly_breakdown": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "month": {
+                                                                "type": "string",
+                                                                "example": "2025-01"
+                                                            },
+                                                            "collections": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 10000
+                                                            },
+                                                            "payments": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 8000
+                                                            },
+                                                            "net": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 2000
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2823,6 +3165,12 @@
                         "content": {
                             "application/pdf": {}
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2856,6 +3204,12 @@
                         "content": {
                             "application/pdf": {}
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2878,6 +3232,12 @@
                         "content": {
                             "application/pdf": {}
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2900,6 +3260,12 @@
                         "content": {
                             "application/pdf": {}
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2922,6 +3288,12 @@
                         "content": {
                             "application/pdf": {}
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
@@ -2944,6 +3316,12 @@
                         "content": {
                             "application/pdf": {}
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimitExceeded"
                     }
                 },
                 "security": [
