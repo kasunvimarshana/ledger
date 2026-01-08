@@ -19,6 +19,7 @@ export interface ApiResponse<T = any> {
   conflict?: boolean;
   serverData?: any;
   fromCache?: boolean; // Flag to indicate cached data
+  queued?: boolean; // Flag to indicate operation was queued for offline sync
 }
 
 class ApiClient {
@@ -86,6 +87,7 @@ class ApiClient {
           success: true,
           message: 'Operation queued for sync when online',
           data: data as T,
+          queued: true, // Set flag for reliable detection
         };
       }
       return this.handleError(error);
@@ -107,6 +109,7 @@ class ApiClient {
           success: true,
           message: 'Operation queued for sync when online',
           data: data as T,
+          queued: true, // Set flag for reliable detection
         };
       }
       return this.handleError(error);
@@ -142,6 +145,7 @@ class ApiClient {
           return {
             success: true,
             message: 'Operation queued for sync when online',
+            queued: true, // Set flag for reliable detection
           };
         }
       }

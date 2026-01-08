@@ -28,6 +28,8 @@ interface CollectionFormData {
   quantity: string;
   unit: string;
   notes: string;
+  version?: number; // Track version for optimistic locking
+  id?: number; // Track ID for updates
 }
 
 export const CollectionFormScreen: React.FC = () => {
@@ -80,6 +82,8 @@ export const CollectionFormScreen: React.FC = () => {
           quantity: collection.quantity?.toString() || '',
           unit: collection.unit || 'kg',
           notes: collection.notes || '',
+          version: collection.version, // Capture version for optimistic locking
+          id: collection.id, // Capture ID
         });
       }
     } catch (error) {
@@ -168,14 +172,26 @@ export const CollectionFormScreen: React.FC = () => {
         quantity: parseFloat(formData.quantity),
         unit: formData.unit,
         notes: formData.notes || null,
+        ...(isEditMode && formData.version !== undefined ? { version: formData.version } : {}),
+        ...(isEditMode && formData.id !== undefined ? { id: formData.id } : {}),
       };
 
       if (isEditMode) {
-        await apiClient.put(`/collections/${collectionId}`, submitData);
-        Alert.alert('Success', 'Collection updated successfully');
+        const response = await apiClient.put(`/collections/${collectionId}`, submitData);
+        // Check if operation was queued for offline sync
+        if (response.queued) {
+          Alert.alert('Queued for Sync', 'Your changes will be synced when you\'re back online.');
+        } else {
+          Alert.alert('Success', 'Collection updated successfully');
+        }
       } else {
-        await apiClient.post('/collections', submitData);
-        Alert.alert('Success', 'Collection created successfully');
+        const response = await apiClient.post('/collections', submitData);
+        // Check if operation was queued for offline sync
+        if (response.queued) {
+          Alert.alert('Queued for Sync', 'Collection will be created when you\'re back online.');
+        } else {
+          Alert.alert('Success', 'Collection created successfully');
+        }
       }
 
       navigation.goBack();
