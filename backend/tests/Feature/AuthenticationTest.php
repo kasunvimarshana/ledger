@@ -120,7 +120,7 @@ class AuthenticationTest extends TestCase
         // Verify audit log was created
         $this->assertDatabaseHas('audit_logs', [
             'user_id' => $user->id,
-            'action' => 'logout',
+            'event' => 'logout',
             'auditable_type' => 'App\Models\User',
             'auditable_id' => $user->id,
         ]);

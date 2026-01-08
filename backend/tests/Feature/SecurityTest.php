@@ -181,7 +181,7 @@ class SecurityTest extends TestCase
         // Verify audit log was created
         $this->assertDatabaseHas('audit_logs', [
             'user_id' => $user->id,
-            'action' => 'logout',
+            'event' => 'logout',
             'auditable_type' => 'App\Models\User',
             'auditable_id' => $user->id,
         ]);
@@ -200,7 +200,7 @@ class SecurityTest extends TestCase
 
         // Verify IP and user agent were recorded
         $auditLog = \App\Models\AuditLog::where('user_id', $user->id)
-            ->where('action', 'logout')
+            ->where('event', 'logout')
             ->first();
 
         $this->assertNotNull($auditLog);

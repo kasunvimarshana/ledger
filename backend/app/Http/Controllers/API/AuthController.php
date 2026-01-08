@@ -295,17 +295,17 @@ class AuthController extends Controller
     {
         try {
             $user = auth('api')->user();
-            
+
             // Log the logout action for audit purposes
             \App\Models\AuditLog::create([
                 'user_id' => $user->id,
-                'action' => 'logout',
+                'event' => 'logout',
                 'auditable_type' => 'App\Models\User',
                 'auditable_id' => $user->id,
                 'old_values' => null,
-                'new_values' => json_encode([
+                'new_values' => [
                     'logout_at' => now()->toDateTimeString(),
-                ]),
+                ],
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
@@ -331,7 +331,7 @@ class AuthController extends Controller
             ], 200);
         } catch (\Exception $e) {
             // Log the error for debugging
-            \Illuminate\Support\Facades\Log::error('Logout error: ' . $e->getMessage(), [
+            \Illuminate\Support\Facades\Log::error('Logout error: '.$e->getMessage(), [
                 'user_id' => auth('api')->id(),
                 'exception' => get_class($e),
                 'trace' => $e->getTraceAsString(),
