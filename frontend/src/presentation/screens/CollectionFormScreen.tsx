@@ -97,9 +97,9 @@ export const CollectionFormScreen: React.FC = () => {
 
   const loadCurrentRate = async (productId: string) => {
     try {
-      const response = await apiClient.get<Rate>(`/products/${productId}/current-rate`);
+      const response = await apiClient.get<{ rate: Rate }>(`/products/${productId}/current-rate`);
       if (response.success && response.data) {
-        setCurrentRate(response.data as Rate);
+        setCurrentRate(response.data.rate as Rate);
       } else {
         setCurrentRate(null);
         Alert.alert('Warning', 'No current rate found for this product');
@@ -300,7 +300,7 @@ export const CollectionFormScreen: React.FC = () => {
         {calculatedAmount > 0 && (
           <View style={styles.amountInfo}>
             <Text style={styles.amountLabel}>Calculated Amount:</Text>
-            <Text style={styles.amountValue}>${calculatedAmount.toFixed(2)}</Text>
+            <Text style={styles.amountValue}>{calculatedAmount.toFixed(2)}</Text>
           </View>
         )}
 
