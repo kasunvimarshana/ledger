@@ -28,7 +28,7 @@ class RateLimitTest extends TestCase
                 'email' => 'wrong@example.com',
                 'password' => 'wrongpassword',
             ]);
-            
+
             // These should fail due to wrong credentials, but not rate limiting
             $this->assertNotEquals(429, $response->status());
         }
@@ -60,7 +60,7 @@ class RateLimitTest extends TestCase
                 'password' => 'password123',
                 'password_confirmation' => 'password123',
             ]);
-            
+
             // These should succeed or fail with validation, not rate limiting
             $this->assertNotEquals(429, $response->status());
         }
@@ -111,7 +111,7 @@ class RateLimitTest extends TestCase
             $response = $this->withHeaders([
                 'Authorization' => "Bearer {$token}",
             ])->getJson('/api/suppliers');
-            
+
             // Should not be rate limited yet
             if ($response->status() === 429) {
                 // If we hit the limit before 60, that's fine too
@@ -132,7 +132,7 @@ class RateLimitTest extends TestCase
                 'message' => 'Too many requests. Please try again later.',
             ]);
         }
-        
+
         // Test passes if we got rate limited
         $this->assertTrue(true);
     }
@@ -150,7 +150,7 @@ class RateLimitTest extends TestCase
             $response = $this->withHeaders([
                 'Authorization' => "Bearer {$token}",
             ])->getJson('/api/reports/summary');
-            
+
             // Should not be rate limited yet
             if ($response->status() === 429) {
                 break;

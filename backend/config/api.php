@@ -23,13 +23,13 @@ return [
             'limit' => env('API_RATE_LIMIT', 60),
             'decay_minutes' => env('API_RATE_LIMIT_DECAY', 1),
         ],
-        
+
         // Stricter rate limit for authentication endpoints
         'auth' => [
             'limit' => env('API_AUTH_RATE_LIMIT', 5),
             'decay_minutes' => env('API_AUTH_RATE_LIMIT_DECAY', 1),
         ],
-        
+
         // Rate limit for reporting endpoints (can be resource intensive)
         'reports' => [
             'limit' => env('API_REPORTS_RATE_LIMIT', 30),
@@ -60,7 +60,7 @@ return [
 
     // Version
     'version' => env('API_VERSION', '1.0.0'),
-    
+
     // API Documentation
     'docs' => [
         'enabled' => env('API_DOCS_ENABLED', true),

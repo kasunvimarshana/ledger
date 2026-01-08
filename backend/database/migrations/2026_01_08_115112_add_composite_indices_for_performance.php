@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
+     *
      * Adds composite indices to improve query performance
      * for commonly used query patterns
      */
