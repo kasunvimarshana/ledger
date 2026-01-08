@@ -95,7 +95,6 @@ class CollectionSeeder extends Seeder
                 // Get the appropriate rate for the collection date
                 $rate = Rate::where('product_id', $product->id)
                     ->where('unit', $collectionItem['unit'])
-                    ->where('is_active', true)
                     ->whereDate('effective_from', '<=', $collectionDate)
                     ->where(function ($query) use ($collectionDate) {
                         $query->whereNull('effective_to')

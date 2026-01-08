@@ -167,7 +167,7 @@ class PaymentSeeder extends Seeder
                 Payment::create([
                     'supplier_id' => $supplier->id,
                     'user_id' => $users->random()->id,
-                    'payment_date' => Carbon::parse($paymentItem['date']),
+                    'payment_date' => $paymentItem['date'],
                     'amount' => $paymentItem['amount'],
                     'type' => $paymentItem['type'],
                     'reference_number' => $paymentItem['reference'],
