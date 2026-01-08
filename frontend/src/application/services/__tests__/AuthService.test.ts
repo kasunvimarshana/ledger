@@ -146,6 +146,28 @@ describe('AuthService', () => {
       expect(AsyncStorage.removeItem).toHaveBeenCalledWith(TOKEN_STORAGE_KEY);
       expect(AsyncStorage.removeItem).toHaveBeenCalledWith(USER_STORAGE_KEY);
     });
+
+    it('should handle token already blacklisted error', async () => {
+      const tokenBlacklistError = new Error('Token has been blacklisted');
+      (apiClient.post as jest.Mock).mockRejectedValue(tokenBlacklistError);
+
+      await AuthService.logout();
+
+      // Should still clear local data
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(TOKEN_STORAGE_KEY);
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(USER_STORAGE_KEY);
+    });
+
+    it('should handle unauthorized error gracefully', async () => {
+      const unauthorizedError = new Error('Unauthorized');
+      (apiClient.post as jest.Mock).mockRejectedValue(unauthorizedError);
+
+      await AuthService.logout();
+
+      // Should still clear local data even if already logged out on server
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(TOKEN_STORAGE_KEY);
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(USER_STORAGE_KEY);
+    });
   });
 
   describe('getCurrentUser', () => {
