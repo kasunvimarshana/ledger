@@ -221,27 +221,33 @@ curl -X POST http://localhost:8000/api/login \
 
 ## 📚 Documentation
 
-### Primary Documents
-- **[Comprehensive End-to-End Verification Report](./COMPREHENSIVE_END_TO_END_VERIFICATION.md)** - 🆕 **Latest:** Complete testing and verification report (19KB)
-- **[Print & PDF User Guide](./PRINT_PDF_USER_GUIDE.md)** - ⭐ Complete guide to print and PDF generation features (7KB)
-- **[Reports User Guide](./REPORTS_USER_GUIDE.md)** - ⭐ Comprehensive guide to using reporting features (10KB)
-- **[Offline Implementation Final Report](./OFFLINE_IMPLEMENTATION_FINAL_REPORT.md)** - ⭐ Complete 20KB implementation report with architecture and deployment guide
-- **[Offline Verification Checklist](./OFFLINE_VERIFICATION_CHECKLIST.md)** - ⭐ 16KB comprehensive verification and testing guide
-- **[Offline Functionality Guide](./OFFLINE_FUNCTIONALITY_GUIDE.md)** - ⭐ Complete guide to offline support and network resilience (19KB)
-- **[Data Integrity Guide](./DATA_INTEGRITY_GUIDE.md)** - ⭐ Complete guide to data integrity and operational continuity (12KB)
-- **[Final System Status](./FINAL_SYSTEM_STATUS.md)** - ⭐ Comprehensive 17KB final report with complete system details
-- **[Synchronization Guide](./SYNC_GUIDE.md)** - ⭐ Detailed offline/online sync and conflict resolution guide
-- **[Swagger API Documentation](http://localhost:8000/api/documentation)** - Interactive API explorer with all 50+ endpoints
-- **[README](./README.md)** - This document - Quick start and overview
+**All documentation has been organized into the `/documents` directory for easy navigation.**
 
-### Detailed Documentation
-- [Software Requirements Specification (SRS)](./SRS.md) - Complete requirements
-- [Product Requirements Document (PRD)](./PRD.md) - Product specifications
-- [Executive Summary (ES)](./ES.md) - Project overview
-- [Deployment Guide](./DEPLOYMENT.md) - Production deployment
-- [Testing Guide](./TESTING.md) - Testing strategies
-- [API Reference](./API_REFERENCE.md) - API documentation
-- [Swagger Guide](./SWAGGER_GUIDE.md) - Swagger usage
+### 📋 Documentation Index
+- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Complete documentation catalog with 124 organized files
+
+### Essential Documents
+- **[Comprehensive End-to-End Verification](./documents/reports/COMPREHENSIVE_END_TO_END_VERIFICATION.md)** - Latest testing and verification (19KB) ⭐
+- **[Final Review and Stabilization Report](./documents/reports/FINAL_REVIEW_AND_STABILIZATION_REPORT.md)** - Production readiness (13KB) ⭐
+- **[User Manual](./documents/guides/USER_MANUAL.md)** - Complete user guide
+- **[Quick Start Guide](./documents/guides/QUICK_START_GUIDE.md)** - Get started in 5 minutes
+- **[Troubleshooting Guide](./documents/guides/TROUBLESHOOTING_GUIDE.md)** - Common issues and solutions
+
+### Documentation Categories
+1. **[Requirements](./documents/requirements/)** - PRD, SRS, Executive Summaries (4 files)
+2. **[User Guides](./documents/guides/)** - Manuals, troubleshooting, feature guides (12 files)
+3. **[API Documentation](./documents/api/)** - Complete API reference, Swagger docs (8 files)
+4. **[Architecture](./documents/architecture/)** - System design, refactoring (5 files)
+5. **[Implementation](./documents/implementation/)** - Feature implementations (23 files)
+6. **[Testing](./documents/testing/)** - Testing strategies and reports (16 files)
+7. **[Deployment](./documents/deployment/)** - Production deployment guides (8 files)
+8. **[Status Reports](./documents/reports/)** - Project status and reviews (46 files)
+
+### Quick Links by Role
+- **Developers:** [API Reference](./documents/api/API_REFERENCE.md) | [Architecture](./frontend/ARCHITECTURE.md) | [Testing](./documents/testing/TESTING.md)
+- **DevOps:** [Deployment Checklist](./documents/deployment/PRODUCTION_DEPLOYMENT_CHECKLIST.md) | [Environment Variables](./documents/deployment/ENVIRONMENT_VARIABLES.md)
+- **End Users:** [User Manual](./documents/guides/USER_MANUAL.md) | [Reports Guide](./documents/guides/REPORTS_USER_GUIDE.md)
+- **QA:** [Testing Guide](./documents/testing/TESTING.md) | [UI Testing](./documents/guides/MANUAL_UI_TESTING_GUIDE.md)
 
 ### API Endpoint Groups
 
