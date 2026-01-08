@@ -230,10 +230,10 @@ class SeederTest extends TestCase
             ->get();
 
         if ($rates->count() > 1) {
-            // Rates should generally increase over time
+            // Rates should increase over time - verify the trend is generally upward
             $firstRate = $rates->first()->rate;
             $lastRate = $rates->last()->rate;
-            $this->assertGreaterThanOrEqual($firstRate, $lastRate);
+            $this->assertGreaterThan($firstRate, $lastRate, 'Last rate should be higher than first rate to show price increase over time');
         }
     }
 }

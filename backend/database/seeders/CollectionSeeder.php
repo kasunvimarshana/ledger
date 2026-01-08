@@ -90,7 +90,7 @@ class CollectionSeeder extends Seeder
             }
 
             foreach ($data['collections'] as $collectionItem) {
-                $collectionDate = Carbon::parse($collectionItem['date']);
+                $collectionDate = $collectionItem['date'];
                 
                 // Get the appropriate rate for the collection date
                 $rate = Rate::where('product_id', $product->id)
