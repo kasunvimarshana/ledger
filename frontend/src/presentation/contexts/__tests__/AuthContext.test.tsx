@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { render, waitFor, act } from '@testing-library/react-native';
+import { render, waitFor, act, fireEvent } from '@testing-library/react-native';
 import { Text, Button } from 'react-native';
 import { AuthProvider, useAuth } from '../AuthContext';
 import AuthService from '../../../application/services/AuthService';
@@ -52,7 +52,7 @@ describe('AuthContext', () => {
       <>
         <Text testID="authenticated">{isAuthenticated ? 'authenticated' : 'not-authenticated'}</Text>
         <Text testID="user">{user ? user.name : 'no-user'}</Text>
-        <Button testID="logout-button" title="Logout" onPress={() => logout()} />
+        <Button testID="logout-button" title="Logout" onPress={logout} />
       </>
     );
   };
@@ -122,7 +122,7 @@ describe('AuthContext', () => {
 
     // Trigger logout
     await act(async () => {
-      getByTestId('logout-button').props.onPress();
+      fireEvent.press(getByTestId('logout-button'));
       await new Promise(resolve => setTimeout(resolve, 100));
     });
 
@@ -155,7 +155,7 @@ describe('AuthContext', () => {
 
     // Trigger logout
     await act(async () => {
-      getByTestId('logout-button').props.onPress();
+      fireEvent.press(getByTestId('logout-button'));
       await new Promise(resolve => setTimeout(resolve, 100));
     });
 
