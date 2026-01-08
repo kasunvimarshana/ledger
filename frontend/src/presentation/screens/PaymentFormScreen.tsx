@@ -234,7 +234,7 @@ export const PaymentFormScreen: React.FC = () => {
                 styles.balanceValue,
                 { color: supplierBalance >= 0 ? THEME.colors.success : THEME.colors.error }
               ]}>
-                ${supplierBalance.toFixed(2)}
+                {supplierBalance.toFixed(2)}
               </Text>
             </View>
           )}
