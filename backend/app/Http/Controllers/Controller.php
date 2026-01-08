@@ -68,6 +68,10 @@ namespace App\Http\Controllers;
  *     name="Payments",
  *     description="Payment management with advance, partial, and full payment support"
  * )
+ * @OA\Tag(
+ *     name="Reports",
+ *     description="Comprehensive reporting and analytics endpoints"
+ * )
  */
 abstract class Controller
 {

@@ -23,7 +23,7 @@ class ReportController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/reports/summary",
+     *     path="/reports/summary",
      *     summary="Get overall system summary",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -99,7 +99,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/supplier-balances",
+     *     path="/reports/supplier-balances",
      *     summary="Get supplier balances report",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -186,7 +186,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/collections-summary",
+     *     path="/reports/collections-summary",
      *     summary="Get collections summary by date range",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -335,7 +335,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/payments-summary",
+     *     path="/reports/payments-summary",
      *     summary="Get payments summary by date range",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -458,7 +458,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/product-performance",
+     *     path="/reports/product-performance",
      *     summary="Get product performance report",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -542,7 +542,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/financial-summary",
+     *     path="/reports/financial-summary",
      *     summary="Get comprehensive financial summary",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -654,7 +654,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/summary/pdf",
+     *     path="/reports/summary/pdf",
      *     summary="Download system summary report as PDF",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -682,7 +682,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/supplier-balances/pdf",
+     *     path="/reports/supplier-balances/pdf",
      *     summary="Download supplier balances report as PDF",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -719,7 +719,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/collections-summary/pdf",
+     *     path="/reports/collections-summary/pdf",
      *     summary="Download collections summary as PDF",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -747,7 +747,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/payments-summary/pdf",
+     *     path="/reports/payments-summary/pdf",
      *     summary="Download payments summary as PDF",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -775,7 +775,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/product-performance/pdf",
+     *     path="/reports/product-performance/pdf",
      *     summary="Download product performance report as PDF",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
@@ -803,7 +803,7 @@ class ReportController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/reports/financial-summary/pdf",
+     *     path="/reports/financial-summary/pdf",
      *     summary="Download financial summary as PDF",
      *     tags={"Reports"},
      *     security={{"bearerAuth":{}}},
