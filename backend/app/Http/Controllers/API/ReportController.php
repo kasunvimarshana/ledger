@@ -78,19 +78,22 @@ class ReportController extends Controller
         $paymentAmountThisMonth = Payment::whereBetween('payment_date', [$startOfMonth, $endOfMonth])->sum('amount');
 
         return response()->json([
-            'totalSuppliers' => $totalSuppliers,
-            'activeSuppliers' => $activeSuppliers,
-            'totalProducts' => $totalProducts,
-            'activeProducts' => $activeProducts,
-            'totalCollections' => $totalCollections,
-            'totalCollectionAmount' => round($totalCollectionAmount, 2),
-            'totalPayments' => $totalPayments,
-            'totalPaymentAmount' => round($totalPaymentAmount, 2),
-            'outstandingBalance' => round($outstandingBalance, 2),
-            'collectionsThisMonth' => $collectionsThisMonth,
-            'paymentsThisMonth' => $paymentsThisMonth,
-            'collectionAmountThisMonth' => round($collectionAmountThisMonth, 2),
-            'paymentAmountThisMonth' => round($paymentAmountThisMonth, 2),
+            'success' => true,
+            'data' => [
+                'totalSuppliers' => $totalSuppliers,
+                'activeSuppliers' => $activeSuppliers,
+                'totalProducts' => $totalProducts,
+                'activeProducts' => $activeProducts,
+                'totalCollections' => $totalCollections,
+                'totalCollectionAmount' => round($totalCollectionAmount, 2),
+                'totalPayments' => $totalPayments,
+                'totalPaymentAmount' => round($totalPaymentAmount, 2),
+                'outstandingBalance' => round($outstandingBalance, 2),
+                'collectionsThisMonth' => $collectionsThisMonth,
+                'paymentsThisMonth' => $paymentsThisMonth,
+                'collectionAmountThisMonth' => round($collectionAmountThisMonth, 2),
+                'paymentAmountThisMonth' => round($paymentAmountThisMonth, 2),
+            ],
         ]);
     }
 
@@ -175,7 +178,10 @@ class ReportController extends Controller
                 ];
             });
 
-        return response()->json($balances);
+        return response()->json([
+            'success' => true,
+            'data' => $balances,
+        ]);
     }
 
     /**
@@ -314,13 +320,16 @@ class ReportController extends Controller
             });
 
         return response()->json([
-            'summary' => [
-                'total_count' => $totalCount,
-                'total_amount' => round($totalAmount, 2),
-                'total_quantity' => round($totalQuantity, 3),
+            'success' => true,
+            'data' => [
+                'summary' => [
+                    'total_count' => $totalCount,
+                    'total_amount' => round($totalAmount, 2),
+                    'total_quantity' => round($totalQuantity, 3),
+                ],
+                'by_product' => $byProduct,
+                'by_supplier' => $bySupplier,
             ],
-            'by_product' => $byProduct,
-            'by_supplier' => $bySupplier,
         ]);
     }
 
@@ -435,12 +444,15 @@ class ReportController extends Controller
             });
 
         return response()->json([
-            'summary' => [
-                'total_count' => $totalCount,
-                'total_amount' => round($totalAmount, 2),
+            'success' => true,
+            'data' => [
+                'summary' => [
+                    'total_count' => $totalCount,
+                    'total_amount' => round($totalAmount, 2),
+                ],
+                'by_type' => $byType,
+                'by_supplier' => $bySupplier,
             ],
-            'by_type' => $byType,
-            'by_supplier' => $bySupplier,
         ]);
     }
 
@@ -512,7 +524,10 @@ class ReportController extends Controller
                 ];
             });
 
-        return response()->json($products);
+        return response()->json([
+            'success' => true,
+            'data' => $products,
+        ]);
     }
 
     /**
@@ -625,12 +640,15 @@ class ReportController extends Controller
         })->values();
 
         return response()->json([
-            'summary' => [
-                'total_collections' => round($totalCollections, 2),
-                'total_payments' => round($totalPayments, 2),
-                'net_balance' => round($netBalance, 2),
+            'success' => true,
+            'data' => [
+                'summary' => [
+                    'total_collections' => round($totalCollections, 2),
+                    'total_payments' => round($totalPayments, 2),
+                    'net_balance' => round($netBalance, 2),
+                ],
+                'monthly_breakdown' => $monthlyBreakdown,
             ],
-            'monthly_breakdown' => $monthlyBreakdown,
         ]);
     }
 
